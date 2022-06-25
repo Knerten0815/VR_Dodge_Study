@@ -488,6 +488,27 @@ public class TrackingSpaceGenerator
         GenerateT_ShapeTrackingSpace(obstacleType, out trackingSpacePoints, out obstaclePolygons, out initialConfigurations, w1, w2, w3);
     }
 
+    /// <summary>
+    /// Generates a circle chaped tracking space.
+    /// </summary>
+    /// <param name="trackingSpacePoints"></param>
+    /// <param name="initialConfigurations"></param>
+    /// <param name="radius">bigger radius = bigger circle, duh</param>
+    /// <param name="niceness">how many corners will our "circle" have?</param>
+    public static void GenerateCircleTrackingSpace(out List<Vector2> trackingSpacePoints, out List<InitialConfiguration> initialConfigurations, float radius, int niceness)
+    {
+        if (niceness < 3)
+            niceness = 3;
+
+        trackingSpacePoints = GeneratePolygonTrackingSpacePoints(niceness, radius);
+
+        initialConfigurations = new List<InitialConfiguration>();
+        Vector2 playerPos = new Vector2(0, 0);
+        Vector2 playerForward = new Vector2(0, 1);
+
+        initialConfigurations.Add(new InitialConfiguration(playerPos, playerForward));
+    }
+
     //generate the mesh of tracking space or obstacle, center is (0,0), enumerate other vertices to generate triangles    
     public static Mesh GeneratePolygonMesh(List<Vector2> polygonPoints) {
         var mesh = new Mesh();

@@ -1243,7 +1243,7 @@ MonoBehaviour:
   obstacleType: 0
   obstacleHeight: 1
   trackingSpaceFilePath: 
-  squareWidth: 20
+  squareWidth: 1
   obstacleColor: {r: 0.4352941, g: 0.2426616, b: 0.0039215665, a: 1}
   bufferColor: {r: 0.3301887, g: 0.3301887, b: 0.3301887, a: 0.2509804}
   trackingSpacePoints: []
@@ -3029,7 +3029,7 @@ MonoBehaviour:
   m_Camera: {fileID: 741444523}
   m_OriginBaseGameObject: {fileID: 1164335302}
   m_CameraFloorOffsetObject: {fileID: 1496115739}
-  m_RequestedTrackingOriginMode: 0
+  m_RequestedTrackingOriginMode: 2
   m_CameraYOffset: 1.1176
 --- !u!4 &1164335304
 Transform:

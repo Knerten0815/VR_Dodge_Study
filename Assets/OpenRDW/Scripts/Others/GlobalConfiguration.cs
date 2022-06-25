@@ -15,7 +15,7 @@ public class GlobalConfiguration : MonoBehaviour
 
     //square: size varied tracking space, size= squareSpaceWidth
     //others: shape varied tracking space, area= TARGET_AREA
-    public enum TrackingSpaceChoice { Rectangle, Trapezoid, Triangle, Cross, L_shape, T_shape, FilePath, Square};
+    public enum TrackingSpaceChoice { Rectangle, Trapezoid, Triangle, Cross, L_shape, T_shape, FilePath, Square, Circle};
     public enum MovementController { Keyboard, AutoPilot, HMD };//Three input modes
 
     //Path mode
@@ -1365,6 +1365,9 @@ public class GlobalConfiguration : MonoBehaviour
                 break;
             case TrackingSpaceChoice.Square://no obstacle in square
                 TrackingSpaceGenerator.GenerateRectangleTrackingSpace(0, out trackingSpacePoints, out obstaclePolygons, out defaultInitialConfiguration, squareWidth, squareWidth);
+                break;
+            case TrackingSpaceChoice.Circle:
+                TrackingSpaceGenerator.GenerateCircleTrackingSpace(out trackingSpacePoints, out defaultInitialConfiguration, squareWidth, 100);
                 break;
             default:
                 trackingSpacePoints = TrackingSpaceGenerator.GeneratePolygonTrackingSpacePoints(4);
