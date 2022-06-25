@@ -492,6 +492,17 @@ public class TrackingSpaceGenerator
     //generate tracking space based on the boundary of the actual tracking space.
     public static void GenerateTrackingBoundaryTrackingSpace(out List<Vector2> trackingSpacePoints, out List<InitialConfiguration> initialConfigurations)
     {
+        trackingSpacePoints = GetTrackingSpaceBoundaries();
+
+        initialConfigurations = new List<InitialConfiguration>();
+        Vector2 playerPos = new Vector2(0, 0);
+        Vector2 playerForward = new Vector2(0, 1);
+
+        initialConfigurations.Add(new InitialConfiguration(playerPos, playerForward));
+    }
+
+    public static List<Vector2> GetTrackingSpaceBoundaries()
+    {
         var hmdDevices = new List<InputDevice>();
         InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.HeadMounted, hmdDevices);
 
@@ -502,10 +513,10 @@ public class TrackingSpaceGenerator
             if (device.subsystem.TryGetBoundaryPoints(Vec3trackingSpacePoints))
                 Debug.Log("Fetched " + Vec3trackingSpacePoints.Count + " TrackingSpacePoints.");
             else
-                Debug.Log("Failed to fetch TrackingSpacePoints.");           
+                Debug.Log("Failed to fetch TrackingSpacePoints.");
         }
 
-        trackingSpacePoints = new List<Vector2>();
+        List<Vector2> trackingSpacePoints = new List<Vector2>();
 
         foreach (Vector3 vec3Point in Vec3trackingSpacePoints)
         {
@@ -514,11 +525,21 @@ public class TrackingSpaceGenerator
 
         trackingSpacePoints.Reverse();
 
-        initialConfigurations = new List<InitialConfiguration>();
-        Vector2 playerPos = new Vector2(0, 0);
-        Vector2 playerForward = new Vector2(0, 1);
+        return trackingSpacePoints;
+    }
 
-        initialConfigurations.Add(new InitialConfiguration(playerPos, playerForward));
+    public static Vector2 GetTrackingSpaceCenter()
+    {
+        List<Vector2> trackingSpacepoints = GetTrackingSpaceBoundaries();
+
+        Vector2 trackingSpaceCenter = Vector2.zero;
+
+        foreach (Vector2 vec2Point in trackingSpacepoints)
+        {
+            trackingSpaceCenter += vec2Point;
+        }
+
+        return trackingSpaceCenter / trackingSpacepoints.Count;
     }
 
     /// <summary>
@@ -540,6 +561,8 @@ public class TrackingSpaceGenerator
         Vector2 playerForward = new Vector2(0, 1);
 
         initialConfigurations.Add(new InitialConfiguration(playerPos, playerForward));
+
+        SingletonFoEveryton.Instance.SetCameraToCenter();
     }
 
     //generate the mesh of tracking space or obstacle, center is (0,0), enumerate other vertices to generate triangles    
