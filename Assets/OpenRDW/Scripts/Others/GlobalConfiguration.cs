@@ -4,6 +4,7 @@ using UnityEngine;
 using PathSeed = VirtualPathGenerator.PathSeed;
 using AvatarInfo = ExperimentSetup.AvatarInfo;
 using System.IO;
+using UnityEngine.XR;
 
 //Store common parameters 
 public class GlobalConfiguration : MonoBehaviour
@@ -15,7 +16,7 @@ public class GlobalConfiguration : MonoBehaviour
 
     //square: size varied tracking space, size= squareSpaceWidth
     //others: shape varied tracking space, area= TARGET_AREA
-    public enum TrackingSpaceChoice { Rectangle, Trapezoid, Triangle, Cross, L_shape, T_shape, FilePath, Square, Circle};
+    public enum TrackingSpaceChoice { Rectangle, Trapezoid, Triangle, Cross, L_shape, T_shape, FilePath, Square, Circle, Boundary};
     public enum MovementController { Keyboard, AutoPilot, HMD };//Three input modes
 
     //Path mode
@@ -404,7 +405,15 @@ public class GlobalConfiguration : MonoBehaviour
         {
             //generate experimentSetups according to UI settings
             GenerateExperimentSetupsByUI();
-        }        
+        }
+
+        readyToStart = true;
+
+        //networkingMode, update target avatar number
+        if (networkingMode && !loadFromTxt && firstTimePressR)
+            GenerateExperimentSetupsByUI();//regenerate experiment setups
+
+        firstTimePressR = false;
     }
 
     // Update is called once per frame
@@ -480,7 +489,7 @@ public class GlobalConfiguration : MonoBehaviour
             Utilities.CaptureScreenShot(statisticsLogger.SCREENSHOTS_DERECTORY+Utilities.GetTimeStringForFileName()+".png",statisticsLogger.superSize);
         }
         //press key R to confirm ready
-        if (Input.GetKeyDown(KeyCode.R)) {
+        /*if (Input.GetKeyDown(KeyCode.R)) {
             readyToStart = true;
 
             //networkingMode, update target avatar number
@@ -488,7 +497,7 @@ public class GlobalConfiguration : MonoBehaviour
                 GenerateExperimentSetupsByUI();//regenerate experiment setups
 
             firstTimePressR = false;
-        }
+        }*/
         if (Input.GetKeyDown(KeyCode.T)) {
             firstPersonView = !firstPersonView;
         }
@@ -798,6 +807,10 @@ public class GlobalConfiguration : MonoBehaviour
                 return TrackingSpaceChoice.Square;
             case "filepath":
                 return TrackingSpaceChoice.FilePath;
+            case "circle":
+                return TrackingSpaceChoice.Circle;
+            case "boundary":
+                return TrackingSpaceChoice.Boundary;
             default:
                 return TrackingSpaceChoice.Rectangle;
         }
@@ -1148,7 +1161,8 @@ public class GlobalConfiguration : MonoBehaviour
             defaultId = networkManager.avatarId;
         }
 
-        redirectedAvatars[defaultId].transform.Find("[CameraRig]").gameObject.SetActive(movementController == MovementController.HMD);
+        
+        redirectedAvatars[defaultId].transform.Find("[CameraRig]").gameObject.SetActive(movementController == MovementController.HMD);         
 
         if (overviewModeEveryTrial)
         {
@@ -1368,6 +1382,9 @@ public class GlobalConfiguration : MonoBehaviour
                 break;
             case TrackingSpaceChoice.Circle:
                 TrackingSpaceGenerator.GenerateCircleTrackingSpace(out trackingSpacePoints, out defaultInitialConfiguration, squareWidth, 100);
+                break;
+            case TrackingSpaceChoice.Boundary:
+                TrackingSpaceGenerator.GenerateTrackingBoundaryTrackingSpace(out trackingSpacePoints, out defaultInitialConfiguration);
                 break;
             default:
                 trackingSpacePoints = TrackingSpaceGenerator.GeneratePolygonTrackingSpacePoints(4);

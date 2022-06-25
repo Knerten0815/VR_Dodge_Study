@@ -1218,7 +1218,7 @@ MonoBehaviour:
   readyToStart: 0
   avatarNum: 1
   avatarColors:
-  - {r: 0.9921569, g: 0.48235297, b: 0, a: 1}
+  - {r: 0.9921569, g: 0.48235297, b: 0, a: 0.33333334}
   - {r: 1, g: 0.909804, b: 0.27450982, a: 1}
   - {r: 0.9725491, g: 0.40000004, b: 0.8705883, a: 1}
   - {r: 0, g: 0, b: 0, a: 1}
@@ -1239,7 +1239,7 @@ MonoBehaviour:
   trackingSpaceVisible: 1
   bufferVisible: 0
   if3dObstacle: 1
-  trackingSpaceChoice: 7
+  trackingSpaceChoice: 8
   obstacleType: 0
   obstacleHeight: 1
   trackingSpaceFilePath: 
@@ -2954,6 +2954,49 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 994403087}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1097306651
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1097306653}
+  - component: {fileID: 1097306652}
+  m_Layer: 0
+  m_Name: TestGO
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1097306652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097306651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f9e7064d22308743872ed267f60d2ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1097306653
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097306651}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1108764143
 GameObject:
   m_ObjectHideFlags: 0
@@ -3026,10 +3069,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0cb9aa70a22847b5925ee5f067c10a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Camera: {fileID: 741444523}
+  m_Camera: {fileID: 922333730}
   m_OriginBaseGameObject: {fileID: 1164335302}
   m_CameraFloorOffsetObject: {fileID: 1496115739}
-  m_RequestedTrackingOriginMode: 2
+  m_RequestedTrackingOriginMode: 0
   m_CameraYOffset: 1.1176
 --- !u!4 &1164335304
 Transform:

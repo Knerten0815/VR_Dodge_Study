@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UnityEngine.XR;
 
 public class TrackingSpaceGenerator
 {
@@ -486,6 +487,38 @@ public class TrackingSpaceGenerator
         var w3 = c * w1;
         Debug.Log("area:" + (w1 * w1 + w1 * w2 * 2 + w1 * w3));
         GenerateT_ShapeTrackingSpace(obstacleType, out trackingSpacePoints, out obstaclePolygons, out initialConfigurations, w1, w2, w3);
+    }
+
+    //generate tracking space based on the boundary of the actual tracking space.
+    public static void GenerateTrackingBoundaryTrackingSpace(out List<Vector2> trackingSpacePoints, out List<InitialConfiguration> initialConfigurations)
+    {
+        var hmdDevices = new List<InputDevice>();
+        InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.HeadMounted, hmdDevices);
+
+        List<Vector3> Vec3trackingSpacePoints = new List<Vector3>();
+
+        foreach (var device in hmdDevices)
+        {
+            if (device.subsystem.TryGetBoundaryPoints(Vec3trackingSpacePoints))
+                Debug.Log("Fetched " + Vec3trackingSpacePoints.Count + " TrackingSpacePoints.");
+            else
+                Debug.Log("Failed to fetch TrackingSpacePoints.");           
+        }
+
+        trackingSpacePoints = new List<Vector2>();
+
+        foreach (Vector3 vec3Point in Vec3trackingSpacePoints)
+        {
+            trackingSpacePoints.Add(new Vector2(vec3Point.x, vec3Point.z));
+        }
+
+        trackingSpacePoints.Reverse();
+
+        initialConfigurations = new List<InitialConfiguration>();
+        Vector2 playerPos = new Vector2(0, 0);
+        Vector2 playerForward = new Vector2(0, 1);
+
+        initialConfigurations.Add(new InitialConfiguration(playerPos, playerForward));
     }
 
     /// <summary>
