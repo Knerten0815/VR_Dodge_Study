@@ -5,27 +5,45 @@ using TMPro;
 [RequireComponent(typeof(Slider))]
 public class DynamicFloatToStringFoSliders : MonoBehaviour
 {
+    public enum Gains { None, MinRot, MaxRot, MinTrans, MaxTrans, CurveRadius, ResetBuffer }
+
     Slider slider;
     [SerializeField] TMP_Text text;
+    [SerializeField] Gains gainToRead;
+    [SerializeField] GlobalConfiguration config;
 
-    private void Awake()
+    private void Start()
     {
         slider = GetComponent<Slider>();
-        text.text = slider.value.ToString();        
+        text.text = slider.value.ToString();
+
+        switch (gainToRead)
+        {
+            case Gains.MinRot:
+                slider.value = config.MIN_ROT_GAIN;
+                break;
+            case Gains.MaxRot:
+                slider.value = config.MAX_ROT_GAIN;
+                break;
+            case Gains.MinTrans:
+                slider.value = config.MIN_TRANS_GAIN;
+                break;
+            case Gains.MaxTrans:
+                slider.value = config.MAX_TRANS_GAIN;
+                break;
+            case Gains.CurveRadius:
+                slider.value = config.CURVATURE_RADIUS;
+                break;
+            case Gains.ResetBuffer:
+                slider.value = config.RESET_TRIGGER_BUFFER;
+                break;
+            default:
+                break;
+        }
     }
 
-    private void OnEnable()
+    private void Update()
     {
-        slider.onValueChanged.AddListener(setText);
-    }
-
-    private void OnDisable()
-    {
-        slider.onValueChanged.RemoveListener(setText);
-    }
-
-    private void setText(float value)
-    {
-        text.text = value.ToString();
+        text.text = slider.value.ToString("0.00");
     }
 }
