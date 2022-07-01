@@ -307,7 +307,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 226094008}
-        m_MethodName: SetMaxTransGain
+        m_MethodName: SetCurvatureRadius
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1638,7 +1638,7 @@ MonoBehaviour:
   readyToStart: 0
   avatarNum: 1
   avatarColors:
-  - {r: 0.9921569, g: 0.48235297, b: 0, a: 0.33333334}
+  - {r: 1, g: 1, b: 1, a: 1}
   - {r: 1, g: 0.909804, b: 0.27450982, a: 1}
   - {r: 0.9725491, g: 0.40000004, b: 0.8705883, a: 1}
   - {r: 0, g: 0, b: 0, a: 1}
@@ -1646,8 +1646,8 @@ MonoBehaviour:
   - {r: 0, g: 1, b: 1, a: 1}
   avatarPrefabId: 1
   avatarPrefabs:
-  - {fileID: 919132149155446097, guid: 40f7755b5cf0da54e87eaee92bde7ce1, type: 3}
-  - {fileID: 919132149155446097, guid: e955f9bb479dd8243ae483535d6256ca, type: 3}
+  - {fileID: 5075395970476053711, guid: dfae282c19bc12147b04d971873fa7e9, type: 3}
+  - {fileID: 5075395970476053711, guid: dfae282c19bc12147b04d971873fa7e9, type: 3}
   animatorController: {fileID: 9100000, guid: 444409c847614d6449066e498230d05e, type: 2}
   redirectedAvatars:
   - {fileID: 226041972}
@@ -2323,7 +2323,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 226094008}
-        m_MethodName: SetMaxTransGain
+        m_MethodName: SetMinRotGain
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2441,7 +2441,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 226094008}
-        m_MethodName: SetMaxTransGain
+        m_MethodName: SetMinTransGain
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2728,7 +2728,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 226094008}
-        m_MethodName: SetMaxTransGain
+        m_MethodName: SetMaxRotGain
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3058,7 +3058,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 226094008}
-        m_MethodName: SetMaxTransGain
+        m_MethodName: SetResetBuffer
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
