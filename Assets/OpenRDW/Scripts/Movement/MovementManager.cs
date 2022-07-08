@@ -23,6 +23,8 @@ public class MovementManager : MonoBehaviour {
     [SerializeField]
     private string samplingIntervalsFilePath;
 
+    [SerializeField] Material handMat;
+
     [HideInInspector]
     public List<Vector2> waypoints;//waypoints for simulation/collection
 
@@ -408,6 +410,8 @@ public class MovementManager : MonoBehaviour {
         {
             var avatarColors = globalConfiguration.avatarColors;
             ChangeColor(avatarColors[avatarId % avatarColors.Length]);
+
+            handMat.color = avatarColors[avatarId % avatarColors.Length];
         }        
     }
     

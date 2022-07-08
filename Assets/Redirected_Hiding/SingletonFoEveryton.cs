@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -10,6 +11,7 @@ namespace RD_Hiding
         public GlobalConfiguration config;
         public GameObject camRig;
         public GameObject startUI;
+        [SerializeField] TMP_Text diagonaleValue;
 
         public XRInputSubsystem inputSystem = null;
         public InputDevice hmd;
@@ -18,6 +20,8 @@ namespace RD_Hiding
 
         #region Singleton Setup
         private static SingletonFoEveryton _instance;
+        private GameObject longestDiagonal;
+
         public static SingletonFoEveryton Instance { get { return _instance; } }
 
         private void Awake()
@@ -84,8 +88,60 @@ namespace RD_Hiding
         {
             Vector2 center = TrackingSpaceGenerator.GetTrackingSpaceCenter();
             camRig.transform.position = new Vector3(-center.x, 0, -center.y);
+        }
 
-            instantiateSphere(Vector2.zero, true);
+        public void GetDiagonale(bool draw)
+        {
+            diagonaleValue.text = GetLongestDistanceInBoundaries(draw).ToString();
+        }
+
+        public void DestroyDiagonale()
+        {
+            GameObject.Destroy(longestDiagonal);
+        }
+
+        public float GetLongestDistanceInBoundaries(bool draw)
+        {
+            List<Vector2> bounds = TrackingSpaceGenerator.GetTrackingSpaceBoundaries();
+
+            float longestDistance = 0;
+            Vector3 center = new Vector3(TrackingSpaceGenerator.GetTrackingSpaceCenter().x, 0, TrackingSpaceGenerator.GetTrackingSpaceCenter().y);
+            Vector3 start = Vector3.zero;
+            Vector3 end = Vector3.zero;
+
+            for (int i = 0; i < bounds.Count; i++)
+            {
+                if (i + 2 == bounds.Count)
+                    break;
+
+                for (int j = i + 2; j < bounds.Count; j++)
+                {
+                    float magnitude = (bounds[i] - bounds[j]).magnitude;
+                    if (Mathf.Abs(magnitude) > longestDistance)
+                    {
+                        longestDistance = magnitude;
+                        start = new Vector3(bounds[i].x, 0.1f, bounds[i].y) - center;
+                        end = new Vector3(bounds[j].x, 0.1f, bounds[j].y) - center;
+                    }
+                }
+            }
+
+            if (draw)
+                DrawLine(start, end, Color.red);
+
+            return longestDistance;
+        }
+
+        void DrawLine(Vector3 start, Vector3 end, Color color)
+        {
+            longestDiagonal = new GameObject();
+            longestDiagonal.transform.position = start;
+            longestDiagonal.AddComponent<LineRenderer>();
+            LineRenderer lr = longestDiagonal.GetComponent<LineRenderer>();
+            lr.SetColors(color, color);
+            lr.SetWidth(0.1f, 0.1f);
+            lr.SetPosition(0, start);
+            lr.SetPosition(1, end);
         }
     }
 }

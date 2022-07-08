@@ -278,6 +278,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "PrimaryButton",
+                    "type": "Button",
+                    "id": "7953dbcb-90ec-4e21-941b-1c70478c7cce",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SecondaryButton",
+                    "type": "Button",
+                    "id": "6c227475-5006-422b-955f-a5b055844477",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ThumbstickClicked",
+                    "type": "Button",
+                    "id": "e42e5b59-ffe8-433b-9ec5-21345b40d5b5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -456,6 +483,39 @@
                     "action": "Translate Anchor",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "7b9695dc-0e6e-4ab2-85b2-e9b1719dad79",
+                    "path": "<XRController>{LeftHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PrimaryButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7af0fd8c-dc07-4151-ad9e-842d3a1cb653",
+                    "path": "<XRController>{LeftHand}/secondaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SecondaryButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f2d1da8a-54ee-447c-b9f1-c3d10cf28539",
+                    "path": "<XRController>{LeftHand}/thumbstickClicked",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Generic XR Controller",
+                    "action": "ThumbstickClicked",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -796,6 +856,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "PrimaryButton",
+                    "type": "Button",
+                    "id": "520dc933-c45d-45e6-bcf5-584ecfb924cc",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SecondaryButton",
+                    "type": "Button",
+                    "id": "0af11347-955b-4dc7-b370-b429f05a9dc3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ThumbstickClicked",
+                    "type": "Button",
+                    "id": "59f598e7-c60c-4bce-91e8-d328de5cf937",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -974,6 +1061,39 @@
                     "action": "Translate Anchor",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "40210b09-8720-4710-ba78-0fb45afdd1b7",
+                    "path": "<XRController>{RightHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Generic XR Controller",
+                    "action": "PrimaryButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7139db8e-e04c-4e00-b09a-d69b73351913",
+                    "path": "<XRController>{RightHand}/secondaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Generic XR Controller",
+                    "action": "SecondaryButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c3c3a141-29b6-40b3-83c1-fc94091b39e1",
+                    "path": "<XRController>{RightHand}/thumbstickClicked",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Generic XR Controller",
+                    "action": "ThumbstickClicked",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
