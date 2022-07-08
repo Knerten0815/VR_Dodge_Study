@@ -67,8 +67,8 @@ public class StatisticsLogger : MonoBehaviour {
     [Range(1,10)]
     public int superSize;
 
-    private Color backgroundColor = Color.white;
-    private Color trackingSpaceColor = Color.black;
+    [SerializeField] private Color backgroundColor = Color.white;
+    [SerializeField] private Color trackingSpaceColor = Color.black;
     
     private Color obstacleColor;
     // The way this works is that we wait 1 / samplingFrequency time to transpire before we attempt to clean buffers and gather samples

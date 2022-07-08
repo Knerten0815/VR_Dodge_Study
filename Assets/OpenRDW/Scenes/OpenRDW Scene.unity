@@ -1784,7 +1784,7 @@ MonoBehaviour:
   readyToStart: 0
   avatarNum: 1
   avatarColors:
-  - {r: 1, g: 0.6284657, b: 0, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
   - {r: 1, g: 0.909804, b: 0.27450982, a: 1}
   - {r: 0.9725491, g: 0.40000004, b: 0.8705883, a: 1}
   - {r: 0, g: 0, b: 0, a: 1}
@@ -1877,6 +1877,8 @@ MonoBehaviour:
   maxFrames: 1000
   frameRate: 30
   superSize: 1
+  backgroundColor: {r: 0.72156864, g: 0.14509805, b: 0.52156866, a: 1}
+  trackingSpaceColor: {r: 0.9176471, g: 0.35686275, b: 0.04705883, a: 1}
   RESULT_DIRECTORY: Experiment Results/
   RESULT_WITH_TIME_DIRECTORY: 
   SUMMARY_STATISTICS_DIRECTORY: Summary Statistics/
