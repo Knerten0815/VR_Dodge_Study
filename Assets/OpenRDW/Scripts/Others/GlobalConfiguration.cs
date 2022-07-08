@@ -133,6 +133,9 @@ public class GlobalConfiguration : MonoBehaviour
     [Tooltip("Pre-defined colors for avatars")]
     public Color[] avatarColors;
 
+    [Tooltip("Overwrite avatar material color with avatarColors (true), or use the original prefab material (false)")]
+    public bool overwriteAvatarPrefabColor = false;
+
     [Tooltip("Which avatar prefab will be used for visualization")]
     public int avatarPrefabId;
 
@@ -309,8 +312,9 @@ public class GlobalConfiguration : MonoBehaviour
     [HideInInspector]
     public UserInterfaceManager userInterfaceManager;
 
-    #endregion              
-       
+    #endregion
+
+    #region Unity Callback Functions
     private void Awake()
     {        
         startTimeOfProgram = Utilities.GetTimeString();
@@ -407,13 +411,18 @@ public class GlobalConfiguration : MonoBehaviour
             GenerateExperimentSetupsByUI();
         }
 
-        readyToStart = true;
+        //get avatar configurations
+        var avatarList = experimentSetups[experimentIterator].avatars;
 
-        //networkingMode, update target avatar number
-        if (networkingMode && !loadFromTxt && firstTimePressR)
-            GenerateExperimentSetupsByUI();//regenerate experiment setups
+        for (int id = 0; id < avatarList.Count; id++)
+        {
+            var mm = redirectedAvatars[id].GetComponent<MovementManager>();
+            //var rm = redirectedAvatars[id].GetComponent<RedirectionManager>();
 
-        firstTimePressR = false;
+            //reload data from experimentSetups
+            mm.LoadData(id, avatarList[id]);
+            mm.GenerateTrackingSpaceMesh(trackingSpacePoints, obstaclePolygons);
+        }
     }
 
     // Update is called once per frame
@@ -503,6 +512,25 @@ public class GlobalConfiguration : MonoBehaviour
         }
         UpdateUI();
     }
+
+    #endregion
+
+    #region Getters and Setters
+    public void SetExportVideo(bool exportVideo) { this.exportVideo = exportVideo; }
+
+    public void SetMaxTransGain(float maxTrans) { MAX_TRANS_GAIN = maxTrans; }
+
+    public void SetMinTransGain(float minTrans) { MIN_TRANS_GAIN = minTrans; }
+
+    public void SetMaxRotGain(float maxRot) { MAX_ROT_GAIN = maxRot; }
+
+    public void SetMinRotGain(float minRot) { MIN_ROT_GAIN = minRot; }
+
+    public void SetCurvatureRadius(float curveRad) { CURVATURE_RADIUS = curveRad; }
+
+    public void SetResetBuffer(float resetBuffer) { RESET_TRIGGER_BUFFER = resetBuffer; }
+
+    #endregion
     public void UpdateUI() {       
         userInterfaceManager.SetActivePanelExperimentComplete(experimentComplete);
     }
@@ -670,11 +698,24 @@ public class GlobalConfiguration : MonoBehaviour
     public void EndExperimentMenu() {
         EndExperiment(1);
     }
+
+    public void PlayerIsReadyMenue()
+    {
+        StartNextExperiment();
+
+        readyToStart = true;
+
+        //networkingMode, update target avatar number
+        if (networkingMode && !loadFromTxt && firstTimePressR)
+            GenerateExperimentSetupsByUI();//regenerate experiment setups
+
+        firstTimePressR = false;
+    }
     public void MakeOneStepMovement()
     {
         if (!experimentInProgress && experimentIterator < experimentSetups.Count)
         {
-            StartNextExperiment();
+            //StartNextExperiment();
         }
 
         if (experimentInProgress && !avatarIsWalking)

@@ -6,11 +6,15 @@ namespace RD_Hiding
 {
     public class SingletonFoEveryton : MonoBehaviour
     {
-        public GameObject testSphere;
         public GameObject openRDWTrackingSpace;
-        public GameObject cam;
+        public GlobalConfiguration config;
+        public GameObject camRig;
+        public GameObject startUI;
+
         public XRInputSubsystem inputSystem = null;
         public InputDevice hmd;
+
+        private bool firstStart = true;
 
         #region Singleton Setup
         private static SingletonFoEveryton _instance;
@@ -41,6 +45,15 @@ namespace RD_Hiding
             }
         }
 
+        private void Update()
+        {
+            if(Mathf.Abs(Camera.main.transform.position.x) < 0.5f && Mathf.Abs(Camera.main.transform.position.z) < 0.5f && firstStart)
+            {                
+                firstStart = false;
+                startUI.SetActive(true);
+            }
+        }
+
         public void RecenterHMD()
         {
             if (hmd.subsystem.TryRecenter())
@@ -49,33 +62,30 @@ namespace RD_Hiding
                 Debug.Log("Failed to recenter!");
         }
 
-        public void instantiateSphere(Vector3 position, bool isPartOfTrackingSpace)
-        {
-            GameObject theSphere;
-            if (isPartOfTrackingSpace)
-                theSphere = Instantiate(testSphere, openRDWTrackingSpace.transform);
-            else
-                theSphere = Instantiate(testSphere);
-
-            theSphere.transform.position = position;
-        }
-
         public void instantiateSphere(Vector2 position, bool isPartOfTrackingSpace)
         {
-            GameObject theSphere;
-            if (isPartOfTrackingSpace)
-                theSphere = Instantiate(testSphere, openRDWTrackingSpace.transform);
-            else
-                theSphere = Instantiate(testSphere);
-
-            theSphere.transform.position = new Vector3(position.x, 0, position.y);
+            instantiateSphere(position, (Vector3.one * 0.1f), Color.yellow, isPartOfTrackingSpace);
         }
 
+        public void instantiateSphere(Vector2 position, Vector3 size, Color colour, bool isPartOfTrackingSpace)
+        {
+            GameObject theSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
-        public void SetCameraToCenter()
+            theSphere.GetComponent<MeshRenderer>().material.color = colour;
+
+            theSphere.transform.position = new Vector3(position.x, 0, position.y);
+            theSphere.transform.localScale = size;
+
+            if (isPartOfTrackingSpace)
+                theSphere.transform.SetParent(openRDWTrackingSpace.transform);
+        }
+
+        public void SetRelativeCameraPosition()
         {
             Vector2 center = TrackingSpaceGenerator.GetTrackingSpaceCenter();
-            cam.transform.position = new Vector3(-center.x, 0, -center.y);
+            camRig.transform.position = new Vector3(-center.x, 0, -center.y);
+
+            instantiateSphere(Vector2.zero, true);
         }
     }
 }

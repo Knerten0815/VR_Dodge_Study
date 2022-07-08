@@ -284,17 +284,21 @@ public class MovementManager : MonoBehaviour {
             var representation = globalConfiguration.CreateAvatar(transform, i);
 
             otherAvatarRepresentations.Add(representation.transform);
-            var avatarColor = globalConfiguration.avatarColors[i];
-            foreach (var mr in representation.GetComponentsInChildren<MeshRenderer>())
+
+            if (globalConfiguration.overwriteAvatarPrefabColor)
             {
-                mr.material = new Material(Shader.Find("Standard"));
-                mr.material.color = avatarColor;
-            }
-            foreach (var mr in representation.GetComponentsInChildren<SkinnedMeshRenderer>())
-            {
-                mr.material = new Material(Shader.Find("Standard"));
-                mr.material.color = avatarColor;                
-            }
+                var avatarColor = globalConfiguration.avatarColors[i];
+                foreach (var mr in representation.GetComponentsInChildren<MeshRenderer>())
+                {
+                    mr.material = new Material(Shader.Find("Standard"));
+                    mr.material.color = avatarColor;
+                }
+                foreach (var mr in representation.GetComponentsInChildren<SkinnedMeshRenderer>())
+                {
+                    mr.material = new Material(Shader.Find("Standard"));
+                    mr.material.color = avatarColor;
+                }
+            }            
 
             //visualize buffer
             var bufferMesh = TrackingSpaceGenerator.GenerateBufferMesh(new List<Vector2> { Vector2.zero }, false, generalManager.RESET_TRIGGER_BUFFER);
@@ -399,8 +403,12 @@ public class MovementManager : MonoBehaviour {
         redirectionManager.trailDrawer.BeginTrailDrawing();
 
         headFollower.CreateAvatarViualization();
-        var avatarColors = globalConfiguration.avatarColors;
-        ChangeColor(avatarColors[avatarId % avatarColors.Length]);
+
+        if (globalConfiguration.overwriteAvatarPrefabColor)
+        {
+            var avatarColors = globalConfiguration.avatarColors;
+            ChangeColor(avatarColors[avatarId % avatarColors.Length]);
+        }        
     }
     
     public void GenerateTrackingSpaceMesh(List<Vector2> trackingSpacePoints, List<List<Vector2>> obstaclePolygons)

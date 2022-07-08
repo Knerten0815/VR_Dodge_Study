@@ -20,7 +20,6 @@ namespace RD_Hiding
             height = transform.position.y;
         }
 
-
         void Update()
         {
             //position
@@ -39,7 +38,5 @@ namespace RD_Hiding
 
             transform.rotation = Quaternion.Euler(rot);
         }
-
     }
-
 }

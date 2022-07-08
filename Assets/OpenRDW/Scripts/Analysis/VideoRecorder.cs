@@ -147,6 +147,17 @@ public class VideoRecorder : MonoBehaviour
         // Inform thread to terminate when finished processing frames
         terminateThreadWhenDone = true;
     }
+    
+    public void StartRecording()
+    {
+        if (globalConfiguration.exportVideo)
+        {
+            // Start a new encoder thread
+            threadIsProcessing = true;
+            encoderThread = new Thread(EncodeAndSave);
+            encoderThread.Start();
+        }
+    }
 
     private void LateUpdate()
     {
