@@ -783,11 +783,11 @@ public class StatisticsLogger : MonoBehaviour {
 
         var trackingSpacePoints = experimentSetup.trackingSpacePoints;
         var obstaclePolygons = experimentSetup.obstaclePolygons;
-        var trackingBoundary = TrackingSpaceGenerator.GetTrackingSpaceBoundaries();
-        for (int i = 0; i < trackingSpacePoints.Count; i++)
-            Utilities.DrawLine(texRealPathGraph, trackingSpacePoints[i], trackingSpacePoints[(i + 1) % trackingSpacePoints.Count], realSideLength, borderThickness, trackingSpaceColor);
+        var trackingBoundary = TrackingSpaceGenerator.GetTrackingSpaceBoundaries();                                                                                                           // ---------------- added -------------- //
         for (int i = 0; i < trackingBoundary.Count; i++)
-            Utilities.DrawLine(texRealPathGraph, trackingBoundary[i], trackingBoundary[(i + 1) % trackingBoundary.Count], realSideLength, borderThickness, boundaryColor);
+            Utilities.DrawLine(texRealPathGraph, trackingBoundary[i], trackingBoundary[(i + 1) % trackingBoundary.Count], realSideLength, borderThickness, boundaryColor);                   // ---------------- added -------------- //
+        for (int i = 0; i < trackingSpacePoints.Count; i++)
+            Utilities.DrawLine(texRealPathGraph, trackingSpacePoints[i], trackingSpacePoints[(i + 1) % trackingSpacePoints.Count], realSideLength, borderThickness, trackingSpaceColor);        
         foreach (var obstaclePolygon in obstaclePolygons)
             Utilities.DrawPolygon(texRealPathGraph, obstaclePolygon, realSideLength, borderThickness, obstacleColor);
             //for (int i = 0; i < obstaclePolygon.Count; i++)
@@ -830,7 +830,9 @@ public class StatisticsLogger : MonoBehaviour {
         csvWriter = new StreamWriter(experimentSamplesDirectory + measuredMetric + ".csv");
         foreach (Vector2 value in values)
         {
-            csvWriter.WriteLine(value.x + ", " + value.y);
+            Debug.Log("Two dimensional value.ToString().Replace(, / .): " + value.x.ToString().Replace(",", "."));
+            Debug.Log("Two dimensional value: " + value.x);
+            csvWriter.WriteLine(value.x.ToString().Replace(",", ".") + ", " + value.y.ToString().Replace(",", "."));
         }
         csvWriter.Flush();
         csvWriter.Close();

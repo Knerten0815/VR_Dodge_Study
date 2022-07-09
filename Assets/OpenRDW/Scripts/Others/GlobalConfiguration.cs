@@ -1343,7 +1343,7 @@ public class GlobalConfiguration : MonoBehaviour
         File.WriteAllText(statisticsLogger.Get_TMP_DERECTORY() + @"\" + experimentSetupsListIterator + "-" + experimentSetupsList.Count + " " + experimentIterator + "-" + experimentSetups.Count + ".txt", "");
 
         // Prepared for new experiment
-        //experimentIterator++; ------------------------------------------------------------------------- nope! Always do the same experiment ;)
+        //experimentIterator++; ------------------------------------------------------------------------------------------------------------------------------- nope! Always do the same experiment ;)
         
         experimentInProgress = false;
 

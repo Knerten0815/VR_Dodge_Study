@@ -10,7 +10,7 @@ namespace RD_Hiding
         public GlobalConfiguration config;
         public GameObject camRig;
         public GameObject startUI;
-        public float distanceToActivateStartUI = 0.5f;
+        public float distanceToActivateStartUI = 0.1f;
         public RayToggler leftRayToggler, rightRayToggler;
         [SerializeField] bool ignoreWarning; 
         [SerializeField] GameObject warningUI;
