@@ -69,7 +69,8 @@ public class StatisticsLogger : MonoBehaviour {
 
     [SerializeField] private Color backgroundColor = Color.white;
     [SerializeField] private Color trackingSpaceColor = Color.black;
-    
+    [SerializeField] private Color boundaryColor = Color.red;
+
     private Color obstacleColor;
     // The way this works is that we wait 1 / samplingFrequency time to transpire before we attempt to clean buffers and gather samples
     // And since we always get a buffer value right before collecting samples, we'll have at least 1 buffer value to get an average from
@@ -782,8 +783,11 @@ public class StatisticsLogger : MonoBehaviour {
 
         var trackingSpacePoints = experimentSetup.trackingSpacePoints;
         var obstaclePolygons = experimentSetup.obstaclePolygons;
+        var trackingBoundary = TrackingSpaceGenerator.GetTrackingSpaceBoundaries();
         for (int i = 0; i < trackingSpacePoints.Count; i++)
             Utilities.DrawLine(texRealPathGraph, trackingSpacePoints[i], trackingSpacePoints[(i + 1) % trackingSpacePoints.Count], realSideLength, borderThickness, trackingSpaceColor);
+        for (int i = 0; i < trackingBoundary.Count; i++)
+            Utilities.DrawLine(texRealPathGraph, trackingBoundary[i], trackingBoundary[(i + 1) % trackingBoundary.Count], realSideLength, borderThickness, boundaryColor);
         foreach (var obstaclePolygon in obstaclePolygons)
             Utilities.DrawPolygon(texRealPathGraph, obstaclePolygon, realSideLength, borderThickness, obstacleColor);
             //for (int i = 0; i < obstaclePolygon.Count; i++)

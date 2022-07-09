@@ -8,6 +8,8 @@ using UnityEngine.XR.Interaction.Toolkit;
 [RequireComponent(typeof(XRRayInteractor))]
 public class RayToggler : MonoBehaviour
 {
+    public bool alwaysShowRays = false;
+
     [SerializeField] private InputActionReference activateReference1 = null;
     [SerializeField] private InputActionReference activateReference2 = null;
     [SerializeField] GameObject devToolUI;
@@ -57,10 +59,21 @@ public class RayToggler : MonoBehaviour
 
     private void ApplyStatus()
     {
+        if (alwaysShowRays)
+        {
+            rayInteractor.enabled = true;
+            return;
+        }            
+
         if (rayInteractor.enabled != isEnabledAll)
         {
             rayInteractor.enabled = isEnabledAll;
             devToolUI.SetActive(isEnabledAll);
         }            
+    }
+
+    public void SetAlwaysShowRays(bool showRays)
+    {
+        alwaysShowRays = showRays;
     }
 }

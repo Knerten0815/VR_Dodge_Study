@@ -10,14 +10,18 @@ namespace RD_Hiding
         public GlobalConfiguration config;
         public GameObject camRig;
         public GameObject startUI;
-        [SerializeField] TMP_Text diagonaleValue, areaValue, diagonalWarning, areaWarning;
-
+        public float distanceToActivateStartUI = 0.5f;
+        public RayToggler leftRayToggler, rightRayToggler;
+        [SerializeField] bool ignoreWarning; 
+        [SerializeField] GameObject warningUI;
+        [SerializeField] float minArea, maxArea, minDiagonal, maxDiagonal;
+        [SerializeField] TMP_Text diagonaleValue, areaValue, resemblingArea, diagonalWarning, areaWarning;
 
         private bool firstStart = true;
+        private List<GameObject> debugVisuals = new List<GameObject>();
 
         #region Singleton Setup
         private static SingletonFoEveryton _instance;
-        private GameObject longestDiagonal;
 
         public static SingletonFoEveryton Instance { get { return _instance; } }
 
@@ -32,24 +36,46 @@ namespace RD_Hiding
 
         void Start()
         {
+            //check Tracking Space dimensions
+            if (!ignoreWarning)
+            {
+                float area = TrackingSpaceGenerator.GetTrackingSpaceArea();
+                float diagonal = TrackingSpaceGenerator.GetLongestDistanceInBoundaries(out _, out _);
+                areaWarning.text = area.ToString("0.00");
+                diagonalWarning.text = diagonal.ToString("0.00");
 
+                if (area > maxArea || area < minArea || diagonal > maxArea || diagonal < minArea)
+                {
+                    Debug.Log("TrackingSpace is too small. Opening Warning UI.");
+                    warningUI.SetActive(true);
+                }                    
+            }            
         }
 
         private void Update()
         {
-            if(Mathf.Abs(Camera.main.transform.position.x) < 0.5f && Mathf.Abs(Camera.main.transform.position.z) < 0.5f && firstStart)
-            {                
+            if(Mathf.Abs(Camera.main.transform.position.x) < distanceToActivateStartUI && Mathf.Abs(Camera.main.transform.position.z) < distanceToActivateStartUI && firstStart)
+            {
+                Debug.Log("Participant entered start location: Opening Start Screen");
                 firstStart = false;
                 startUI.SetActive(true);
+                leftRayToggler.alwaysShowRays = true;
+                rightRayToggler.alwaysShowRays = true;
             }
         }
 
-        public void instantiateSphere(Vector2 position, bool isPartOfTrackingSpace)
+        public void SetRelativeCameraPosition()
         {
-            instantiateSphere(position, (Vector3.one * 0.1f), Color.yellow, isPartOfTrackingSpace);
+            Vector2 center = TrackingSpaceGenerator.GetTrackingSpaceCenter();
+            camRig.transform.position = new Vector3(-center.x, 0, -center.y);
         }
 
-        public void instantiateSphere(Vector2 position, Vector3 size, Color colour, bool isPartOfTrackingSpace)
+        public GameObject instantiateSphere(Vector2 position, bool isPartOfTrackingSpace)
+        {
+            return instantiateSphere(position, isPartOfTrackingSpace, (Vector3.one * 0.1f), Color.yellow);
+        }
+
+        public GameObject instantiateSphere(Vector2 position, bool isPartOfTrackingSpace, Vector3 size, Color colour)
         {
             GameObject theSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
@@ -60,19 +86,26 @@ namespace RD_Hiding
 
             if (isPartOfTrackingSpace)
                 theSphere.transform.SetParent(openRDWTrackingSpace.transform);
+
+            return theSphere;
         }
 
-        public void SetRelativeCameraPosition()
-        {
-            Vector2 center = TrackingSpaceGenerator.GetTrackingSpaceCenter();
-            camRig.transform.position = new Vector3(-center.x, 0, -center.y);
-        }
-
+        #region debug visuals
         public void DrawDiagonaleAndSetValue()
         {
-            Vector3 start, end;
-            diagonaleValue.text = TrackingSpaceGenerator.GetLongestDistanceInBoundaries(out start, out end).ToString("0.00");
-            DrawLine(start, end, Color.red);
+            diagonaleValue.text = TrackingSpaceGenerator.GetLongestDistanceInBoundaries(out Vector3 start, out Vector3 end).ToString("0.00");
+            DrawLine(start, end);
+        }
+
+        public void DrawResemblingRectangleAndSetValue()
+        {
+            resemblingArea.text = TrackingSpaceGenerator.GetQuadResemblingTrackingSpace(out Vector3 a, out Vector3 b, out Vector3 c, out Vector3 d).ToString("0.00");
+            DrawLine(a, b);
+            DrawLine(b, c);
+            DrawLine(c, d);
+            DrawLine(d, a);
+            DrawLine(b, d);
+            debugVisuals.Add(instantiateSphere(Vector2.zero, false));
         }
 
         public void SetAreaValue()
@@ -80,9 +113,10 @@ namespace RD_Hiding
             areaValue.text = TrackingSpaceGenerator.GetTrackingSpaceArea().ToString("0.00");
         }
 
-        public void DestroyDiagonale()
+        public void DestroyDebugVisuals()
         {
-            GameObject.Destroy(longestDiagonal);
+            foreach(GameObject go in debugVisuals)
+                GameObject.Destroy(go);
         }
 
         /// <summary>
@@ -90,18 +124,22 @@ namespace RD_Hiding
         /// </summary>
         /// <param name="start"></param>
         /// <param name="end"></param>
-        /// <param name="color"></param>
-        void DrawLine(Vector3 start, Vector3 end, Color color)
+        void DrawLine(Vector3 start, Vector3 end, float width = 0.05f)
         {
-            longestDiagonal = new GameObject();
-            longestDiagonal.transform.position = start;
-            longestDiagonal.AddComponent<LineRenderer>();
-            LineRenderer lr = longestDiagonal.GetComponent<LineRenderer>();
+            GameObject line = new GameObject();
+            line.transform.position = start;
+            line.AddComponent<LineRenderer>();
+            LineRenderer lr = line.GetComponent<LineRenderer>();
             lr.material = new Material(Shader.Find("Standard"));
-            lr.SetColors(color, color);
-            lr.SetWidth(0.1f, 0.1f);
+            lr.startWidth = width;
+            lr.endWidth = width;
+            lr.startColor = Color.red;
+            lr.endColor = Color.red;
             lr.SetPosition(0, start);
             lr.SetPosition(1, end);
+
+            debugVisuals.Add(line);
         }
+        #endregion
     }
 }

@@ -575,6 +575,62 @@ public class TrackingSpaceGenerator
         return longestDistance;
     }
 
+    /// <summary>
+    /// Gets the two longest diagonals of the tracking Space and takes their start and end points as the quad points.
+    /// This will ony work properly as long as the tracking space resembles a quad, of which the shortest side needs to be longer than half its diagonal.
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <param name="c"></param>
+    /// <param name="d"></param>
+    /// <returns>Returns the area of the resembling rectangle</returns>
+    public static float GetQuadResemblingTrackingSpace(out Vector3 a, out Vector3 b, out Vector3 c, out Vector3 d)
+    {
+        List<Vector2> bounds = GetTrackingSpaceBoundaries();
+        Vector3[] bounds3D = new Vector3[bounds.Count];
+        Vector3 center = new Vector3(GetTrackingSpaceCenter().x, 0, GetTrackingSpaceCenter().y);
+
+        for (int i = 0; i < bounds.Count; i++)
+            bounds3D[i] = new Vector3(bounds[i].x, 0.1f, bounds[i].y) - center;
+
+        float diagonalALength = GetLongestDistanceInBoundaries(out a, out c);
+        b = Vector3.zero;
+        d = Vector3.zero;
+        float cornerBuffer = diagonalALength / 2;
+        float diagonalBLength = 0;
+
+        for (int i = 0; i < bounds3D.Length - 1; i++)
+        {
+            for (int j = i + 1; j < bounds3D.Length; j++)
+            {
+                float magnitude = (bounds3D[i] - bounds3D[j]).magnitude;
+
+                if(magnitude > diagonalBLength)
+                {
+                    if((bounds3D[i] - a).magnitude > cornerBuffer && (bounds3D[i] - c).magnitude > cornerBuffer && (bounds3D[j] - a).magnitude > cornerBuffer && (bounds3D[j] - c).magnitude > cornerBuffer)
+                    {
+                        diagonalBLength = magnitude;
+                        b = bounds3D[i];
+                        d = bounds3D[j];
+                    }                    
+                }
+            }
+        }
+
+        Vector3 diagonalA = a - c;
+        Vector3 diagonalB = b - d;
+
+        float alpha = Vector3.Angle(diagonalA, diagonalB);
+        Debug.Log("Angle between diagonals: " + alpha);
+
+        float area = (diagonalALength * diagonalBLength * Mathf.Sin(alpha)) / 2;
+
+        Debug.Log("correct calculation: " + area);
+        Debug.Log("rectangle calculation: " + ((a - b).magnitude * (b - c).magnitude));
+
+        return area;
+    }
+
     public static float GetTrackingSpaceArea()
     {
         List<Vector2> trackingSpacepoints = GetTrackingSpaceBoundaries();
