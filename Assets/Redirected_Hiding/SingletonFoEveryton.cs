@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.XR;
 
 namespace RD_Hiding
 {
@@ -13,8 +12,6 @@ namespace RD_Hiding
         public GameObject startUI;
         [SerializeField] TMP_Text diagonaleValue, areaValue, diagonalWarning, areaWarning;
 
-        public XRInputSubsystem inputSystem = null;
-        public InputDevice hmd;
 
         private bool firstStart = true;
 
@@ -35,17 +32,6 @@ namespace RD_Hiding
 
         void Start()
         {
-            var hmdDevices = new List<InputDevice>();
-            InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.HeadMounted, hmdDevices);
-
-            foreach (var device in hmdDevices)
-                hmd = device;
-
-            List<XRInputSubsystem> subsystems = new List<XRInputSubsystem>();
-            SubsystemManager.GetInstances(subsystems);
-            foreach (var subsystem in subsystems)
-                inputSystem = subsystem;
-
 
         }
 
@@ -56,14 +42,6 @@ namespace RD_Hiding
                 firstStart = false;
                 startUI.SetActive(true);
             }
-        }
-
-        public void RecenterHMD()
-        {
-            if (hmd.subsystem.TryRecenter())
-                Debug.Log("Succesfully recentered!");
-            else
-                Debug.Log("Failed to recenter!");
         }
 
         public void instantiateSphere(Vector2 position, bool isPartOfTrackingSpace)
