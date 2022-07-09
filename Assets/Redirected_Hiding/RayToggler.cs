@@ -10,6 +10,7 @@ public class RayToggler : MonoBehaviour
 {
     [SerializeField] private InputActionReference activateReference1 = null;
     [SerializeField] private InputActionReference activateReference2 = null;
+    [SerializeField] GameObject devToolUI;
 
     private XRRayInteractor rayInteractor = null;
     private bool isEnabled1 = false;
@@ -57,6 +58,9 @@ public class RayToggler : MonoBehaviour
     private void ApplyStatus()
     {
         if (rayInteractor.enabled != isEnabledAll)
+        {
             rayInteractor.enabled = isEnabledAll;
+            devToolUI.SetActive(isEnabledAll);
+        }            
     }
 }

@@ -11,7 +11,7 @@ namespace RD_Hiding
         public GlobalConfiguration config;
         public GameObject camRig;
         public GameObject startUI;
-        [SerializeField] TMP_Text diagonaleValue;
+        [SerializeField] TMP_Text diagonaleValue, areaValue, diagonalWarning, areaWarning;
 
         public XRInputSubsystem inputSystem = null;
         public InputDevice hmd;
@@ -41,12 +41,12 @@ namespace RD_Hiding
             foreach (var device in hmdDevices)
                 hmd = device;
 
-            List<XRInputSubsystem> subsystems = new List<UnityEngine.XR.XRInputSubsystem>();
+            List<XRInputSubsystem> subsystems = new List<XRInputSubsystem>();
             SubsystemManager.GetInstances(subsystems);
             foreach (var subsystem in subsystems)
-            {
                 inputSystem = subsystem;
-            }
+
+
         }
 
         private void Update()
@@ -90,9 +90,16 @@ namespace RD_Hiding
             camRig.transform.position = new Vector3(-center.x, 0, -center.y);
         }
 
-        public void GetDiagonale(bool draw)
+        public void DrawDiagonaleAndSetValue()
         {
-            diagonaleValue.text = GetLongestDistanceInBoundaries(draw).ToString();
+            Vector3 start, end;
+            diagonaleValue.text = TrackingSpaceGenerator.GetLongestDistanceInBoundaries(out start, out end).ToString("0.00");
+            DrawLine(start, end, Color.red);
+        }
+
+        public void SetAreaValue()
+        {
+            areaValue.text = TrackingSpaceGenerator.GetTrackingSpaceArea().ToString("0.00");
         }
 
         public void DestroyDiagonale()
@@ -100,44 +107,19 @@ namespace RD_Hiding
             GameObject.Destroy(longestDiagonal);
         }
 
-        public float GetLongestDistanceInBoundaries(bool draw)
-        {
-            List<Vector2> bounds = TrackingSpaceGenerator.GetTrackingSpaceBoundaries();
-
-            float longestDistance = 0;
-            Vector3 center = new Vector3(TrackingSpaceGenerator.GetTrackingSpaceCenter().x, 0, TrackingSpaceGenerator.GetTrackingSpaceCenter().y);
-            Vector3 start = Vector3.zero;
-            Vector3 end = Vector3.zero;
-
-            for (int i = 0; i < bounds.Count; i++)
-            {
-                if (i + 2 == bounds.Count)
-                    break;
-
-                for (int j = i + 2; j < bounds.Count; j++)
-                {
-                    float magnitude = (bounds[i] - bounds[j]).magnitude;
-                    if (Mathf.Abs(magnitude) > longestDistance)
-                    {
-                        longestDistance = magnitude;
-                        start = new Vector3(bounds[i].x, 0.1f, bounds[i].y) - center;
-                        end = new Vector3(bounds[j].x, 0.1f, bounds[j].y) - center;
-                    }
-                }
-            }
-
-            if (draw)
-                DrawLine(start, end, Color.red);
-
-            return longestDistance;
-        }
-
+        /// <summary>
+        /// taken from https://answers.unity.com/questions/8338/how-to-draw-a-line-using-script.html
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="color"></param>
         void DrawLine(Vector3 start, Vector3 end, Color color)
         {
             longestDiagonal = new GameObject();
             longestDiagonal.transform.position = start;
             longestDiagonal.AddComponent<LineRenderer>();
             LineRenderer lr = longestDiagonal.GetComponent<LineRenderer>();
+            lr.material = new Material(Shader.Find("Standard"));
             lr.SetColors(color, color);
             lr.SetWidth(0.1f, 0.1f);
             lr.SetPosition(0, start);

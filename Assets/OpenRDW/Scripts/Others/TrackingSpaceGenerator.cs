@@ -43,6 +43,7 @@ public class TrackingSpaceGenerator
         }
         return trackingSpacePoints;
     }
+    #region other tracking spaces
     //generate rectangle tracking space (with obstacle)
     public static void GenerateRectangleTrackingSpace(int obstacleType, out List<Vector2> trackingSpacePoints, out List<List<Vector2>> obstaclePolygons, out List<InitialConfiguration> initialConfigurations, float width,float height)
     {
@@ -490,6 +491,8 @@ public class TrackingSpaceGenerator
         GenerateT_ShapeTrackingSpace(obstacleType, out trackingSpacePoints, out obstaclePolygons, out initialConfigurations, w1, w2, w3);
     }
 
+    #endregion
+
     //generate tracking space based on the boundary of the actual tracking space.
     public static void GenerateTrackingBoundaryTrackingSpace(out List<Vector2> trackingSpacePoints, out List<InitialConfiguration> initialConfigurations)
     {
@@ -541,6 +544,53 @@ public class TrackingSpaceGenerator
         }
 
         return trackingSpaceCenter / trackingSpacepoints.Count;
+    }
+
+    public static float GetLongestDistanceInBoundaries(out Vector3 start, out Vector3 end)
+    {
+        List<Vector2> bounds = GetTrackingSpaceBoundaries();
+
+        float longestDistance = 0;
+        Vector3 center = new Vector3(GetTrackingSpaceCenter().x, 0, GetTrackingSpaceCenter().y);
+        start = Vector3.zero;
+        end = Vector3.zero;
+
+        //iterate through all points, except the last one. All diagonals of the last point will get calculated in the j-loops by the end.
+        for (int i = 0; i < bounds.Count - 1; i++)
+        {
+            //iterate through all points, beginning by the next point. No need to calculate points before i.
+            for (int j = i + 1; j < bounds.Count; j++)
+            {
+                float magnitude = (bounds[i] - bounds[j]).magnitude;
+
+                if (magnitude > longestDistance)
+                {
+                    longestDistance = magnitude;
+                    start = new Vector3(bounds[i].x, 0.1f, bounds[i].y) - center;
+                    end = new Vector3(bounds[j].x, 0.1f, bounds[j].y) - center;
+                }
+            }
+        }
+
+        return longestDistance;
+    }
+
+    public static float GetTrackingSpaceArea()
+    {
+        List<Vector2> trackingSpacepoints = GetTrackingSpaceBoundaries();
+
+        // Algorithm for area calculation taken from wikipedia:
+        // https://de.wikipedia.org/wiki/Polygon#Fl%C3%A4cheninhalt
+
+        float result = 0;
+        int n = trackingSpacepoints.Count;
+
+        for (int i = 0; i <= n - 1; i++)
+        {
+            result += (trackingSpacepoints[i].y + trackingSpacepoints[(i + 1) % n].y) * (trackingSpacepoints[i].x - trackingSpacepoints[(i + 1) % n].x);
+        }
+
+        return result / 2;
     }
 
     /// <summary>
