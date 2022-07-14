@@ -5,6 +5,7 @@ using PathSeed = VirtualPathGenerator.PathSeed;
 using AvatarInfo = ExperimentSetup.AvatarInfo;
 using System.IO;
 using UnityEngine.XR;
+using System.Globalization;
 
 //Store common parameters 
 public class GlobalConfiguration : MonoBehaviour
@@ -715,7 +716,8 @@ public class GlobalConfiguration : MonoBehaviour
     {
         if (!experimentInProgress && experimentIterator < experimentSetups.Count)
         {
-            //StartNextExperiment();
+            StartNextExperiment();
+            //statisticsLogger.InitializeAllValues();
         }
 
         if (experimentInProgress && !avatarIsWalking)
@@ -992,7 +994,7 @@ public class GlobalConfiguration : MonoBehaviour
             Debug.LogError("waypointsFilePath does not exist! :" + path);
             return null;
         }
-
+        
         var re = new List<Vector2>();
         try
         {
@@ -1016,8 +1018,8 @@ public class GlobalConfiguration : MonoBehaviour
                     break;
                 }
 
-                var x = float.Parse(split[0]);
-                var y = float.Parse(split[1]);
+                float x = float.Parse(split[0], CultureInfo.InvariantCulture);
+                float y = float.Parse(split[1], CultureInfo.InvariantCulture);
 
                 if (lineId == 1) {
                     firstPoint = new Vector2(x, y);
@@ -1032,10 +1034,12 @@ public class GlobalConfiguration : MonoBehaviour
                     //Debug.Log("nextPoint: " + new Vector2(x, y));
                 }
                 re.Add(new Vector2(x, y));
+                RD_Hiding.SingletonFoEveryton.Instance.instantiateSphere(new Vector2(x, y), false);
             }
         }
         catch
         {
+            Debug.Log("something went wrong during waypint loading");
             return re;
         }
         return re;

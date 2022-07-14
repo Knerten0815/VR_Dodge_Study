@@ -200,7 +200,7 @@ public class StatisticsLogger : MonoBehaviour {
     enum LoggingState { not_started, logging, paused, complete };
     LoggingState state = LoggingState.not_started;
 
-    void InitializeAllValues()
+    public void InitializeAllValues()
     {        
         avatarStatistics = new List<AvatarStatistics>();
         for (int i = 0; i < globalConfiguration.redirectedAvatars.Count; i++) {

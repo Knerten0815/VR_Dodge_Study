@@ -1,0 +1,9 @@
+trackingSpaceChoice = Circle
+obstacleType = 0
+newUser
+redirector = s2o
+resetter = twooneturn
+pathseedChoice = FilePath
+waypointsfilepath = C:\Users\kevin\Desktop\WalkingPaths\user_virtual_positions.csv
+samplingintervalsfilepath = C:\Users\kevin\Desktop\WalkingPaths\sampling_intervals.csv
+end

@@ -669,7 +669,8 @@ public class TrackingSpaceGenerator
 
         initialConfigurations.Add(new InitialConfiguration(playerPos, playerForward));
 
-        RD_Hiding.SingletonFoEveryton.Instance.SetRelativeCameraPosition();
+        if(!RD_Hiding.SingletonFoEveryton.Instance.getLoadFromTxt)
+            RD_Hiding.SingletonFoEveryton.Instance.SetRelativeCameraPosition();
     }
 
     //generate the mesh of tracking space or obstacle, center is (0,0), enumerate other vertices to generate triangles    
