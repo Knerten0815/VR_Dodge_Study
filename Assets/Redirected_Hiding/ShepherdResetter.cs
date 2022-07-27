@@ -23,7 +23,7 @@ namespace RD_Hiding
 
         public override void InitializeReset()
         {
-            redirector.c
+            redirector = redirectionManager.redirector;
         }
 
         public override void InjectResetting()
