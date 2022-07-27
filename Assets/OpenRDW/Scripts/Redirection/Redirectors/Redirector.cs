@@ -12,6 +12,9 @@ public abstract class Redirector : MonoBehaviour
     [HideInInspector]
     public MovementManager movementManager;
 
+    public float CURVATURE_GAIN_CAP_DEGREES_PER_SECOND = 15;  // degrees per second
+    public float ROTATION_GAIN_CAP_DEGREES_PER_SECOND = 30;  // degrees per second
+
     void Awake()
     {
         globalConfiguration = GetComponentInParent<GlobalConfiguration>();
@@ -59,7 +62,7 @@ public abstract class Redirector : MonoBehaviour
         return float.IsNaN(v.x) || float.IsNaN(v.y) || float.IsNaN(v.z);
     }
     /// <summary>
-    /// Applies rotation to Redirected User. The neat thing about calling it this way is that we can keep track of gains applied.
+    /// Applies translation to Redirected User. The neat thing about calling it this way is that we can keep track of gains applied.
     /// </summary>
     /// <param name="translation"></param>
     protected void InjectTranslation(Vector3 translation)

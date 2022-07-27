@@ -307,7 +307,6 @@ public class GlobalConfiguration : MonoBehaviour
     public Camera cameraVirtualTopForAllAvatars;//virtualCam for all avatars
     #endregion
 
-
     #region Others
 
     [HideInInspector]
@@ -1426,7 +1425,7 @@ public class GlobalConfiguration : MonoBehaviour
                 TrackingSpaceGenerator.GenerateRectangleTrackingSpace(0, out trackingSpacePoints, out obstaclePolygons, out defaultInitialConfiguration, squareWidth, squareWidth);
                 break;
             case TrackingSpaceChoice.Circle:
-                TrackingSpaceGenerator.GenerateCircleTrackingSpace(out trackingSpacePoints, out defaultInitialConfiguration, squareWidth, 100);
+                TrackingSpaceGenerator.GenerateCircleTrackingSpace(out trackingSpacePoints, out defaultInitialConfiguration, squareWidth / 2, 100);
                 break;
             case TrackingSpaceChoice.Boundary:
                 TrackingSpaceGenerator.GenerateTrackingBoundaryTrackingSpace(out trackingSpacePoints, out defaultInitialConfiguration);

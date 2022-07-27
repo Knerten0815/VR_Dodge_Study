@@ -17,6 +17,7 @@ namespace RD_Hiding
         [SerializeField] float minArea, maxArea, minDiagonal, maxDiagonal;
         [SerializeField] TMP_Text diagonaleValue, areaValue, resemblingArea, diagonalWarning, areaWarning;
         public bool getLoadFromTxt;
+        public GlobalConfiguration.MovementController getMovementController;
 
         private bool firstStart = true;
         private List<GameObject> debugVisuals = new List<GameObject>();
@@ -34,6 +35,7 @@ namespace RD_Hiding
                 _instance = this;
 
             getLoadFromTxt = config.loadFromTxt;
+            getMovementController = config.movementController;
         }
         #endregion
 
@@ -57,7 +59,7 @@ namespace RD_Hiding
 
         private void Update()
         {
-            if(!config.loadFromTxt && firstStart && Mathf.Abs(Camera.main.transform.position.x) < distanceToActivateStartUI && Mathf.Abs(Camera.main.transform.position.z) < distanceToActivateStartUI)
+            if(config.movementController == GlobalConfiguration.MovementController.HMD && firstStart && Mathf.Abs(Camera.main.transform.position.x) < distanceToActivateStartUI && Mathf.Abs(Camera.main.transform.position.z) < distanceToActivateStartUI)
             {
                 Debug.Log("Participant entered start location: Opening Start Screen");
                 firstStart = false;

@@ -669,7 +669,7 @@ public class TrackingSpaceGenerator
 
         initialConfigurations.Add(new InitialConfiguration(playerPos, playerForward));
 
-        if(!RD_Hiding.SingletonFoEveryton.Instance.getLoadFromTxt)
+        if(RD_Hiding.SingletonFoEveryton.Instance.getMovementController == GlobalConfiguration.MovementController.HMD)
             RD_Hiding.SingletonFoEveryton.Instance.SetRelativeCameraPosition();
     }
 

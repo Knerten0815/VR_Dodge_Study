@@ -4,8 +4,8 @@ using System.Collections.Generic;
 public class RedirectionManager : MonoBehaviour {
     public static readonly float MaxSamePosTime = 50;//the max time(in seconds) the avatar can stand on the same position, exceeds this value will make data invalid (stuck in one place)
 
-    public enum RedirectorChoice { None, S2C, S2O, Zigzag, ThomasAPF, MessingerAPF, DynamicAPF, DeepLearning, PassiveHapticAPF };
-    public enum ResetterChoice { None, TwoOneTurn, APF };
+    public enum RedirectorChoice { None, S2C, S2O, Zigzag, ThomasAPF, MessingerAPF, DynamicAPF, DeepLearning, PassiveHapticAPF, Shepherd, ShepherdAPF };
+    public enum ResetterChoice { None, TwoOneTurn, APF, Shepherd, ShepherdAPF };
 
 
     [Tooltip("The game object that is being physically tracked (probably user's head)")]
@@ -145,6 +145,10 @@ public class RedirectionManager : MonoBehaviour {
                 return typeof(DeepLearning_Redirector);
             case RedirectorChoice.PassiveHapticAPF:
                 return typeof(PassiveHapticAPF_Redirector);
+            case RedirectorChoice.Shepherd:
+                return typeof(RD_Hiding.ShepherdRedirector);
+            case RedirectorChoice.ShepherdAPF:
+                return typeof(RD_Hiding.ShepherdAPFRedirector);
         }
         return typeof(NullRedirector);
     }
@@ -168,6 +172,10 @@ public class RedirectionManager : MonoBehaviour {
             return RedirectorChoice.DeepLearning;
         else if (redirector.Equals(typeof(PassiveHapticAPF_Redirector)))
             return RedirectorChoice.PassiveHapticAPF;
+        else if (redirector.Equals(typeof(RD_Hiding.ShepherdRedirector)))
+            return RedirectorChoice.Shepherd;
+        else if (redirector.Equals(typeof(RD_Hiding.ShepherdAPFRedirector)))
+            return RedirectorChoice.ShepherdAPF;
         return RedirectorChoice.None;
     }
     public static System.Type DecodeRedirector(string s)
@@ -192,6 +200,10 @@ public class RedirectionManager : MonoBehaviour {
                 return typeof(DeepLearning_Redirector);
             case "passivehapticapf":
                 return typeof(PassiveHapticAPF_Redirector);
+            case "shepherd":
+                return typeof(RD_Hiding.ShepherdRedirector);
+            case "shepherdapf":
+                return typeof(RD_Hiding.ShepherdAPFRedirector);
             default:
                 return typeof(NullRedirector);
         }
@@ -207,6 +219,10 @@ public class RedirectionManager : MonoBehaviour {
                 return typeof(TwoOneTurnResetter);
             case ResetterChoice.APF:
                 return typeof(APF_Resetter);
+            case ResetterChoice.Shepherd:
+                return typeof(RD_Hiding.ShepherdResetter);
+            case ResetterChoice.ShepherdAPF:
+                return typeof(RD_Hiding.ShepherdAPFResetter);
         }
         return typeof(NullResetter);
     }
@@ -218,6 +234,10 @@ public class RedirectionManager : MonoBehaviour {
             return ResetterChoice.TwoOneTurn;
         else if (reset.Equals(typeof(APF_Resetter)))
             return ResetterChoice.APF;
+        else if (reset.Equals(typeof(RD_Hiding.ShepherdResetter)))
+            return ResetterChoice.Shepherd;
+        else if (reset.Equals(typeof(RD_Hiding.ShepherdAPFResetter)))
+            return ResetterChoice.ShepherdAPF;
         return ResetterChoice.None;
     }
     public static System.Type DecodeResetter(string s)
@@ -230,6 +250,10 @@ public class RedirectionManager : MonoBehaviour {
                 return typeof(TwoOneTurnResetter);
             case "apf":
                 return typeof(APF_Resetter);
+            case "shepherd":
+                return typeof(RD_Hiding.ShepherdResetter);
+            case "shepherdapf":
+                return typeof(RD_Hiding.ShepherdAPFResetter);
             default:
                 return typeof(NullResetter);
         }

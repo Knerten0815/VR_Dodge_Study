@@ -818,7 +818,7 @@ public class StatisticsLogger : MonoBehaviour {
         csvWriter = new StreamWriter(experimentSamplesDirectory + measuredMetric + ".csv");
         foreach (float value in values)
         {
-            csvWriter.WriteLine(value);
+            csvWriter.WriteLine(value.ToString().Replace(",", "."));
         }
         csvWriter.Flush();
         csvWriter.Close();
@@ -830,8 +830,6 @@ public class StatisticsLogger : MonoBehaviour {
         csvWriter = new StreamWriter(experimentSamplesDirectory + measuredMetric + ".csv");
         foreach (Vector2 value in values)
         {
-            Debug.Log("Two dimensional value.ToString().Replace(, / .): " + value.x.ToString().Replace(",", "."));
-            Debug.Log("Two dimensional value: " + value.x);
             csvWriter.WriteLine(value.x.ToString().Replace(",", ".") + ", " + value.y.ToString().Replace(",", "."));
         }
         csvWriter.Flush();

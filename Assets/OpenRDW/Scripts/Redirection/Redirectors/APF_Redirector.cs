@@ -31,6 +31,7 @@ public abstract class APF_Redirector : Redirector
             totalForcePointer.SetActive(simulationManager.ifVisible);
             totalForcePointer.transform.position = redirectionManager.currPos;
 
+            Debug.Log("Update force arrow when force > 0: " + forceT.magnitude);
             if (forceT.magnitude > 0)
                 totalForcePointer.transform.forward = transform.rotation * Utilities.UnFlatten(forceT);
         }

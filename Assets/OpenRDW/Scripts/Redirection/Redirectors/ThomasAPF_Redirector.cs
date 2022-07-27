@@ -7,9 +7,6 @@ using System.Collections.Generic;
 
 public class ThomasAPF_Redirector : APF_Redirector
 {
-    private const float CURVATURE_GAIN_CAP_DEGREES_PER_SECOND = 15;  // degrees per second
-    private const float ROTATION_GAIN_CAP_DEGREES_PER_SECOND = 30;  // degrees per second
-    
     public override void InjectRedirection()
     {
         var obstaclePolygons = redirectionManager.globalConfiguration.obstaclePolygons;
@@ -24,13 +21,28 @@ public class ThomasAPF_Redirector : APF_Redirector
         var nearestPosList = new List<Vector2>();
         var currPosReal = Utilities.FlattenedPos2D(redirectionManager.currPosReal);
 
-        //physical borders' contributions
-        for (int i = 0; i < trackingSpacePoints.Count; i++) {
-            var p = trackingSpacePoints[i];
-            var q = trackingSpacePoints[(i + 1) % trackingSpacePoints.Count];
-            var nearestPos = Utilities.GetNearestPos(currPosReal, new List<Vector2> { p, q });            
-            nearestPosList.Add(nearestPos);
+        float xPow2 = currPosReal.x * currPosReal.x;
+        float yPow2 = currPosReal.y * currPosReal.y;
+        float radiusPow2 = (globalConfiguration.squareWidth / 2 - globalConfiguration.RESET_TRIGGER_BUFFER) * (globalConfiguration.squareWidth / 2 - globalConfiguration.RESET_TRIGGER_BUFFER);
+
+        //is inside circle tracking space?
+        if(xPow2 + yPow2 < radiusPow2)
+        {
+            //physical borders' contributions
+            for (int i = 0; i < trackingSpacePoints.Count; i++)
+            {
+                var p = trackingSpacePoints[i];
+                var q = trackingSpacePoints[(i + 1) % trackingSpacePoints.Count];
+                var nearestPos = Utilities.GetNearestPos(currPosReal, new List<Vector2> { p, q });
+                nearestPosList.Add(nearestPos);
+            }
         }
+        else
+        {
+            //point back into Tracking Space
+            Vector2 shepherdPosition = currPosReal + currPosReal / currPosReal;
+            nearestPosList.Add(shepherdPosition);            
+        }        
 
         //obstacle contribution
         foreach (var obstacle in obstaclePolygons) {
