@@ -1800,7 +1800,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d97f4f04aa3aa6e4abc407f0d0d45fcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementController: 0
+  movementController: 2
   runInBackstage: 0
   loadFromTxt: 0
   multiCmdFiles: 0
@@ -8310,7 +8310,7 @@ MonoBehaviour:
   distanceToActivateStartUI: 0.5
   leftRayToggler: {fileID: 199032808}
   rightRayToggler: {fileID: 1726374080}
-  ignoreWarning: 0
+  ignoreWarning: 1
   warningUI: {fileID: 496444652}
   minArea: 25
   maxArea: 26

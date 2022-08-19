@@ -16,7 +16,7 @@ public abstract class Resetter : MonoBehaviour {
 
     public Transform instanceHUD;
 
-    private void Awake()
+    public void Awake()
     {
         simulationManager = GetComponent<MovementManager>();        
     }
