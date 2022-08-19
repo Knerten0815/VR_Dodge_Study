@@ -52,7 +52,9 @@ public class SimulatedWalker : MonoBehaviour {
                 }
             }
             else if (redirectionManager.globalConfiguration.movementController == GlobalConfiguration.MovementController.Keyboard)
-            {                
+            {
+                redirectionManager.keyboardController.MakeOneStepKeyboardMovement();    // changed for being able to keep wlaking in Keyboard mode, even if in reset. Simulates VR experience better.
+                /*
                 if (!redirectionManager.inReset)
                 {                    
                     if (!redirectionManager.resetter.IfCollisionHappens())
@@ -61,7 +63,7 @@ public class SimulatedWalker : MonoBehaviour {
                 else
                 {//in reset
                     redirectionManager.resetter.SimulatedWalkerUpdate();
-                }                
+                } */               
             }
         }
     }
