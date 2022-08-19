@@ -44,10 +44,13 @@ namespace RD_Hiding
 
         public override void InitializeReset()
         {
+<<<<<<< HEAD
             Debug.Log("Initalize Reset.");
             maxPlayerRingDepth = 0;
             spawnShepherd();
+=======
             redirector = redirectionManager.redirector;
+>>>>>>> dd2ae00ca1f06ebd8e35c46881658d99f8f4c86c
         }
 
         public override void InjectResetting()
