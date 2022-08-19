@@ -47,6 +47,7 @@ namespace RD_Hiding
             Debug.Log("Initalize Reset.");
             maxPlayerRingDepth = 0;
             spawnShepherd();
+            redirector = redirectionManager.redirector;
         }
 
         public override void InjectResetting()
