@@ -6,18 +6,19 @@ namespace RD_Hiding
 {
     public class ShepherdResetter : Resetter
     {
+        GameObject shepGO;
+        Redirector redirector;
+
         float requiredRotateSteerAngle = 0;//steering angle，rotate the physical plane and avatar together
 
         float requiredRotateAngle = 0;//normal rotation angle, only rotate avatar
 
         float rotateDir;//rotation direction, positive if rotate clockwise
 
-        float circleDiameter;
-        float resetRingDiameter;
-        float maxPlayerRingDepth = 0;
-        GameObject shepGO;
-
-        Redirector redirector;
+        public float circleDiameter;
+        public float resetRingDiameter;        
+        public float ShepherdSpeed = 2;
+        public bool showShepherdTarget = false;
 
         private new void Awake()
         {
@@ -29,8 +30,6 @@ namespace RD_Hiding
             circleDiameter = redirectionManager.globalConfiguration.squareWidth;
             resetRingDiameter = circleDiameter * 4;
             redirector = redirectionManager.redirector;
-
-            Debug.Log("ResetRingDiamter: " + resetRingDiameter);
 
             // draw resetRing
             foreach (var point in redirectionManager.globalConfiguration.trackingSpacePoints)
@@ -45,15 +44,13 @@ namespace RD_Hiding
         public override void InitializeReset()
         {
             Debug.Log("Initalize Reset.");
-            maxPlayerRingDepth = 0;
             spawnShepherd();
         }
 
         public override void InjectResetting()
         {
             redirector.InjectRedirection();
-            calculateShepPosition();
-            if(redirectionManager.currPosReal.magnitude < circleDiameter / 2 - 0.1)
+            if (redirectionManager.currPosReal.magnitude < circleDiameter / 2 - 0.1)
             {
                 redirectionManager.OnResetEnd();
             }
@@ -87,23 +84,9 @@ namespace RD_Hiding
         private void spawnShepherd()
         {
             Vector3 shepPos = redirectionManager.currPosReal.normalized * resetRingDiameter;
-            shepGO = SingletonFoEveryton.Instance.instantiateSphere(shepPos, true, Vector3.one, Color.red);
+            shepGO = Instantiate(SingletonFoEveryton.Instance.dronePreFab);
+            shepGO.transform.SetParent(SingletonFoEveryton.Instance.openRDWTrackingSpace.transform);
             shepGO.transform.localPosition = shepPos;
-            shepGO.name = "Shepherd";
-        }
-
-        private Vector2 calculateShepPosition()
-        {
-            float playerRingDepth = redirectionManager.currPosReal.magnitude - circleDiameter / 2;
-
-            if (playerRingDepth > maxPlayerRingDepth)
-                maxPlayerRingDepth = playerRingDepth;
-
-            Vector3 shepPos = redirectionManager.currPosReal.normalized * (resetRingDiameter - maxPlayerRingDepth);
-            shepPos.y = 1;
-            shepGO.transform.localPosition = shepGO.transform.InverseTransformPoint(shepPos);
-
-            return Vector2.zero;
         }
     }
 }

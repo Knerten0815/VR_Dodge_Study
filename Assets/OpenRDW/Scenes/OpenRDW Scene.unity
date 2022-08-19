@@ -1800,7 +1800,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d97f4f04aa3aa6e4abc407f0d0d45fcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementController: 2
+  movementController: 0
   runInBackstage: 0
   loadFromTxt: 0
   multiCmdFiles: 0
@@ -1844,7 +1844,7 @@ MonoBehaviour:
   rotationSpeed: 90
   currentShownAvatarId: 0
   avatarIdSortedFromHighPriorityToLow: 
-  virtualWorldVisible: 1
+  virtualWorldVisible: 0
   trackingSpaceVisible: 1
   bufferVisible: 0
   if3dObstacle: 1
@@ -2018,7 +2018,7 @@ Transform:
   m_GameObject: {fileID: 226063172}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 1, z: 0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 969460890}
   - {fileID: 1750823280}
@@ -2074,7 +2074,7 @@ Transform:
   m_GameObject: {fileID: 226045700}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 1, z: 10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 226281888}
   m_Father: {fileID: 226333596}
@@ -8310,6 +8310,8 @@ MonoBehaviour:
   distanceToActivateStartUI: 0.5
   leftRayToggler: {fileID: 199032808}
   rightRayToggler: {fileID: 1726374080}
+  dronePreFab: {fileID: 2765736487130794984, guid: ebf9a0f82a9f54845971bdea5862d7eb,
+    type: 3}
   ignoreWarning: 1
   warningUI: {fileID: 496444652}
   minArea: 25
@@ -13564,3 +13566,82 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2129620774}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &2765736486447581047
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2765736487130794967, guid: ebf9a0f82a9f54845971bdea5862d7eb,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2765736487130794967, guid: ebf9a0f82a9f54845971bdea5862d7eb,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2765736487130794967, guid: ebf9a0f82a9f54845971bdea5862d7eb,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2765736487130794967, guid: ebf9a0f82a9f54845971bdea5862d7eb,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2765736487130794967, guid: ebf9a0f82a9f54845971bdea5862d7eb,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2765736487130794967, guid: ebf9a0f82a9f54845971bdea5862d7eb,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2765736487130794967, guid: ebf9a0f82a9f54845971bdea5862d7eb,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2765736487130794967, guid: ebf9a0f82a9f54845971bdea5862d7eb,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2765736487130794967, guid: ebf9a0f82a9f54845971bdea5862d7eb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2765736487130794967, guid: ebf9a0f82a9f54845971bdea5862d7eb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2765736487130794967, guid: ebf9a0f82a9f54845971bdea5862d7eb,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2765736487130794984, guid: ebf9a0f82a9f54845971bdea5862d7eb,
+        type: 3}
+      propertyPath: m_Name
+      value: Shepherd Drone
+      objectReference: {fileID: 0}
+    - target: {fileID: 2765736487130794984, guid: ebf9a0f82a9f54845971bdea5862d7eb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7397679727750755661, guid: ebf9a0f82a9f54845971bdea5862d7eb,
+        type: 3}
+      propertyPath: rdManager
+      value: 
+      objectReference: {fileID: 232108112}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ebf9a0f82a9f54845971bdea5862d7eb, type: 3}

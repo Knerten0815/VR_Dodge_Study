@@ -12,6 +12,7 @@ namespace RD_Hiding
         public GameObject startUI;
         public float distanceToActivateStartUI = 0.1f;
         public RayToggler leftRayToggler, rightRayToggler;
+        public GameObject dronePreFab;
         [SerializeField] bool ignoreWarning; 
         [SerializeField] GameObject warningUI;
         [SerializeField] float minArea, maxArea, minDiagonal, maxDiagonal;
