@@ -6,7 +6,7 @@ namespace RD_Hiding
 {
     public class SingletonFoEveryton : MonoBehaviour
     {
-        public GameObject openRDWTrackingSpace;
+        public GameObject trackingSpaceRoot;
         public GlobalConfiguration config;
         public GameObject camRig;
         public GameObject startUI;
@@ -91,7 +91,7 @@ namespace RD_Hiding
             theSphere.transform.localScale = size;
 
             if (isPartOfTrackingSpace)
-                theSphere.transform.SetParent(openRDWTrackingSpace.transform);
+                theSphere.transform.SetParent(trackingSpaceRoot.transform);
 
             return theSphere;
         }

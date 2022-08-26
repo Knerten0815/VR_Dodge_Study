@@ -31,9 +31,10 @@ namespace RD_Hiding
             resetRingDiameter = circleDiameter * 4;
             redirector = redirectionManager.redirector;
 
-            // draw resetRing
+            /* draw resetRing
             foreach (var point in redirectionManager.globalConfiguration.trackingSpacePoints)
                 SingletonFoEveryton.Instance.instantiateSphere(point.normalized * resetRingDiameter, true);
+            */
         }
 
         public override bool IsResetRequired()
@@ -85,7 +86,7 @@ namespace RD_Hiding
         {
             Vector3 shepPos = redirectionManager.currPosReal.normalized * resetRingDiameter;
             shepGO = Instantiate(SingletonFoEveryton.Instance.dronePreFab);
-            shepGO.transform.SetParent(SingletonFoEveryton.Instance.openRDWTrackingSpace.transform);
+            shepGO.transform.SetParent(SingletonFoEveryton.Instance.trackingSpaceRoot.transform);
             shepGO.transform.localPosition = shepPos;
         }
     }
