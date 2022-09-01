@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -59,13 +61,13 @@ public class AnimateDrone : MonoBehaviour
 
         if (turnOn)
         {
-            halo.GetType().GetProperty("enabled").SetValue(halo, true, null);
+            Type haloType = halo.GetType();
+            haloType.GetProperty("enabled").SetValue(halo, true, null);
         }
         else
         {
             halo.GetType().GetProperty("enabled").SetValue(halo, false, null);
         }
-
     }
 
     IEnumerator setAnimationKeyValues()
@@ -73,11 +75,11 @@ public class AnimateDrone : MonoBehaviour
         while (true)
         {
             // activate spotLight halo
-            spotLight.color = Random.ColorHSV(0, 1, 1, 1, 1, 1);
+            //spotLight.color = UnityEngine.Random.ColorHSV(0, 1, 1, 1, 1, 1);
             SetHalo(true);
 
             // play sound
-            audio.pitch = Random.Range(0.6f, 1.3f);
+            audio.pitch = UnityEngine.Random.Range(0.6f, 1.3f);
             audio.PlayOneShot(rotClip);
 
             // set move variables relative to pitch
@@ -93,13 +95,13 @@ public class AnimateDrone : MonoBehaviour
             // move other parts
             for (int i = 1; i < targetPositions.Length; i++)
             {
-                if(Random.value >= 0.5)
+                if(UnityEngine.Random.value >= 0.5)
                     targetPositions[i] = partDirections[i] * frontMoveDistance;
             }
 
             // rotate
-            int rndPositive = Random.Range(0, 2) * 2 - 1;
-            rotFactor = Random.Range(minRot, maxRot) * rndPositive;
+            int rndPositive = UnityEngine.Random.Range(0, 2) * 2 - 1;
+            rotFactor = UnityEngine.Random.Range(minRot, maxRot) * rndPositive;
 
             // wait for rotationClip
             yield return new WaitForSeconds(0.35f);
@@ -115,7 +117,7 @@ public class AnimateDrone : MonoBehaviour
                 targetPositions[i] = partPositions[i];
             }
 
-            float wait = Random.Range(minPause, maxPause);
+            float wait = UnityEngine.Random.Range(minPause, maxPause);
 
             yield return new WaitForSeconds(wait);
         }

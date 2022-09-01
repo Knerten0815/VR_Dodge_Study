@@ -783,7 +783,9 @@ public class StatisticsLogger : MonoBehaviour {
 
         var trackingSpacePoints = experimentSetup.trackingSpacePoints;
         var obstaclePolygons = experimentSetup.obstaclePolygons;
-        var trackingBoundary = TrackingSpaceGenerator.GetTrackingSpaceBoundaries();                                                                                                           // ---------------- added -------------- //
+        var trackingBoundary = TrackingSpaceGenerator.GetTrackingSpaceBoundaries();                                                                                  // ---------------- added -------------- //
+        if (trackingBoundary.Count == 0)
+            TrackingSpaceGenerator.GenerateRectangleTrackingSpace(0,out trackingBoundary, out obstaclePolygons, out _, 5f, 5f);
         for (int i = 0; i < trackingBoundary.Count; i++)
             Utilities.DrawLine(texRealPathGraph, trackingBoundary[i], trackingBoundary[(i + 1) % trackingBoundary.Count], realSideLength, borderThickness, boundaryColor);                   // ---------------- added -------------- //
         for (int i = 0; i < trackingSpacePoints.Count; i++)
