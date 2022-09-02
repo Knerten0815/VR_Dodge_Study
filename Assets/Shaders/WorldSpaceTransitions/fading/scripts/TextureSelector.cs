@@ -21,7 +21,7 @@ namespace WorldSpaceTransitions
         private Dropdown dropdown;
         [FormerlySerializedAs("keyword")]
         public string globalVarName;
-        public int selected=0;
+        public int selected=1;
 
         void Start()
         {

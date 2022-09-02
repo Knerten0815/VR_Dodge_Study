@@ -86,7 +86,7 @@ namespace RD_Hiding
         {
             Vector3 shepPos = redirectionManager.currPosReal.normalized * resetRingDiameter;
             shepGO = Instantiate(SingletonFoEveryton.Instance.dronePreFab);
-            shepGO.transform.SetParent(SingletonFoEveryton.Instance.trackingSpaceRoot.transform);
+            shepGO.transform.SetParent(SingletonFoEveryton.Instance.shepherdTarget.transform);
             shepGO.transform.localPosition = shepPos;
         }
     }

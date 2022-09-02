@@ -7,6 +7,7 @@ namespace RD_Hiding
     public class SingletonFoEveryton : MonoBehaviour
     {
         public GameObject trackingSpaceRoot;
+        public GameObject shepherdTarget;
         public GlobalConfiguration config;
         public GameObject camRig;
         public GameObject startUI;

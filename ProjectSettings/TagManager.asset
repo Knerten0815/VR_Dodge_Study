@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Camera45
   - AvatarNetworkingTransform
+  - NetworkingTransform
   layers:
   - Default
   - TransparentFX
@@ -38,7 +39,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - TopLayer
   m_SortingLayers:
   - name: Default
     uniqueID: 0
