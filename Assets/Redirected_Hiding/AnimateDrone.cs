@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class AnimateDrone : MonoBehaviour
 {
+    [SerializeField] bool isShepherd;
     [SerializeField] float minRot = 5f;
     [SerializeField] float maxRot = 15f;
     [SerializeField] float minPause = 3f;
@@ -76,7 +77,8 @@ public class AnimateDrone : MonoBehaviour
         {
             // activate spotLight halo
             //spotLight.color = UnityEngine.Random.ColorHSV(0, 1, 1, 1, 1, 1);
-            SetHalo(true);
+            if(isShepherd)
+                SetHalo(true);
 
             // play sound
             audio.pitch = UnityEngine.Random.Range(0.6f, 1.3f);
@@ -107,7 +109,8 @@ public class AnimateDrone : MonoBehaviour
             yield return new WaitForSeconds(0.35f);
 
             // activate spotLight halo
-            SetHalo(false);
+            if(isShepherd)
+                SetHalo(false);
 
             // pause
             rotFactor = 0;

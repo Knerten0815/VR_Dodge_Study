@@ -10,10 +10,17 @@ namespace WorldSpaceTransitions
 {
     public class FadingTransitionDemo : MonoBehaviour
     {
-        private FadingTransition.SurfaceType surfaceType = FadingTransition.SurfaceType.plane;
+        public float transitionSpread = 0.175f;
+        public float sphereRadius = 1.2f;
+        public float textureScale = 1.2f;
+        public float dissolveType;
+        public bool useTriplanarMapping = false;
+        public int materialDropdownValue = 1;
+
+        private FadingTransition.SurfaceType surfaceType = FadingTransition.SurfaceType.sphere;
         private FadingTransition.FadingCentre fadingCentre = FadingTransition.FadingCentre.gizmo;
 
-        private float transitionSpread = 1f;
+        
 
         public Material[] transitionMaterials;//materials to change shaders and properties
 
@@ -21,6 +28,7 @@ namespace WorldSpaceTransitions
         private Dictionary<Material, Material> originalMaterials;
 
         [Space(10)]
+        [Header("GUI references")]
         public Slider radiusOrDistanceSlider;
         public Text radiusOrDistanceValueText;
         public Text radiusOrDistanceTitle;
@@ -105,15 +113,17 @@ namespace WorldSpaceTransitions
 
             if (radiusOrDistanceSlider)
             {
-                radius = radiusOrDistanceSlider.value;//get initial values from UI
-                radiusMax = radiusOrDistanceSlider.maxValue;//get initial values from UI
+                radius = sphereRadius;
+                radiusOrDistanceSlider.value = sphereRadius; //set initial UI values
+                radiusMax = radiusOrDistanceSlider.maxValue; //get initial values from UI
                 radiusOrDistanceSlider.onValueChanged.AddListener(SetValue);
                 radiusOrDistanceSlider.transform.parent.gameObject.SetActive((fadingCentre == FadingTransition.FadingCentre.camera) || (surfaceType == FadingTransition.SurfaceType.sphere));
             }
 
             if (spreadSlider)
             {
-                SetSpread(spreadSlider.value);//get initial values from UI
+                SetSpread(transitionSpread);
+                spreadSlider.value = transitionSpread; //set initial UI values
                 spreadSlider.onValueChanged.AddListener(SetSpread);
                 spreadValue.text = spreadSlider.value.ToString("0.000");
             }
@@ -126,13 +136,15 @@ namespace WorldSpaceTransitions
 
             if (triplanarMappingToggle)
             {
-                SetTriplanarMapping(triplanarMappingToggle.isOn);//get initial values from UI
+                SetTriplanarMapping(useTriplanarMapping);
+                triplanarMappingToggle.isOn = useTriplanarMapping; //set initial UI values
                 triplanarMappingToggle.onValueChanged.AddListener(SetTriplanarMapping);
             }
 
             if (noiseScaleWorldSpaceSlider)
             {
-                SetNoiseScale(noiseScaleWorldSpaceSlider.value);//get initial values from UI
+                SetNoiseScale(textureScale);
+                noiseScaleWorldSpaceSlider.value = textureScale; //set initial UI values
                 noiseScaleWorldSpaceSlider.onValueChanged.AddListener(SetNoiseScale);
             }
             if (noiseScaleScreenSpaceSlider)
@@ -142,17 +154,19 @@ namespace WorldSpaceTransitions
             }
             if (surfaceDropdown)
             {
-                SwitchMode(surfaceDropdown.value);//get initial values from UI
+                SwitchMode(1);
+                surfaceDropdown.value = 1; //set initial UI values
                 surfaceDropdown.onValueChanged.AddListener(SwitchMode);
             }
             else
             {
-                SwitchMode(0);
+                SwitchMode(1);
             }
 
             if (materialDropdown)
             {
-                ModifyMaterials(materialDropdown.value);//get initial values from UI
+                ModifyMaterials(materialDropdownValue);
+                materialDropdown.value = materialDropdownValue; //set initial UI values
                 materialDropdown.onValueChanged.AddListener(ModifyMaterials);
             }
 
@@ -365,6 +379,7 @@ namespace WorldSpaceTransitions
             if (GraphicsSettings.renderPipelineAsset == null)
             {
                 Debug.Log("null");
+                Debug.Log("s = " + s);
                 if (s == "transparent one sided") shader = Shader.Find("Fading/Surface/Transparent");
                 if (s == "transparent two sided") shader = Shader.Find("Fading/Surface/TransparentDouble");
                 if (s == "dissolve one sided") shader = Shader.Find("Fading/Surface/Dissolve");

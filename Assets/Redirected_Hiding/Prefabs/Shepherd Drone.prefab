@@ -182,6 +182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37ccc5f0789341a46bfe27a732b1332c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isShepherd: 1
   minRot: -5
   maxRot: 5
   minPause: 5

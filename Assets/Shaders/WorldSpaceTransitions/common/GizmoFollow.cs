@@ -25,7 +25,7 @@ namespace WorldSpaceTransitions
         void Awake()
         {
             m_referenceCount++;
-            if (m_referenceCount > 1)
+            if (m_referenceCount > 3)
             {
                 DestroyImmediate(this.gameObject);
                 return;

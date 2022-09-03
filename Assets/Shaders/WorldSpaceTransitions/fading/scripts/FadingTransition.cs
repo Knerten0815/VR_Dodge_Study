@@ -13,7 +13,7 @@ namespace WorldSpaceTransitions
         { plane, sphere, none };
         public enum FadingCentre
         { gizmo, camera };
-        public SurfaceType surfaceType = SurfaceType.plane;
+        public SurfaceType surfaceType = SurfaceType.sphere;
         public FadingCentre fadingCentre = FadingCentre.gizmo;
 
         [Range(0.00001f, 2f)]
