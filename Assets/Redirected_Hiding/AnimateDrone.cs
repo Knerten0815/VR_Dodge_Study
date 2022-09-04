@@ -7,6 +7,7 @@ using UnityEngine;
 public class AnimateDrone : MonoBehaviour
 {
     [SerializeField] bool isShepherd;
+    [SerializeField] float hoverAmplitude = 1f, hoverFrequency = 1f;
     [SerializeField] float minRot = 5f;
     [SerializeField] float maxRot = 15f;
     [SerializeField] float minPause = 3f;
@@ -19,11 +20,14 @@ public class AnimateDrone : MonoBehaviour
     [SerializeField] Vector3[] partDirections;
     Vector3[] partPositions;
     Vector3[] targetPositions;
-    [SerializeField] AudioSource audio;
+    [SerializeField] AudioSource rotationAudio, loopAudio;
     [SerializeField] AudioClip rotClip;
+    [SerializeField] float volume = 0.3f, fadeSpeed = 1f;
     [SerializeField] Light spotLight;
 
     float rotFactor, currentRotFactor;
+
+    public bool isActive;
 
     private void Awake()
     {
@@ -37,11 +41,17 @@ public class AnimateDrone : MonoBehaviour
 
     void Start()
     {
+        isActive = true;
+        loopAudio.volume = 0;
         StartCoroutine(setAnimationKeyValues());
+        StartCoroutine(fadeInAudio());
     }
 
     void Update()
     {
+        // hover up and down
+        transform.localPosition = Vector3.zero + new Vector3(0, hoverAmplitude * Mathf.Sin(hoverFrequency * Time.time), 0);
+
         currentRotFactor = Mathf.Lerp(currentRotFactor, rotFactor, Time.deltaTime * LerpSpeed);
         transform.Rotate(Vector3.up * currentRotFactor);
 
@@ -81,11 +91,11 @@ public class AnimateDrone : MonoBehaviour
                 SetHalo(true);
 
             // play sound
-            audio.pitch = UnityEngine.Random.Range(0.6f, 1.3f);
-            audio.PlayOneShot(rotClip);
+            rotationAudio.pitch = UnityEngine.Random.Range(0.6f, 1.3f);
+            rotationAudio.PlayOneShot(rotClip);
 
             // set move variables relative to pitch
-            float relativeSpeed = audio.pitch - 1;
+            float relativeSpeed = rotationAudio.pitch - 1;
             if (relativeSpeed > 0)
                 movementSpeed = relativeSpeed * relSpeedFactor;
             else
@@ -123,6 +133,15 @@ public class AnimateDrone : MonoBehaviour
             float wait = UnityEngine.Random.Range(minPause, maxPause);
 
             yield return new WaitForSeconds(wait);
+        }
+    }
+
+    IEnumerator fadeInAudio()
+    {
+        while(loopAudio.volume < volume && isActive)
+        {
+            loopAudio.volume += Time.deltaTime * fadeSpeed;
+            yield return null;
         }
     }
 }

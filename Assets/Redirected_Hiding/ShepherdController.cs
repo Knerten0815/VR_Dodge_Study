@@ -10,11 +10,10 @@ namespace RD_Hiding
         [SerializeField] float maxRotTime = 1f;
         [SerializeField] private float minRotSpeed = 0.1f;
         [SerializeField] private float maxRotSpeed = 1f;
-        public AudioClip fastRot, mediumFastRot, slowRot;
+        [SerializeField] private float minHeight = 1.5f, maxHeight = 2f;
 
         RedirectionManager rdManager;
         ShepherdResetter resetter;
-        AudioSource audio;
 
         float circleDiameter;
         float resetRingDiameter;
@@ -29,7 +28,6 @@ namespace RD_Hiding
         {
             rdManager = FindObjectOfType<RedirectionManager>();
             resetter = (ShepherdResetter)rdManager.resetter;
-            audio = GetComponent<AudioSource>();
 
             circleDiameter = resetter.circleDiameter;
             resetRingDiameter = resetter.resetRingDiameter;
@@ -40,7 +38,6 @@ namespace RD_Hiding
                 target = SingletonFoEveryton.Instance.instantiateSphere(calculateTargetPosition(), true);
 
             StartCoroutine(calculateAnimationKeys());
-            //audio.Play();
         }
 
         private void OnDestroy()
@@ -77,7 +74,7 @@ namespace RD_Hiding
             }
 
             Vector3 targetPos = rdManager.currPosReal.normalized * targetVectorMagnitude;// + targetOffset;
-            targetPos.y = Random.Range(1f, 1.5f);
+            targetPos.y = Random.Range(minHeight, maxHeight);
 
             return targetPos;
         }

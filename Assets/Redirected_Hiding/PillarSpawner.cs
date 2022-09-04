@@ -26,7 +26,7 @@ public class PillarSpawner : MonoBehaviour
                 {
                     if(!((x < goal.position.x + 3 && x > goal.position.x - 3) && (z < goal.position.z + 3 && z > goal.position.z - 3))) // no pillars around finish
                     {
-                        pillar = Instantiate(pillarPrefab, new Vector3(x, 0, z), Quaternion.identity);
+                        pillar = Instantiate(pillarPrefab, new Vector3(x, pillarScale.y, z), Quaternion.identity);
                         pillar.transform.localScale = pillarScale;
                         pillar.transform.SetParent(pillarParent);
                     }
