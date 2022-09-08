@@ -39,8 +39,6 @@ namespace WorldSpaceTransitions
 
         void Update()
         {
-
-
             if (tempPos != transform.position || tempRot != transform.rotation)
             {
 
@@ -53,6 +51,7 @@ namespace WorldSpaceTransitions
 
         void OnEnable()
         {
+            Shader.SetGlobalFloat("_Radius", FadingTransition.instance.radius);
             SetSection();
         }
 
@@ -63,6 +62,8 @@ namespace WorldSpaceTransitions
             {
                 m_instance = null;
             }
+
+            FadingTransition.instance.fadeOutWorldTransition();
         }
 
         void SetSection()

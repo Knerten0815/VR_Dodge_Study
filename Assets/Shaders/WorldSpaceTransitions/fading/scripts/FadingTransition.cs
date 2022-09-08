@@ -1,5 +1,6 @@
 ﻿//setting the global shader variables in inspector in editor
 using UnityEngine;
+using System.Collections;
 #if UNITY_EDITOR
 using UnityEditor;
 using System.IO;
@@ -49,6 +50,7 @@ namespace WorldSpaceTransitions
         private Quaternion gizmoRot;
         private Transform gizmo;
         public float radius = 3f;
+        public float fadeOutSpeed = 1;
         public float distance = 0;//this is a transition plane distance from camera when in "tied to camera" mode.
         [Range(0.025f, 2f)]
         public float noiseScaleWorld = 1;
@@ -318,6 +320,23 @@ namespace WorldSpaceTransitions
             gradientTexture.Apply();
             //processing = false;
             //SaveTexture();
+        }
+
+        public void fadeOutWorldTransition()
+        {
+            StopAllCoroutines();
+            StartCoroutine(fadeOut());
+        }
+
+        IEnumerator fadeOut()
+        {
+            float tempRadius = radius;
+            while(tempRadius > 0)
+            {
+                tempRadius -= Time.deltaTime * fadeOutSpeed;
+                Shader.SetGlobalFloat("_Radius", tempRadius);
+                yield return null;
+            }
         }
     }
 }
