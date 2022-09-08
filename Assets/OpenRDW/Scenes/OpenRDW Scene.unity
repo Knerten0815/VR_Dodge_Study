@@ -2127,7 +2127,7 @@ MonoBehaviour:
   currentShownAvatarId: 0
   avatarIdSortedFromHighPriorityToLow: 
   virtualWorldVisible: 1
-  trackingSpaceVisible: 0
+  trackingSpaceVisible: 1
   bufferVisible: 0
   if3dObstacle: 1
   trackingSpaceChoice: 8
@@ -13328,6 +13328,36 @@ PrefabInstance:
     - target: {fileID: 1186966011956041705, guid: 0b864575b0258654c9a1dceccc5d4e59,
         type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1186966012224733146, guid: 0b864575b0258654c9a1dceccc5d4e59,
+        type: 3}
+      propertyPath: surfaceType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1186966012224733146, guid: 0b864575b0258654c9a1dceccc5d4e59,
+        type: 3}
+      propertyPath: distance
+      value: 1.6970562
+      objectReference: {fileID: 0}
+    - target: {fileID: 1186966012224733146, guid: 0b864575b0258654c9a1dceccc5d4e59,
+        type: 3}
+      propertyPath: transitionSpread
+      value: 0.175
+      objectReference: {fileID: 0}
+    - target: {fileID: 1186966012224733146, guid: 0b864575b0258654c9a1dceccc5d4e59,
+        type: 3}
+      propertyPath: radius
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1186966012224733146, guid: 0b864575b0258654c9a1dceccc5d4e59,
+        type: 3}
+      propertyPath: noiseScaleWorld
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1186966012224733148, guid: 0b864575b0258654c9a1dceccc5d4e59,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1186966012354087970, guid: 0b864575b0258654c9a1dceccc5d4e59,

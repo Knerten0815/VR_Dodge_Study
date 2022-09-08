@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: glowfading101
-  m_Shader: {fileID: 4800000, guid: 454213bd9075e39408aa5cbaf5b53d13, type: 3}
+  m_Shader: {fileID: 4800000, guid: 9a8e616f2f1c47043a3649cabc32d674, type: 3}
   m_ShaderKeywords: DISSOLVE DISSOLVE_GLOW DISSOLVE_TEXTURE GLOW GLOWISSOLVE SCREENDISSOLVE
     SCREENDISSOLVE_GLOW _DOUBLESIDED_ON _doubleSided
   m_LightmapFlags: 4
