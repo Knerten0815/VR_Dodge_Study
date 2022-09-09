@@ -50,7 +50,7 @@ namespace WorldSpaceTransitions
         private Quaternion gizmoRot;
         private Transform gizmo;
         public float radius = 3f;
-        public float fadeOutSpeed = 1;
+        public float fadeSpeed = 1;
         public float distance = 0;//this is a transition plane distance from camera when in "tied to camera" mode.
         [Range(0.025f, 2f)]
         public float noiseScaleWorld = 1;
@@ -328,12 +328,29 @@ namespace WorldSpaceTransitions
             StartCoroutine(fadeOut());
         }
 
+        public void fadeInWorldTransition()
+        {
+            StopAllCoroutines();
+            StartCoroutine(fadeIn());
+        }
+
+        IEnumerator fadeIn()
+        {
+            float tempRadius = 0;
+            while (tempRadius < radius)
+            {
+                tempRadius += Time.deltaTime * fadeSpeed;
+                Shader.SetGlobalFloat("_Radius", tempRadius);
+                yield return null;
+            }
+        }
+
         IEnumerator fadeOut()
         {
             float tempRadius = radius;
             while(tempRadius > 0)
             {
-                tempRadius -= Time.deltaTime * fadeOutSpeed;
+                tempRadius -= Time.deltaTime * fadeSpeed;
                 Shader.SetGlobalFloat("_Radius", tempRadius);
                 yield return null;
             }

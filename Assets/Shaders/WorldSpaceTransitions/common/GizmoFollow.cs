@@ -5,14 +5,16 @@ namespace WorldSpaceTransitions
 {
     public class GizmoFollow : MonoBehaviour
     {
-        private static int m_referenceCount = 0;
-
-        private static GizmoFollow m_instance;
         private Vector3 tempPos;
         private Quaternion tempRot;
 
         public bool followPosition = true;
         public bool followRotation = true;
+
+        /*----unused Singleton code
+        private static int m_referenceCount = 0;
+
+        private static GizmoFollow m_instance;
 
         public static GizmoFollow Instance
         {
@@ -21,7 +23,7 @@ namespace WorldSpaceTransitions
                 return m_instance;
             }
         }
-
+        
         void Awake()
         {
             m_referenceCount++;
@@ -32,39 +34,40 @@ namespace WorldSpaceTransitions
             }
 
             m_instance = this;
+            
             // Use this line if you need the object to persist across scenes
             //DontDestroyOnLoad(this.gameObject);
         }
-
+        */
 
         void Update()
         {
             if (tempPos != transform.position || tempRot != transform.rotation)
             {
-
                 tempPos = transform.position;
                 tempRot = transform.rotation;
                 SetSection();
             }
         }
 
-
         void OnEnable()
         {
-            Shader.SetGlobalFloat("_Radius", FadingTransition.instance.radius);
+            FadingTransition.instance.fadeInWorldTransition();
             SetSection();
         }
 
         void OnDestroy()
         {
+            /*
             m_referenceCount--;
             if (m_referenceCount == 0)
             {
                 m_instance = null;
-            }
+            }*/
 
             FadingTransition.instance.fadeOutWorldTransition();
         }
+        
 
         void SetSection()
         {

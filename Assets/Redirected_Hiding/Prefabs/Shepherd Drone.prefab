@@ -979,7 +979,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   followPosition: 1
-  followRotation: 1
+  followRotation: 0
 --- !u!1 &6351639112737811309
 GameObject:
   m_ObjectHideFlags: 0
