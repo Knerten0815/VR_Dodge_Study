@@ -165,6 +165,8 @@
 		#if CLIP_SPHERE
 			if((1-2*_inverse)*(dot((posWorld - _SectionPoint),(posWorld - _SectionPoint)) - _Radius*_Radius)<0) discard; //_inverse = 1 : negative to clip the outside of the sphere
 		#endif
+
+			///------------ maybe adding custom CLIP-3SPHERES with SectionPoint, SectionPointLeftHand and SectionPointRightHand will do the trick
 		#if (FADE_PLANE || FADE_SPHERE)&&(DISSOLVE || DISSOLVE_GLOW)
 			float transparency = 0;
 			#if FADE_PLANE

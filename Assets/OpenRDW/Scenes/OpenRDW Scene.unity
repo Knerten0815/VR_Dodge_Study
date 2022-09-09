@@ -2195,7 +2195,7 @@ MonoBehaviour:
   logSampleVariables: 1
   samplingFrequency: 10
   imageResolution: 2048
-  realSideLength: 40
+  realSideLength: 10
   borderThickness: 8
   pathThickness: 10
   maxFrames: 1000
@@ -9058,6 +9058,7 @@ MonoBehaviour:
   areaWarning: {fileID: 242605575}
   getLoadFromTxt: 0
   getMovementController: 0
+  drawTrueTrackingBoundaries: 1
 --- !u!4 &1097306653
 Transform:
   m_ObjectHideFlags: 0
@@ -13572,51 +13573,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1781894697}
   m_CullTransparentMesh: 0
---- !u!1 &1792687429
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1792687431}
-  - component: {fileID: 1792687430}
-  m_Layer: 0
-  m_Name: test
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1792687430
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1792687429}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68145686190acd349ab42da5c4edca85, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  followPosition: 1
-  followRotation: 0
---- !u!4 &1792687431
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1792687429}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.303931, y: 2.3651974, z: 20.59248}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1798831164
 GameObject:
   m_ObjectHideFlags: 0
@@ -16391,7 +16347,7 @@ MonoBehaviour:
     filename: _gradient
   radius: 1.2
   fadeSpeed: 1
-  distance: 30.81922
+  distance: 1.6970562
   noiseScaleWorld: 1.2
   noiseScaleScreen: 5
 --- !u!114 &1388679541576992121

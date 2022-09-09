@@ -32,10 +32,10 @@ namespace RD_Hiding
             circleDiameter = resetter.circleDiameter;
             resetRingDiameter = resetter.resetRingDiameter;
 
-            targetPosition = Vector3.zero;
+            targetPosition = calculateTargetPosition();
 
             if(resetter.showShepherdTarget)
-                target = SingletonFoEveryton.Instance.instantiateSphere(calculateTargetPosition(), true);
+                target = SingletonFoEveryton.Instance.instantiateSphere(targetPosition, true);
 
             StartCoroutine(calculateAnimationKeys());
         }
@@ -59,7 +59,7 @@ namespace RD_Hiding
         private Vector3 calculateTargetPosition()
         {
             float playerRingDepth = rdManager.currPosReal.magnitude - circleDiameter / 2;
-            float targetVectorMagnitude = 1;
+            float targetVectorMagnitude;
 
             if (playerRingDepth * 3 < resetRingDiameter)
             {

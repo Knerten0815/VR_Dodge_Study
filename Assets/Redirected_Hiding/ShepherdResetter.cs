@@ -31,10 +31,31 @@ namespace RD_Hiding
             resetRingDiameter = circleDiameter * 4;
             redirector = redirectionManager.redirector;
 
-            /* draw resetRing
+            /*
+            // draw resetRing
             foreach (var point in redirectionManager.globalConfiguration.trackingSpacePoints)
                 SingletonFoEveryton.Instance.instantiateSphere(point.normalized * resetRingDiameter, true);
             */
+
+            if (SingletonFoEveryton.Instance.drawTrueTrackingBoundaries)
+            {
+                // draw trackingSpaceBoundaries
+                var trackingBoundary = TrackingSpaceGenerator.GetTrackingSpaceBoundaries();
+                if (trackingBoundary.Count == 0)
+                {
+                    // draw 5x5 m tracking boundary if not headset is used
+                    TrackingSpaceGenerator.GenerateRectangleTrackingSpace(0, out trackingBoundary, out _, out _, 5f, 5f);
+                    SingletonFoEveryton.Instance.DrawLine(trackingBoundary[0], trackingBoundary[1]);
+                    SingletonFoEveryton.Instance.DrawLine(trackingBoundary[1], trackingBoundary[2]);
+                    SingletonFoEveryton.Instance.DrawLine(trackingBoundary[2], trackingBoundary[3]);
+                    SingletonFoEveryton.Instance.DrawLine(trackingBoundary[3], trackingBoundary[0]);
+                }
+                else
+                {
+                    foreach (var point in trackingBoundary)
+                        SingletonFoEveryton.Instance.instantiateSphere(point, true);
+                }
+            }
         }
 
         public override bool IsResetRequired()
@@ -87,7 +108,25 @@ namespace RD_Hiding
             Vector3 shepPos = redirectionManager.currPosReal.normalized * resetRingDiameter;
             shepGO = Instantiate(SingletonFoEveryton.Instance.dronePreFab);
             shepGO.transform.SetParent(SingletonFoEveryton.Instance.shepherdTarget.transform);
+            shepPos.y = -3;
             shepGO.transform.localPosition = shepPos;
+
+            /* --- material or shader switch unfortantely are not instant
+            SingletonFoEveryton.Instance.planeRenderer.material = SingletonFoEveryton.Instance.groundplaneDissolveMat;
+            StartCoroutine(waitForShepherdAscend());
+            */
         }
+
+        /*
+        IEnumerator waitForShepherdAscend()
+        {
+            while(shepGO != null && shepGO.transform.position.y < 1.5f)
+            {
+                yield return null;
+            }
+
+            SingletonFoEveryton.Instance.planeRenderer.material = SingletonFoEveryton.Instance.groundPlaneMat;
+        }
+        */
     }
 }

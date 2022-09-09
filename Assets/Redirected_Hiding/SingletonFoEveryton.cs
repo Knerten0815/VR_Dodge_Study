@@ -14,12 +14,16 @@ namespace RD_Hiding
         public float distanceToActivateStartUI = 0.1f;
         public RayToggler leftRayToggler, rightRayToggler;
         public GameObject dronePreFab;
+        /*public MeshRenderer planeRenderer;
+        public Material groundPlaneMat, groundplaneDissolveMat;*/
         [SerializeField] bool ignoreWarning; 
         [SerializeField] GameObject warningUI;
         [SerializeField] float minArea, maxArea, minDiagonal, maxDiagonal;
         [SerializeField] TMP_Text diagonaleValue, areaValue, resemblingArea, diagonalWarning, areaWarning;
         public bool getLoadFromTxt;
         public GlobalConfiguration.MovementController getMovementController;
+
+        public bool drawTrueTrackingBoundaries;
 
         private bool firstStart = true;
         private List<GameObject> debugVisuals = new List<GameObject>();
@@ -131,7 +135,7 @@ namespace RD_Hiding
         /// </summary>
         /// <param name="start"></param>
         /// <param name="end"></param>
-        void DrawLine(Vector3 start, Vector3 end, float width = 0.05f)
+        public GameObject DrawLine(Vector3 start, Vector3 end, float width = 0.05f)
         {
             GameObject line = new GameObject();
             line.transform.position = start;
@@ -146,7 +150,32 @@ namespace RD_Hiding
             lr.SetPosition(1, end);
 
             debugVisuals.Add(line);
+            return line;
         }
-        #endregion
-    }
+
+        public GameObject DrawLine(Vector2 start, Vector2 end, float width = 0.05f, bool isPartOfTrackingSpace = true)
+        {
+            Vector3 startVec3 = new Vector3(start.x, 0, start.y);
+            Vector3 endVec3 = new Vector3(end.x, 0, end.y);
+
+            GameObject line = new GameObject();
+            //line.transform.position = startVec3;
+            line.AddComponent<LineRenderer>();
+            LineRenderer lr = line.GetComponent<LineRenderer>();
+            lr.material = new Material(Shader.Find("Standard"));
+            lr.material.color = Color.red;
+            lr.startWidth = width;
+            lr.endWidth = width;
+            lr.SetPosition(0, startVec3);
+            lr.SetPosition(1, endVec3);
+
+            if (isPartOfTrackingSpace)
+                line.transform.parent = trackingSpaceRoot.transform;
+
+            line.GetComponent<LineRenderer>().useWorldSpace = false;
+
+            return line;
+        }
+            #endregion
+        }
 }

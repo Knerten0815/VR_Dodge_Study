@@ -7,11 +7,12 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Mat_Red_Grid_512
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: _EMISSION _NORMALMAP
+  m_Name: Mat_White_Grid_512-Dissolve
+  m_Shader: {fileID: 4800000, guid: 9a8e616f2f1c47043a3649cabc32d674, type: 3}
+  m_ShaderKeywords: DISSOLVE DISSOLVE_GLOW DISSOLVE_TEXTURE GLOW GLOWISSOLVE SCREENDISSOLVE
+    SCREENDISSOLVE_GLOW _DOUBLESIDED_ON _EMISSION _NORMALMAP _doubleSided
   m_LightmapFlags: 1
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -37,11 +38,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: 150, y: 150}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 20aaf4e58599253418c5b918af14675b, type: 3}
-        m_Scale: {x: 1, y: 1}
+        m_Texture: {fileID: 2800000, guid: e8b2e86144824644b938e82b1299cd7e, type: 3}
+        m_Scale: {x: 150, y: 150}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
@@ -61,9 +62,12 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0.5
+    - _Glossiness: 0.69
     - _GlossyReflections: 1
-    - _Metallic: 0
+    - _GlowColFac: 0.5
+    - _GlowIntensity: 0.38
+    - _GlowScale: 3.65
+    - _Metallic: 0.31
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
@@ -72,6 +76,12 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
+    - _doubleSided: 1
+    - _glowdissolve: 1
+    - _inverse: 0
+    - _retractBackfaces: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Glow: {r: 0.005298448, g: 0.24701712, b: 0.7205882, a: 1}
+    - _GlowEnd: {r: 0.8308824, g: 1, b: 0.95801216, a: 1}
