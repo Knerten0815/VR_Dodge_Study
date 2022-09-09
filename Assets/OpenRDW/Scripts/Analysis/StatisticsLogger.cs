@@ -50,6 +50,8 @@ public class StatisticsLogger : MonoBehaviour {
     public int imageResolution;
     [Tooltip("Side length represent the real world meters")]
     public int realSideLength;
+    [Tooltip("Side length represent the real world meters")]
+    public int virtualSideLength;
     [Tooltip("Border thickness drawn in the image")]
     public int borderThickness;
     [Tooltip("Path thickness drawn in the image")]
@@ -773,7 +775,7 @@ public class StatisticsLogger : MonoBehaviour {
     }
     
     //save path, boundaries, obstacles as a image
-    public void LogExperimentPathPictures(int experimentSetupId) {
+    public void LogExperimentRealPathPictures(int experimentSetupId) {
         var experimentSetups = globalConfiguration.experimentSetups;
 
         var experimentSetup = experimentSetups[experimentSetupId];
@@ -812,6 +814,50 @@ public class StatisticsLogger : MonoBehaviour {
         //Export as png file
         Utilities.ExportTexture2dToPng(GRAPH_DERECTORY + string.Format("{0}_{1}_realPath.png", experimentSetupId, Utilities.GetTimeStringForFileName()), texRealPathGraph);        
 
+    }
+
+    //save path, boundaries, obstacles as a image
+    public void LogExperimentVirtualPathPictures(int experimentSetupId)
+    {
+        var experimentSetups = globalConfiguration.experimentSetups;
+
+        var experimentSetup = experimentSetups[experimentSetupId];
+
+        //set background to white
+        Utilities.SetTextureToSingleColor(texVirtualPathGraph, backgroundColor);
+
+        var trackingSpacePoints = experimentSetup.trackingSpacePoints;
+        var obstaclePolygons = experimentSetup.obstaclePolygons;
+        var trackingBoundary = TrackingSpaceGenerator.GetTrackingSpaceBoundaries();                                                                                  // ---------------- added -------------- //
+        if (trackingBoundary.Count == 0)
+            TrackingSpaceGenerator.GenerateRectangleTrackingSpace(0, out trackingBoundary, out obstaclePolygons, out _, 5f, 5f);
+        for (int i = 0; i < trackingBoundary.Count; i++)
+            Utilities.DrawLine(texVirtualPathGraph, trackingBoundary[i], trackingBoundary[(i + 1) % trackingBoundary.Count], virtualSideLength, borderThickness, boundaryColor);                   // ---------------- added -------------- //
+        /*for (int i = 0; i < trackingSpacePoints.Count; i++)
+            Utilities.DrawLine(texVirtualPathGraph, trackingSpacePoints[i], trackingSpacePoints[(i + 1) % trackingSpacePoints.Count], realSideLength, borderThickness, trackingSpaceColor);
+        foreach (var obstaclePolygon in obstaclePolygons)
+            Utilities.DrawPolygon(texVirtualPathGraph, obstaclePolygon, realSideLength, borderThickness, obstacleColor);*/
+        //for (int i = 0; i < obstaclePolygon.Count; i++)
+        //    Utilities.DrawLine(tex, obstaclePolygon[i], obstaclePolygon[(i + 1) % obstaclePolygon.Count], sideLength, borderThickness, obstacleColor);
+        for (int uId = 0; uId < avatarStatistics.Count; uId++)
+        {
+            var color = globalConfiguration.avatarColors[uId];
+            var virtualPosList = avatarStatistics[uId].userVirtualPositionSamples;
+            var beginWeight = 0.1f;
+            var deltaWeight = (1 - beginWeight) / virtualPosList.Count;
+
+            for (int i = 0; i < virtualPosList.Count - 1; i++)
+            {
+                var w = (beginWeight + deltaWeight * i);
+                //Debug.Log("realPosList[i]:" + realPosList[i].ToString("f3"));
+                Utilities.DrawLine(texVirtualPathGraph, virtualPosList[i], virtualPosList[i + 1], virtualSideLength, pathThickness, w * color + (1 - w) * backgroundColor, (w + deltaWeight) * color + (1 - w - deltaWeight) * backgroundColor);
+            }
+        }
+
+        texVirtualPathGraph.Apply();
+
+        //Export as png file
+        Utilities.ExportTexture2dToPng(GRAPH_DERECTORY + string.Format("{0}_{1}_virutalPath.png", experimentSetupId, Utilities.GetTimeStringForFileName()), texVirtualPathGraph);
     }
 
     public void LogOneDimensionalExperimentSamples(string experimentSamplesDirectory, string measuredMetric, List<float> values)

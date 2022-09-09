@@ -1,8 +1,9 @@
 trackingSpaceChoice = Circle
+SquareWidth = 500
 obstacleType = 0
 newUser
-redirector = s2o
-resetter = twooneturn
+redirector = shepherd
+resetter = shepherd
 pathseedChoice = FilePath
 waypointsfilepath = C:\Users\kevin\Desktop\WalkingPaths\user_virtual_positions.csv
 samplingintervalsfilepath = C:\Users\kevin\Desktop\WalkingPaths\sampling_intervals.csv

@@ -878,7 +878,7 @@ public class GlobalConfiguration : MonoBehaviour
                 split = line.Split(',');
             else
                 split = line.Split(' ');
-            //Debug.Log(line);
+            Debug.Log(line);
             switch (split[0].ToLower())
             {
                 //add a new user
@@ -1340,7 +1340,11 @@ public class GlobalConfiguration : MonoBehaviour
 
         //save images
         if (exportImage)
-            statisticsLogger.LogExperimentPathPictures(experimentIterator);
+        {
+            statisticsLogger.LogExperimentRealPathPictures(experimentIterator);
+            statisticsLogger.LogExperimentVirtualPathPictures(experimentIterator);
+        }
+            
 
         //create temporary files to indicate the stage of the experiment
         File.WriteAllText(statisticsLogger.Get_TMP_DERECTORY() + @"\" + experimentSetupsListIterator + "-" + experimentSetupsList.Count + " " + experimentIterator + "-" + experimentSetups.Count + ".txt", "");

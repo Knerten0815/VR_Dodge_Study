@@ -2082,9 +2082,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d97f4f04aa3aa6e4abc407f0d0d45fcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementController: 0
+  movementController: 1
   runInBackstage: 0
-  loadFromTxt: 0
+  loadFromTxt: 1
   multiCmdFiles: 0
   useSimulationTime: 0
   overviewModeEveryTrial: 0
@@ -2196,6 +2196,7 @@ MonoBehaviour:
   samplingFrequency: 10
   imageResolution: 2048
   realSideLength: 10
+  virtualSideLength: 40
   borderThickness: 8
   pathThickness: 10
   maxFrames: 1000
