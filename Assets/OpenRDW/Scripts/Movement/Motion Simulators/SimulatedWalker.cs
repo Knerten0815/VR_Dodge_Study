@@ -35,8 +35,8 @@ public class SimulatedWalker : MonoBehaviour {
         {
             if (redirectionManager.globalConfiguration.movementController == GlobalConfiguration.MovementController.AutoPilot)
             {                
-                if (!redirectionManager.inReset)
-                {                    
+                //if (!redirectionManager.inReset)
+                //{                    
                     if (!redirectionManager.resetter.IfCollisionHappens()) {
                         if (movementManager.pathSeedChoice == PathSeedChoice.RealUserPath) {
                             GetPosDirAndSet();
@@ -45,11 +45,11 @@ public class SimulatedWalker : MonoBehaviour {
                             TurnAndWalkToWaypoint();
                         }                        
                     }                        
-                }                
+                /*}                
                 else
                 {//in reset
                     redirectionManager.resetter.SimulatedWalkerUpdate();
-                }
+                }*/
             }
             else if (redirectionManager.globalConfiguration.movementController == GlobalConfiguration.MovementController.Keyboard)
             {

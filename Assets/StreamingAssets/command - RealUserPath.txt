@@ -1,5 +1,4 @@
 trackingSpaceChoice = Circle
-SquareWidth = 500
 obstacleType = 0
 newUser
 redirector = shepherd

@@ -12,6 +12,8 @@ public class StatisticsLogger : MonoBehaviour {
     [Tooltip("If log sample variables")]
     public bool logSampleVariables = false;
 
+    public float pathStartAlpha = 0.3f;
+
     public class ResultOfTrial {
         public int endState;
         public List<Dictionary<string, string>> result;
@@ -69,9 +71,11 @@ public class StatisticsLogger : MonoBehaviour {
     [Range(1,10)]
     public int superSize;
 
-    [SerializeField] private Color backgroundColor = Color.white;
-    [SerializeField] private Color trackingSpaceColor = Color.black;
-    [SerializeField] private Color boundaryColor = Color.red;
+    [SerializeField] private Color backgroundColor;
+    [SerializeField] private Color realPathColor;
+    [SerializeField] private Color trackingSpaceColor;
+    [SerializeField] private Color boundaryColor;
+    [SerializeField] private Color[] virtualPathColors;
 
     private Color obstacleColor;
     // The way this works is that we wait 1 / samplingFrequency time to transpire before we attempt to clean buffers and gather samples
@@ -797,15 +801,14 @@ public class StatisticsLogger : MonoBehaviour {
             //for (int i = 0; i < obstaclePolygon.Count; i++)
             //    Utilities.DrawLine(tex, obstaclePolygon[i], obstaclePolygon[(i + 1) % obstaclePolygon.Count], sideLength, borderThickness, obstacleColor);
         for (int uId = 0; uId < avatarStatistics.Count; uId++) {
-            var color = globalConfiguration.avatarColors[uId];
+            //var virtualPathColor = globalConfiguration.avatarColors[uId];
             var realPosList = avatarStatistics[uId].userRealPositionSamples;
-            var beginWeight = 0.1f;
-            var deltaWeight = (1 - beginWeight) / realPosList.Count;
+            var deltaWeight = (1 - pathStartAlpha) / realPosList.Count;
             
             for (int i = 0; i < realPosList.Count - 1; i++) {
-                var w = (beginWeight + deltaWeight * i);
+                var w = (pathStartAlpha + deltaWeight * i);
                 //Debug.Log("realPosList[i]:" + realPosList[i].ToString("f3"));
-                Utilities.DrawLine(texRealPathGraph, realPosList[i], realPosList[i + 1], realSideLength, pathThickness, w * color + (1 - w) * backgroundColor, (w + deltaWeight) * color + (1 - w - deltaWeight) * backgroundColor);
+                Utilities.DrawLine(texRealPathGraph, realPosList[i], realPosList[i + 1], realSideLength, pathThickness, w * realPathColor + (1 - w) * backgroundColor, (w + deltaWeight) * realPathColor + (1 - w - deltaWeight) * backgroundColor);
             }
         }
         
@@ -832,7 +835,7 @@ public class StatisticsLogger : MonoBehaviour {
         if (trackingBoundary.Count == 0)
             TrackingSpaceGenerator.GenerateRectangleTrackingSpace(0, out trackingBoundary, out obstaclePolygons, out _, 5f, 5f);
         for (int i = 0; i < trackingBoundary.Count; i++)
-            Utilities.DrawLine(texVirtualPathGraph, trackingBoundary[i], trackingBoundary[(i + 1) % trackingBoundary.Count], virtualSideLength, borderThickness, boundaryColor);                   // ---------------- added -------------- //
+            Utilities.DrawLine(texVirtualPathGraph, trackingBoundary[i], trackingBoundary[(i + 1) % trackingBoundary.Count], virtualSideLength, borderThickness, Color.black);                   // ---------------- added -------------- //
         /*for (int i = 0; i < trackingSpacePoints.Count; i++)
             Utilities.DrawLine(texVirtualPathGraph, trackingSpacePoints[i], trackingSpacePoints[(i + 1) % trackingSpacePoints.Count], realSideLength, borderThickness, trackingSpaceColor);
         foreach (var obstaclePolygon in obstaclePolygons)
@@ -841,16 +844,32 @@ public class StatisticsLogger : MonoBehaviour {
         //    Utilities.DrawLine(tex, obstaclePolygon[i], obstaclePolygon[(i + 1) % obstaclePolygon.Count], sideLength, borderThickness, obstacleColor);
         for (int uId = 0; uId < avatarStatistics.Count; uId++)
         {
-            var color = globalConfiguration.avatarColors[uId];
+            int colorIndex = PlayerPrefs.GetInt("virtualPathColorIndex", -1);
+
+            if(colorIndex < 0 || colorIndex >= virtualPathColors.Length - 1)
+            {
+                colorIndex = 0;
+                PlayerPrefs.SetInt("virtualPathColorIndex", 0);
+            }  
+            else
+            {
+                colorIndex++;
+                PlayerPrefs.SetInt("virtualPathColorIndex", colorIndex);
+            }
+
+            var color = virtualPathColors[colorIndex];
             var virtualPosList = avatarStatistics[uId].userVirtualPositionSamples;
-            var beginWeight = 0.1f;
-            var deltaWeight = (1 - beginWeight) / virtualPosList.Count;
+            var deltaWeight = (1 - pathStartAlpha) / virtualPosList.Count;
 
             for (int i = 0; i < virtualPosList.Count - 1; i++)
             {
-                var w = (beginWeight + deltaWeight * i);
+                var w = (pathStartAlpha + deltaWeight * i);
+                var startColor = color;
+                startColor.a = w;
+                var endColor = color;
+                endColor.a = (w + deltaWeight);
                 //Debug.Log("realPosList[i]:" + realPosList[i].ToString("f3"));
-                Utilities.DrawLine(texVirtualPathGraph, virtualPosList[i], virtualPosList[i + 1], virtualSideLength, pathThickness, w * color + (1 - w) * backgroundColor, (w + deltaWeight) * color + (1 - w - deltaWeight) * backgroundColor);
+                Utilities.DrawLine(texVirtualPathGraph, virtualPosList[i], virtualPosList[i + 1], virtualSideLength, pathThickness, startColor, endColor);//w * color + (1 - w) * backgroundColor, (w + deltaWeight) * color + (1 - w - deltaWeight) * backgroundColor);
             }
         }
 
