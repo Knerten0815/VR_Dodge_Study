@@ -826,8 +826,8 @@ public class StatisticsLogger : MonoBehaviour {
 
         var experimentSetup = experimentSetups[experimentSetupId];
 
-        //set background to white
-        Utilities.SetTextureToSingleColor(texVirtualPathGraph, backgroundColor);
+        //set background to transparent
+        Utilities.SetTextureToSingleColor(texVirtualPathGraph, Color.clear);
 
         var trackingSpacePoints = experimentSetup.trackingSpacePoints;
         var obstaclePolygons = experimentSetup.obstaclePolygons;
