@@ -36,26 +36,6 @@ namespace RD_Hiding
             foreach (var point in redirectionManager.globalConfiguration.trackingSpacePoints)
                 SingletonFoEveryton.Instance.instantiateSphere(point.normalized * resetRingDiameter, true);
             */
-
-            if (SingletonFoEveryton.Instance.drawTrueTrackingBoundaries)
-            {
-                // draw trackingSpaceBoundaries
-                var trackingBoundary = TrackingSpaceGenerator.GetTrackingSpaceBoundaries();
-                if (trackingBoundary.Count == 0)
-                {
-                    // draw 5x5 m tracking boundary if not headset is used
-                    TrackingSpaceGenerator.GenerateRectangleTrackingSpace(0, out trackingBoundary, out _, out _, 5f, 5f);
-                    SingletonFoEveryton.Instance.DrawLine(trackingBoundary[0], trackingBoundary[1]);
-                    SingletonFoEveryton.Instance.DrawLine(trackingBoundary[1], trackingBoundary[2]);
-                    SingletonFoEveryton.Instance.DrawLine(trackingBoundary[2], trackingBoundary[3]);
-                    SingletonFoEveryton.Instance.DrawLine(trackingBoundary[3], trackingBoundary[0]);
-                }
-                else
-                {
-                    foreach (var point in trackingBoundary)
-                        SingletonFoEveryton.Instance.instantiateSphere(point, true);
-                }
-            }
         }
 
         public override bool IsResetRequired()

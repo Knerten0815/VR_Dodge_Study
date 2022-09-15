@@ -35,7 +35,7 @@ namespace RD_Hiding
             targetPosition = calculateTargetPosition();
 
             if(resetter.showShepherdTarget)
-                target = SingletonFoEveryton.Instance.instantiateSphere(targetPosition, true);
+                target = SingletonFoEveryton.Instance.instantiateSphere2D(targetPosition, true);
 
             StartCoroutine(calculateAnimationKeys());
         }

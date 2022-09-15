@@ -496,7 +496,7 @@ public class TrackingSpaceGenerator
     //generate tracking space based on the boundary of the actual tracking space.
     public static void GenerateTrackingBoundaryTrackingSpace(out List<Vector2> trackingSpacePoints, out List<InitialConfiguration> initialConfigurations)
     {
-        trackingSpacePoints = GetTrackingSpaceBoundaries();
+        trackingSpacePoints = GetTrackingSpace(out _);
 
         initialConfigurations = new List<InitialConfiguration>();
         Vector2 playerPos = new Vector2(0, 0);
@@ -505,7 +505,7 @@ public class TrackingSpaceGenerator
         initialConfigurations.Add(new InitialConfiguration(playerPos, playerForward));
     }
 
-    public static List<Vector2> GetTrackingSpaceBoundaries()
+    public static List<Vector2> GetTrackingSpace(out Vector2 center)
     {
         var hmdDevices = new List<InputDevice>();
         InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.HeadMounted, hmdDevices);
@@ -521,37 +521,29 @@ public class TrackingSpaceGenerator
         }
 
         List<Vector2> trackingSpacePoints = new List<Vector2>();
+        Vector3 Vec3center = Vector3.zero;
 
         foreach (Vector3 vec3Point in Vec3trackingSpacePoints)
         {
             trackingSpacePoints.Add(new Vector2(vec3Point.x, vec3Point.z));
+            Vec3center += vec3Point;
         }
 
         trackingSpacePoints.Reverse();
 
+        Vec3center = Vec3center / Vec3trackingSpacePoints.Count;
+        center = new Vector2(Vec3center.x, Vec3center.z);        
+
         return trackingSpacePoints;
-    }
-
-    public static Vector2 GetTrackingSpaceCenter()
-    {
-        List<Vector2> trackingSpacepoints = GetTrackingSpaceBoundaries();
-
-        Vector2 trackingSpaceCenter = Vector2.zero;
-
-        foreach (Vector2 vec2Point in trackingSpacepoints)
-        {
-            trackingSpaceCenter += vec2Point;
-        }
-
-        return trackingSpaceCenter / trackingSpacepoints.Count;
     }
 
     public static float GetLongestDistanceInBoundaries(out Vector3 start, out Vector3 end)
     {
-        List<Vector2> bounds = GetTrackingSpaceBoundaries();
+        Vector2 Vec2center = RD_Hiding.SingletonFoEveryton.Instance.trackingSpaceCenter;
+        List<Vector2> bounds = RD_Hiding.SingletonFoEveryton.Instance.trackingSpaceBoundaries;
 
         float longestDistance = 0;
-        Vector3 center = new Vector3(GetTrackingSpaceCenter().x, 0, GetTrackingSpaceCenter().y);
+        Vector3 center = Vector3.zero;// new Vector3(Vec2center.x, 0, Vec2center.y);
         start = Vector3.zero;
         end = Vector3.zero;
 
@@ -586,9 +578,9 @@ public class TrackingSpaceGenerator
     /// <returns>Returns the area of the resembling rectangle</returns>
     public static float GetQuadResemblingTrackingSpace(out Vector3 a, out Vector3 b, out Vector3 c, out Vector3 d)
     {
-        List<Vector2> bounds = GetTrackingSpaceBoundaries();
+        List<Vector2> bounds = RD_Hiding.SingletonFoEveryton.Instance.trackingSpaceBoundaries;
         Vector3[] bounds3D = new Vector3[bounds.Count];
-        Vector3 center = new Vector3(GetTrackingSpaceCenter().x, 0, GetTrackingSpaceCenter().y);
+        Vector3 center = new Vector3(RD_Hiding.SingletonFoEveryton.Instance.trackingSpaceCenter.x, 0, RD_Hiding.SingletonFoEveryton.Instance.trackingSpaceCenter.y);
 
         for (int i = 0; i < bounds.Count; i++)
             bounds3D[i] = new Vector3(bounds[i].x, 0.1f, bounds[i].y) - center;
@@ -633,7 +625,7 @@ public class TrackingSpaceGenerator
 
     public static float GetTrackingSpaceArea()
     {
-        List<Vector2> trackingSpacepoints = GetTrackingSpaceBoundaries();
+        List<Vector2> trackingSpacepoints = RD_Hiding.SingletonFoEveryton.Instance.trackingSpaceBoundaries;
 
         // Algorithm for area calculation taken from wikipedia:
         // https://de.wikipedia.org/wiki/Polygon#Fl%C3%A4cheninhalt

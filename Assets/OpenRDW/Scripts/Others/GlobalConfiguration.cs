@@ -1033,7 +1033,7 @@ public class GlobalConfiguration : MonoBehaviour
                     //Debug.Log("nextPoint: " + new Vector2(x, y));
                 }
                 re.Add(new Vector2(x, y));
-                RD_Hiding.SingletonFoEveryton.Instance.instantiateSphere(new Vector2(x, y), false);
+                RD_Hiding.SingletonFoEveryton.Instance.instantiateSphere2D(new Vector2(x, y), false);
             }
         }
         catch

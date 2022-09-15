@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.XR;
 
 namespace RD_Hiding
 {
@@ -24,6 +25,8 @@ namespace RD_Hiding
         public GlobalConfiguration.MovementController getMovementController;
 
         public bool drawTrueTrackingBoundaries;
+        public List<Vector2> trackingSpaceBoundaries;
+        public Vector2 trackingSpaceCenter;
 
         private bool firstStart = true;
         private List<GameObject> debugVisuals = new List<GameObject>();
@@ -60,7 +63,7 @@ namespace RD_Hiding
                     Debug.Log("TrackingSpace is too small. Opening Warning UI.");
                     warningUI.SetActive(true);
                 }                    
-            }            
+            }
         }
 
         private void Update()
@@ -77,22 +80,46 @@ namespace RD_Hiding
 
         public void SetRelativeCameraPosition()
         {
-            Vector2 center = TrackingSpaceGenerator.GetTrackingSpaceCenter();
-            camRig.transform.position = new Vector3(-center.x, 0, -center.y);
+            trackingSpaceBoundaries = TrackingSpaceGenerator.GetTrackingSpace(out trackingSpaceCenter);
+            camRig.transform.position = new Vector3(-trackingSpaceCenter.x, 0, -trackingSpaceCenter.y);
+
+            for(int i = 0; i < trackingSpaceBoundaries.Count; i++)
+            {
+                trackingSpaceBoundaries[i] += new Vector2(camRig.transform.position.x, camRig.transform.position.z);
+            }
         }
 
-        public GameObject instantiateSphere(Vector2 position, bool isPartOfTrackingSpace)
+        public GameObject instantiateSphere2D(Vector2 position, bool isPartOfTrackingSpace)
         {
-            return instantiateSphere(position, isPartOfTrackingSpace, (Vector3.one * 0.1f), Color.yellow);
+            return instantiateSphere2D(position, isPartOfTrackingSpace, (Vector3.one * 0.1f), Color.yellow);
         }
 
-        public GameObject instantiateSphere(Vector2 position, bool isPartOfTrackingSpace, Vector3 size, Color colour)
+        public GameObject instantiateSphere2D(Vector2 position, bool isPartOfTrackingSpace, Vector3 size, Color colour)
         {
             GameObject theSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 
             theSphere.GetComponent<MeshRenderer>().material.color = colour;
 
             theSphere.transform.position = new Vector3(position.x, 0, position.y);
+            theSphere.transform.localScale = size;
+
+            if (isPartOfTrackingSpace)
+                theSphere.transform.SetParent(trackingSpaceRoot.transform);
+
+            return theSphere;
+        }
+
+        public GameObject instantiateSphere3D(Vector3 position, bool isPartOfTrackingSpace)
+        {
+            return instantiateSphere3D(position, isPartOfTrackingSpace, (Vector3.one * 0.1f), Color.yellow);
+        }
+
+        public GameObject instantiateSphere3D(Vector3 position, bool isPartOfTrackingSpace, Vector3 size, Color colour)
+        {
+            GameObject theSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            
+            theSphere.GetComponent<MeshRenderer>().material.color = colour;
+            theSphere.transform.position = position;
             theSphere.transform.localScale = size;
 
             if (isPartOfTrackingSpace)
@@ -116,7 +143,26 @@ namespace RD_Hiding
             DrawLine(c, d);
             DrawLine(d, a);
             DrawLine(b, d);
-            debugVisuals.Add(instantiateSphere(Vector2.zero, false));
+            debugVisuals.Add(instantiateSphere2D(Vector2.zero, false));
+        }
+
+        public void drawTrackingBoundaries()
+        {
+            // draw trackingSpaceBoundaries
+            if (trackingSpaceBoundaries.Count == 0)
+            {
+                // draw 5x5 m tracking boundary if not headset is used
+                TrackingSpaceGenerator.GenerateRectangleTrackingSpace(0, out trackingSpaceBoundaries, out _, out _, 5f, 5f);
+                debugVisuals.Add(DrawLine(trackingSpaceBoundaries[0], trackingSpaceBoundaries[1]));
+                debugVisuals.Add(DrawLine(trackingSpaceBoundaries[1], trackingSpaceBoundaries[2]));
+                debugVisuals.Add(DrawLine(trackingSpaceBoundaries[2], trackingSpaceBoundaries[3]));
+                debugVisuals.Add(DrawLine(trackingSpaceBoundaries[3], trackingSpaceBoundaries[0]));
+            }
+            else
+            {
+                foreach (var point in trackingSpaceBoundaries)
+                    debugVisuals.Add(instantiateSphere2D(point, true));
+            }
         }
 
         public void SetAreaValue()

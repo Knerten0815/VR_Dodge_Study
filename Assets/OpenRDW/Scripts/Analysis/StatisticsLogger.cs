@@ -789,7 +789,7 @@ public class StatisticsLogger : MonoBehaviour {
 
         var trackingSpacePoints = experimentSetup.trackingSpacePoints;
         var obstaclePolygons = experimentSetup.obstaclePolygons;
-        var trackingBoundary = TrackingSpaceGenerator.GetTrackingSpaceBoundaries();                                                                                  // ---------------- added -------------- //
+        var trackingBoundary = RD_Hiding.SingletonFoEveryton.Instance.trackingSpaceBoundaries;                                                                                 // ---------------- added -------------- //
         if (trackingBoundary.Count == 0)
             TrackingSpaceGenerator.GenerateRectangleTrackingSpace(0,out trackingBoundary, out obstaclePolygons, out _, 5f, 5f);
         for (int i = 0; i < trackingBoundary.Count; i++)
@@ -831,7 +831,7 @@ public class StatisticsLogger : MonoBehaviour {
 
         var trackingSpacePoints = experimentSetup.trackingSpacePoints;
         var obstaclePolygons = experimentSetup.obstaclePolygons;
-        var trackingBoundary = TrackingSpaceGenerator.GetTrackingSpaceBoundaries();                                                                                  // ---------------- added -------------- //
+        var trackingBoundary = RD_Hiding.SingletonFoEveryton.Instance.trackingSpaceBoundaries;                                                                                        // ---------------- added -------------- //
         if (trackingBoundary.Count == 0)
             TrackingSpaceGenerator.GenerateRectangleTrackingSpace(0, out trackingBoundary, out obstaclePolygons, out _, 5f, 5f);
         for (int i = 0; i < trackingBoundary.Count; i++)
