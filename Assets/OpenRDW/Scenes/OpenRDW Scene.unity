@@ -2162,7 +2162,7 @@ GameObject:
   - component: {fileID: 226062307}
   m_Layer: 0
   m_Name: 3rd Person View
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2205,7 +2205,6 @@ GameObject:
   - component: {fileID: 226199562}
   - component: {fileID: 226199563}
   - component: {fileID: 226199564}
-  - component: {fileID: 226094007}
   m_Layer: 0
   m_Name: OpenRDW
   m_TagString: Untagged
@@ -2213,18 +2212,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &226094007
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 226094006}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d6aff730ef5bec4293a647e23421a54, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &226103090
 GameObject:
   m_ObjectHideFlags: 0
@@ -2334,7 +2321,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d97f4f04aa3aa6e4abc407f0d0d45fcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementController: 2
+  movementController: 0
   runInBackstage: 0
   loadFromTxt: 0
   multiCmdFiles: 0
@@ -2868,7 +2855,7 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -5125,7 +5112,6 @@ GameObject:
   - component: {fileID: 507834997}
   - component: {fileID: 507834996}
   - component: {fileID: 507834995}
-  - component: {fileID: 507834998}
   m_Layer: 0
   m_Name: Start
   m_TagString: Untagged
@@ -5209,24 +5195,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 507834993}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &507834998
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 507834993}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 2
-  outlineColor: {r: 0.83137256, g: 1, b: 0.95686275, a: 0.3529412}
-  outlineWidth: 2
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!1 &510961910
 GameObject:
   m_ObjectHideFlags: 0
@@ -6602,7 +6570,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 684657824}
-  - component: {fileID: 684657825}
   m_Layer: 0
   m_Name: Observer Drone
   m_TagString: Untagged
@@ -6626,24 +6593,6 @@ Transform:
   m_Father: {fileID: 1802682454}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
---- !u!114 &684657825
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 684657823}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 2
-  outlineColor: {r: 0.83137256, g: 1, b: 0.95686275, a: 0.3529412}
-  outlineWidth: 2
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!1 &687914478
 GameObject:
   m_ObjectHideFlags: 0
@@ -6806,7 +6755,7 @@ GameObject:
   - component: {fileID: 741444525}
   m_Layer: 0
   m_Name: og XR Camera
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9086,8 +9035,8 @@ MonoBehaviour:
   pillarParent: {fileID: 376058388}
   pillarScale: {x: 0.7, y: 70, z: 0.7}
   goal: {fileID: 2035857123}
-  a: 20
-  b: 40
+  a: 15
+  b: 20
   pillarSpacing: 1.1
 --- !u!114 &1097306655
 MonoBehaviour:
@@ -10569,7 +10518,7 @@ Transform:
   m_GameObject: {fileID: 1410904227}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 226284296}
   m_RootOrder: 1
@@ -13032,7 +12981,6 @@ GameObject:
   - component: {fileID: 1737370957}
   - component: {fileID: 1737370956}
   - component: {fileID: 1737370958}
-  - component: {fileID: 1737370959}
   m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -13168,24 +13116,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camTransform: {fileID: 0}
---- !u!114 &1737370959
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1737370954}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 2
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 6.22
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!1 &1747728870
 GameObject:
   m_ObjectHideFlags: 0
@@ -15378,7 +15308,6 @@ GameObject:
   - component: {fileID: 2035857126}
   - component: {fileID: 2035857125}
   - component: {fileID: 2035857124}
-  - component: {fileID: 2035857127}
   m_Layer: 0
   m_Name: Goal
   m_TagString: Untagged
@@ -15463,24 +15392,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2035857122}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &2035857127
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2035857122}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 2
-  outlineColor: {r: 0.003921569, g: 0.24705882, b: 0.72156864, a: 0.3529412}
-  outlineWidth: 2
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!1 &2073670887
 GameObject:
   m_ObjectHideFlags: 0
@@ -16374,7 +16285,7 @@ MonoBehaviour:
     filename: _gradient
   radius: 1.2
   fadeSpeed: 1
-  distance: 1.6970562
+  distance: 0
   noiseScaleWorld: 1.2
   noiseScaleScreen: 5
 --- !u!114 &1388679541576992121
@@ -16493,18 +16404,6 @@ Transform:
   m_Father: {fileID: 684657824}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!122 &8997748671418876061
-Halo:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9098485867013303322}
-  m_Enabled: 1
-  m_Color:
-    serializedVersion: 2
-    rgba: 1522024193
-  m_Size: 0.48
 --- !u!1 &9098485867013303322
 GameObject:
   m_ObjectHideFlags: 0
@@ -16515,7 +16414,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5823181317505221820}
   - component: {fileID: 5142113203459514278}
-  - component: {fileID: 8997748671418876061}
   m_Layer: 0
   m_Name: Spot Light
   m_TagString: Untagged

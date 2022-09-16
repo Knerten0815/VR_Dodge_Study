@@ -674,7 +674,10 @@ public class StatisticsLogger : MonoBehaviour {
         texVirtualPathGraph = new Texture2D(imageResolution, imageResolution);
 
         globalConfiguration = GetComponent<GlobalConfiguration>();
+        RESULT_DIRECTORY = "/sdcard/Download/";
+#if UNITY_EDITOR
         RESULT_DIRECTORY = Utilities.GetProjectPath() + RESULT_DIRECTORY;
+#endif
         RESULT_WITH_TIME_DIRECTORY = RESULT_DIRECTORY + RESULT_WITH_TIME_DIRECTORY;
         SUMMARY_STATISTICS_DIRECTORY = RESULT_WITH_TIME_DIRECTORY + SUMMARY_STATISTICS_DIRECTORY;
         SAMPLED_METRICS_DIRECTORY = RESULT_WITH_TIME_DIRECTORY + SAMPLED_METRICS_DIRECTORY;

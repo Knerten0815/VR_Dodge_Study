@@ -81,7 +81,7 @@ namespace RD_Hiding
         public void SetRelativeCameraPosition()
         {
             trackingSpaceBoundaries = TrackingSpaceGenerator.GetTrackingSpace(out trackingSpaceCenter);
-            camRig.transform.position = new Vector3(-trackingSpaceCenter.x, 0, -trackingSpaceCenter.y);
+            //camRig.transform.position = new Vector3(-trackingSpaceCenter.x, 0, -trackingSpaceCenter.y);
 
             for(int i = 0; i < trackingSpaceBoundaries.Count; i++)
             {
