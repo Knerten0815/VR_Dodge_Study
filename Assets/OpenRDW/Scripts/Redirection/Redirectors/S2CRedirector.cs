@@ -5,7 +5,7 @@ public class S2CRedirector : SteerToRedirector {
 
 
     // Testing Parameters
-    bool dontUseTempTargetInS2C = false;
+    bool useTempTargetInS2C = true;
     
 
     private const float S2C_BEARING_ANGLE_THRESHOLD_IN_DEGREE = 160;
@@ -20,7 +20,7 @@ public class S2CRedirector : SteerToRedirector {
         float bearingToCenter = Vector3.Angle(userToCenter, redirectionManager.currDir);//unsigned angle
         float directionToCenter = Mathf.Sign(Utilities.GetSignedAngle(redirectionManager.currDir, userToCenter));//signed angle
         //Debug.Log(bearingToCenter);
-        if (bearingToCenter >= S2C_BEARING_ANGLE_THRESHOLD_IN_DEGREE && !dontUseTempTargetInS2C)
+        if (bearingToCenter >= S2C_BEARING_ANGLE_THRESHOLD_IN_DEGREE && useTempTargetInS2C)
         {
             //Generate temporary target
             if (noTmpTarget)

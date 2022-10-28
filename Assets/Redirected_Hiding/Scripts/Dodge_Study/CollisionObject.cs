@@ -26,7 +26,7 @@ namespace Dodge_Study
                 float calculatedKMSpeed = calculatedSpeed * 3.6f;
                 Debug.Log("Travelled " + cos.distanceToUser + "m in " + timer + " seconds. Which is " + calculatedKMSpeed + " km/h or " + calculatedSpeed + " m/s. ");
                 if (Mathf.Abs(arrivalInSeconds - timer) > 0.01f)
-                    Debug.LogError("Detected incorrect speed!");
+                    Debug.LogError("Detected incorrect speed! Travelled for " + timer + " seconds instead of " + arrivalInSeconds +"!");
 
                 cos.endTest();
             }                
