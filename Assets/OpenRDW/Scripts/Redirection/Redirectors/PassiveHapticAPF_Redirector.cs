@@ -142,11 +142,11 @@ public class PassiveHapticAPF_Redirector : APF_Redirector
         var deltaDir = redirectionManager.deltaDir;
         if (deltaDir * desiredSteeringDirection < 0)
         {
-            g_r = desiredSteeringDirection * Mathf.Min(Mathf.Abs(deltaDir * globalConfiguration.MIN_ROT_GAIN), maxRotationFromRotationGain);
+            g_r = desiredSteeringDirection * Mathf.Min(Mathf.Abs(deltaDir * globalConfiguration.ROT_AGAINST_USER_GAIN), maxRotationFromRotationGain);
         }
         else
         {
-            g_r = desiredSteeringDirection * Mathf.Min(Mathf.Abs(deltaDir * globalConfiguration.MAX_ROT_GAIN), maxRotationFromRotationGain);
+            g_r = desiredSteeringDirection * Mathf.Min(Mathf.Abs(deltaDir * globalConfiguration.ROT_WITH_USER_GAIN), maxRotationFromRotationGain);
         }
 
         // Translation Gain

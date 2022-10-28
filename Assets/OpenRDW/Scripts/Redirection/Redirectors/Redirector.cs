@@ -12,8 +12,8 @@ public abstract class Redirector : MonoBehaviour
     [HideInInspector]
     public MovementManager movementManager;
 
-    public float CURVATURE_GAIN_CAP_DEGREES_PER_SECOND = 15;  // degrees per second
-    public float ROTATION_GAIN_CAP_DEGREES_PER_SECOND = 30;  // degrees per second
+    public float CURVATURE_GAIN_CAP_DEGREES_PER_SECOND = 0;  // degrees per second ---------------------------------------------------------- adjusted to 0 so that there is no Curvature Gain
+    public float ROTATION_GAIN_CAP_DEGREES_PER_SECOND = 30;  // degrees per second ---------------------------------------------------------- This will also turn off Rotation Gain, if set to 0
 
     void Awake()
     {

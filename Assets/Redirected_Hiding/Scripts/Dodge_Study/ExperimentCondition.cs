@@ -1,4 +1,6 @@
-﻿namespace Dodge_Study
+﻿using UnityEngine;
+
+namespace Dodge_Study
 {
     public class ExperimentCondition
     {
@@ -33,15 +35,21 @@
         public int AngleIndex { get { return angleIndex; } }
 
         /// <summary>
+        /// The ID of a specific condition. Is made up of the 4 Variable indices. This only works if all variables have less than 10 states.
+        /// </summary>
+        public int ConditionId { get { return conditionId; } }
+
+        /// <summary>
         /// Has this condition caused a collision?
         /// </summary>
-        public bool Collided { get { return collided; } set { collided = value; } }
+        public bool CollisionDetected { get { return collisionDetected; } set { collisionDetected = value; } }
 
         private int formIndex;
         private int sizeIndex;
         private int speedIndex;
         private int angleIndex;
-        private bool collided = false;
+        private bool collisionDetected = false;
+        private int conditionId;
 
         /// <summary>
         /// 
@@ -56,6 +64,10 @@
             this.sizeIndex = sizeIndex;
             this.speedIndex = speedIndex;
             this.angleIndex = angleIndex;
+
+            string idString = "" + formIndex + sizeIndex + speedIndex + angleIndex;
+            conditionId = int.Parse(idString);
+            Debug.Log("Sting: " + idString + "! Int: " + conditionId);
         }
 
         public Form GetForm() { return (Form)formIndex; }

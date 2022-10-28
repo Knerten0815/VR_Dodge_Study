@@ -4,7 +4,7 @@ namespace Dodge_Study
 {
     public class CollisionObject : MonoBehaviour
     {
-        public bool collided = false;
+        public bool collisionDetected= false;
 
         private float speed = 0;
         private CollisonObjectSpawner cos = null;
@@ -34,7 +34,7 @@ namespace Dodge_Study
 
         private void OnCollisionEnter(Collision collision)
         {
-            collided = true;
+            collisionDetected = true;
         }
 
         public void Init(float speed, float angle, CollisonObjectSpawner cos)

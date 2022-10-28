@@ -118,7 +118,7 @@ public class ZigZagRedirector : Redirector
         float minimumRealRotationRemaining = angleToVirtualTarget; // / (1 + redirectionManager.MIN_ROT_GAIN);
 
         // This can slightly be improved by expecting more from rotation when you know the user is rotating in a direction that now requires positive rotation gain instead!
-        float expectedRotationFromRotationGain = Mathf.Sign(requiredAngleInjection) * Mathf.Min(Mathf.Abs(requiredAngleInjection), Mathf.Abs(minimumRealRotationRemaining * redirectionManager.globalConfiguration.MIN_ROT_GAIN));
+        float expectedRotationFromRotationGain = Mathf.Sign(requiredAngleInjection) * Mathf.Min(Mathf.Abs(requiredAngleInjection), Mathf.Abs(minimumRealRotationRemaining * redirectionManager.globalConfiguration.ROT_AGAINST_USER_GAIN));
         float remainingRotationForCurvatureGain = requiredAngleInjection - expectedRotationFromRotationGain;
         expectedRotationFromCurvature = Mathf.Sign(requiredAngleInjection) * Mathf.Min(minimumRealTranslationRemaining * (Mathf.Rad2Deg / redirectionManager.globalConfiguration.CURVATURE_RADIUS), Mathf.Abs(2 * remainingRotationForCurvatureGain));
 
@@ -138,7 +138,7 @@ public class ZigZagRedirector : Redirector
 
         // Put Caps on Gain Values
         g_t = g_t > 0 ? Mathf.Min(g_t, redirectionManager.globalConfiguration.MAX_TRANS_GAIN) : Mathf.Max(g_t, redirectionManager.globalConfiguration.MIN_TRANS_GAIN);
-        g_r = g_r > 0 ? Mathf.Min(g_r, redirectionManager.globalConfiguration.MAX_ROT_GAIN) : Mathf.Max(g_r, redirectionManager.globalConfiguration.MIN_ROT_GAIN);
+        g_r = g_r > 0 ? Mathf.Min(g_r, redirectionManager.globalConfiguration.ROT_WITH_USER_GAIN) : Mathf.Max(g_r, redirectionManager.globalConfiguration.ROT_AGAINST_USER_GAIN);
 
         // Don't do translation if you're still checking out the previous target
         if ((redirectionManager.currPos - Utilities.UnFlatten(waypoints[waypointIndex - 1])).magnitude < WAYPOINT_UPDATE_DISTANCE)

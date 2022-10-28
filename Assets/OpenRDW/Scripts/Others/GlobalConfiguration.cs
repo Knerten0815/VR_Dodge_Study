@@ -64,11 +64,11 @@ public class GlobalConfiguration : MonoBehaviour
 
     [Tooltip("Rotation gain (dilate)")]
     [Range(0, 5)]
-    public float MAX_ROT_GAIN = 0.49F;
+    public float ROT_WITH_USER_GAIN = 0.49F;
 
     [Tooltip("Rotation gain (compress)")]
     [Range(-0.99F, 0)]
-    public float MIN_ROT_GAIN = -0.2F;
+    public float ROT_AGAINST_USER_GAIN = -0.2F;
 
     [Tooltip("Radius applied by curvature gain")]
     [Range(1, 23)]
@@ -522,9 +522,9 @@ public class GlobalConfiguration : MonoBehaviour
 
     public void SetMinTransGain(float minTrans) { MIN_TRANS_GAIN = minTrans; }
 
-    public void SetMaxRotGain(float maxRot) { MAX_ROT_GAIN = maxRot; }
+    public void SetMaxRotGain(float maxRot) { ROT_WITH_USER_GAIN = maxRot; }
 
-    public void SetMinRotGain(float minRot) { MIN_ROT_GAIN = minRot; }
+    public void SetMinRotGain(float minRot) { ROT_AGAINST_USER_GAIN = minRot; }
 
     public void SetCurvatureRadius(float curveRad) { CURVATURE_RADIUS = curveRad; }
 
@@ -931,10 +931,10 @@ public class GlobalConfiguration : MonoBehaviour
                     MIN_TRANS_GAIN = float.Parse(split[2]);
                     break;
                 case "max_rot_gain":
-                    MAX_ROT_GAIN = float.Parse(split[2]);
+                    ROT_WITH_USER_GAIN = float.Parse(split[2]);
                     break;
                 case "min_rot_gain":
-                    MIN_ROT_GAIN = float.Parse(split[2]);
+                    ROT_AGAINST_USER_GAIN = float.Parse(split[2]);
                     break;
                 case "curvature_radius":
                     CURVATURE_RADIUS = float.Parse(split[2]);

@@ -93,7 +93,7 @@ public class DeepLearning_Redirector : Redirector
 
         var gm = redirectionManager.globalConfiguration;
         g_t = Convert(-1, 1, gm.MIN_TRANS_GAIN, gm.MAX_TRANS_GAIN, g_t);
-        g_r = Convert(-1, 1, gm.MIN_ROT_GAIN, gm.MAX_ROT_GAIN, g_r);        
+        g_r = Convert(-1, 1, gm.ROT_AGAINST_USER_GAIN, gm.ROT_WITH_USER_GAIN, g_r);        
         g_c = Convert(-1, 1, -1 / gm.CURVATURE_RADIUS, 1 / gm.CURVATURE_RADIUS, g_c);
 
         var translation = g_t * redirectionManager.deltaPos;

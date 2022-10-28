@@ -161,11 +161,11 @@ public class MessingerAPF_Redirector : APF_Redirector
         var deltaDir = redirectionManager.deltaDir;
         if (deltaDir * desiredSteeringDirection < 0)
         {//rotate away total force vector
-            g_r = desiredSteeringDirection * Mathf.Max(baseRate * deltaTime, Mathf.Min(Mathf.Abs(deltaDir * redirectionManager.globalConfiguration.MIN_ROT_GAIN), maxRotationFromRotationGain));                
+            g_r = desiredSteeringDirection * Mathf.Max(baseRate * deltaTime, Mathf.Min(Mathf.Abs(deltaDir * redirectionManager.globalConfiguration.ROT_AGAINST_USER_GAIN), maxRotationFromRotationGain));                
         }
         else
         {//rotate towards total force vector
-            g_r = desiredSteeringDirection * Mathf.Max(baseRate * deltaTime, Mathf.Min(Mathf.Abs(deltaDir * redirectionManager.globalConfiguration.MAX_ROT_GAIN), maxRotationFromRotationGain));                
+            g_r = desiredSteeringDirection * Mathf.Max(baseRate * deltaTime, Mathf.Min(Mathf.Abs(deltaDir * redirectionManager.globalConfiguration.ROT_WITH_USER_GAIN), maxRotationFromRotationGain));                
         }
         
         //use max

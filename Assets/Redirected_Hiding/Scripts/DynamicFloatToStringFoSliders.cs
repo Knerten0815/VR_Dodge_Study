@@ -20,10 +20,10 @@ public class DynamicFloatToStringFoSliders : MonoBehaviour
         switch (gainToRead)
         {
             case Gains.MinRot:
-                slider.value = config.MIN_ROT_GAIN;
+                slider.value = config.ROT_AGAINST_USER_GAIN;
                 break;
             case Gains.MaxRot:
-                slider.value = config.MAX_ROT_GAIN;
+                slider.value = config.ROT_WITH_USER_GAIN;
                 break;
             case Gains.MinTrans:
                 slider.value = config.MIN_TRANS_GAIN;

@@ -517,19 +517,28 @@ public class TrackingSpaceGenerator
             if (device.subsystem.TryGetBoundaryPoints(Vec3trackingSpacePoints))
                 Debug.Log("Fetched " + Vec3trackingSpacePoints.Count + " TrackingSpacePoints.");
             else
-                Debug.Log("Failed to fetch TrackingSpacePoints.");
+                Debug.LogError("Failed to fetch Tracking Space Points from device.");
         }
 
         List<Vector2> trackingSpacePoints = new List<Vector2>();
         Vector3 Vec3center = Vector3.zero;
 
-        foreach (Vector3 vec3Point in Vec3trackingSpacePoints)
+        if(Vec3trackingSpacePoints.Count != 0)
         {
-            trackingSpacePoints.Add(new Vector2(vec3Point.x, vec3Point.z));
-            Vec3center += vec3Point;
-        }
+            foreach (Vector3 vec3Point in Vec3trackingSpacePoints)
+            {
+                trackingSpacePoints.Add(new Vector2(vec3Point.x, vec3Point.z));
+                Vec3center += vec3Point;
+            }
 
-        trackingSpacePoints.Reverse();
+            trackingSpacePoints.Reverse();
+        }
+        else
+        {
+            Debug.LogError("Failed to fetch Tracking Space Points: No Device to fetch from!");
+            GenerateCircleTrackingSpace(out trackingSpacePoints, out _, 1f, 50);
+            //GenerateRectangleTrackingSpace(0, out trackingSpacePoints, out _, out _);
+        }        
 
         Vec3center = Vec3center / Vec3trackingSpacePoints.Count;
         center = new Vector2(Vec3center.x, Vec3center.z);        

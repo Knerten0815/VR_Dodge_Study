@@ -52,7 +52,7 @@ namespace Dodge_Study
 
         public void endTest()
         {
-            currentCondition.Collided = currentCollisionObject.collided;
+            currentCondition.CollisionDetected = currentCollisionObject.collided;
             testedConditions.Add(currentCondition);
 
             Destroy(currentCollisionObject.gameObject);
