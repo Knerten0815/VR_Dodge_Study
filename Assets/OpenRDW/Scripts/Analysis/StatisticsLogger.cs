@@ -98,6 +98,17 @@ public class StatisticsLogger : MonoBehaviour {
         public float maxCurvatureGain = float.MinValue;
         public float minCurvatureGain = float.MaxValue;
 
+        // -------------------------------------------------------------------------------------------- VR-Dodge-Study parameters -----------------------------------------------------------------------------------
+        public float maxYawDeltaVirtual;
+        public float maxYawDeltaReal;
+        public float maxDistanceToStart;
+        public Vector3 positionAtMaxDistanceToStart;
+        public Vector3 rotationAtMaxYaw;
+        public bool collisionDetected;
+        // also sumOfInjectedRotationFromRotationGain
+        // => Rotation der virtuellen Welt nach Repositionierung der Versuchsperson, relativ zur Rotation der virtuellen Welt zu Beginn eines Ausweichmanövers
+        // -------------------------------------------------------------------------------------------- VR-Dodge-Study parameters ------------------------------------------------------------------------------------
+
         // Reset Single Parameters
         public float resetCount = 0;
         public float sumOfVirtualDistanceTravelled = 0; // Based on user movement controller plus redirection movement

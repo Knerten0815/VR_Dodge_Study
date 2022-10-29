@@ -44,7 +44,7 @@ namespace Dodge_Study
 
             direction = -transform.position.normalized;
             direction.y = 0;
-            transform.Rotate(Vector3.up * (angle + 180));
+            transform.Rotate(Vector3.up * (angle + 180));   // face the user
             timer = 0;
             arrivalInSeconds = cos.distanceToUser / this.speed;
 

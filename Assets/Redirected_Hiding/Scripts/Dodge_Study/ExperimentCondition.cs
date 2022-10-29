@@ -65,9 +65,7 @@ namespace Dodge_Study
             this.speedIndex = speedIndex;
             this.angleIndex = angleIndex;
 
-            string idString = "" + formIndex + sizeIndex + speedIndex + angleIndex;
-            conditionId = int.Parse(idString);
-            Debug.Log("Sting: " + idString + "! Int: " + conditionId);
+            conditionId = formIndex * 1000 + sizeIndex * 100 + speedIndex * 10 + angleIndex;
         }
 
         public Form GetForm() { return (Form)formIndex; }
@@ -75,7 +73,7 @@ namespace Dodge_Study
         public float GetSpeed() { return speeds[speedIndex]; }
         public float GetAngle() { return angles[angleIndex]; }
 
-        /* probably not used
+        /* probably not needed
          * 
         
         
