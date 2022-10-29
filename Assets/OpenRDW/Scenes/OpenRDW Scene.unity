@@ -1925,10 +1925,10 @@ MonoBehaviour:
   useSimulationTime: 0
   overviewModeEveryTrial: 0
   firstPersonView: 0
-  MAX_TRANS_GAIN: 0.26
-  MIN_TRANS_GAIN: -0.14
-  MAX_ROT_GAIN: 0.49
-  MIN_ROT_GAIN: -0.2
+  MAX_TRANS_GAIN: 0
+  MIN_TRANS_GAIN: 0
+  ROT_WITH_USER_GAIN: 0.4772
+  ROT_AGAINST_USER_GAIN: -0.2758
   CURVATURE_RADIUS: 7.5
   RESET_TRIGGER_BUFFER: 0.1
   simulatedTime: 0

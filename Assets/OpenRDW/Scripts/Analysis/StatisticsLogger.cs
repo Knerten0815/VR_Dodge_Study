@@ -427,19 +427,19 @@ public class StatisticsLogger : MonoBehaviour {
         }
     }
 
-    public void Event_Rotation_Gain(int userId, float g_r, float rotationApplied)
+    public void Event_Rotation_Gain(int userId, float rotationGainFactor, float rotationApplied)
     {
         if (state == LoggingState.logging)
         {
             var us = avatarStatistics[userId];
             us.sumOfInjectedRotationFromRotationGain += Mathf.Abs(rotationApplied);
-            us.maxRotationGain = Mathf.Max(us.maxRotationGain, g_r);
-            us.minRotationGain = Mathf.Min(us.minRotationGain, g_r);
+            us.maxRotationGain = Mathf.Max(us.maxRotationGain, rotationGainFactor);
+            us.minRotationGain = Mathf.Min(us.minRotationGain, rotationGainFactor);
             //rotationGainSamplesBuffer.Add(Mathf.Abs(g_r) * redirectionManager.userMovementManager.lastDeltaTime);
             // The proper way is using redirectionManager.userMovementManager.lastDeltaTime which is the true time the gain was applied for, but this causes problems when we have a long frame and then a short frame
             // But we'll artificially use this current delta time instead!
             //rotationGainSamplesBuffer.Add(g_r * redirectionManager.userMovementManager.lastDeltaTime);
-            us.rotationGainSamplesBuffer.Add(g_r * globalConfiguration.GetDeltaTime());
+            us.rotationGainSamplesBuffer.Add(rotationGainFactor * globalConfiguration.GetDeltaTime());
             //injectedRotationFromRotationGainSamplesBuffer.Add(Mathf.Abs(rotationApplied) * redirectionManager.userMovementManager.lastDeltaTime);
             us.injectedRotationFromRotationGainSamplesBuffer.Add(Mathf.Abs(rotationApplied) * globalConfiguration.GetDeltaTime());
             //injectedRotationSamplesBuffer.Add(Mathf.Abs(rotationApplied) * redirectionManager.userMovementManager.lastDeltaTime);
