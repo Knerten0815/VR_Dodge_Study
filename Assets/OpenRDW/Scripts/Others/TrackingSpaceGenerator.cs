@@ -496,10 +496,11 @@ public class TrackingSpaceGenerator
     //generate tracking space based on the boundary of the actual tracking space.
     public static void GenerateTrackingBoundaryTrackingSpace(out List<Vector2> trackingSpacePoints, out List<InitialConfiguration> initialConfigurations)
     {
-        trackingSpacePoints = GetTrackingSpace(out _);
+        Vector2 center;
+        trackingSpacePoints = GetTrackingSpace(out center);
 
         initialConfigurations = new List<InitialConfiguration>();
-        Vector2 playerPos = new Vector2(0, 0);
+        Vector2 playerPos = -center;
         Vector2 playerForward = new Vector2(0, 1);
 
         initialConfigurations.Add(new InitialConfiguration(playerPos, playerForward));
@@ -546,6 +547,12 @@ public class TrackingSpaceGenerator
         return trackingSpacePoints;
     }
 
+    /// <summary>
+    /// this method sucks. But works good for square shaped boundaries
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    /// <returns></returns>
     public static float GetLongestDistanceInBoundaries(out Vector3 start, out Vector3 end)
     {
         Vector2 Vec2center = RD_Hiding.SingletonFoEveryton.Instance.trackingSpaceCenter;

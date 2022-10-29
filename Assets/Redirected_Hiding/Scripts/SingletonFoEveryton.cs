@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using TMPro;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -45,11 +46,18 @@ namespace RD_Hiding
 
             getLoadFromTxt = config.loadFromTxt;
             getMovementController = config.movementController;
+
+            //trackingSpaceBoundaries = TrackingSpaceGenerator.GetTrackingSpace(out trackingSpaceCenter);  <---------- this will completly freeze Unity
         }
         #endregion
 
         void Start()
         {
+            if (config.movementController == GlobalConfiguration.MovementController.HMD)
+            {
+                trackingSpaceBoundaries = TrackingSpaceGenerator.GetTrackingSpace(out trackingSpaceCenter);
+            }
+
             //check Tracking Space dimensions
             if (!ignoreWarning)
             {
@@ -78,10 +86,40 @@ namespace RD_Hiding
             }
         }
 
+        public float GetLongestDistanceInBoundaries(out Vector3 start, out Vector3 end)
+        {
+            Vector2 Vec2center = trackingSpaceCenter;
+            List<Vector2> bounds = trackingSpaceBoundaries;
+
+            float longestDistance = 0;
+            Vector3 center = Vector3.zero;// new Vector3(Vec2center.x, 0, Vec2center.y);
+            start = Vector3.zero;
+            end = Vector3.zero;
+
+            //iterate through all points, except the last one. All diagonals of the last point will get calculated in the j-loops by the end.
+            for (int i = 0; i < bounds.Count - 1; i++)
+            {
+                //iterate through all points, beginning by the next point. No need to calculate points before i.
+                for (int j = i + 1; j < bounds.Count; j++)
+                {
+                    float magnitude = (bounds[i] - bounds[j]).magnitude;
+
+                    if (magnitude > longestDistance)
+                    {
+                        longestDistance = magnitude;
+                        start = new Vector3(bounds[i].x, 0.1f, bounds[i].y) - center;
+                        end = new Vector3(bounds[j].x, 0.1f, bounds[j].y) - center;
+                    }
+                }
+            }
+
+            return longestDistance;
+        }
+
         public void SetRelativeCameraPosition()
         {
             trackingSpaceBoundaries = TrackingSpaceGenerator.GetTrackingSpace(out trackingSpaceCenter);
-            camRig.transform.position = new Vector3(-trackingSpaceCenter.x, 0, -trackingSpaceCenter.y);
+            camRig.GetComponent<XROrigin>().MoveCameraToWorldLocation(new Vector3(-trackingSpaceCenter.x, 0, -trackingSpaceCenter.y));
 
             for(int i = 0; i < trackingSpaceBoundaries.Count; i++)
             {
@@ -162,6 +200,9 @@ namespace RD_Hiding
             {
                 foreach (var point in trackingSpaceBoundaries)
                     debugVisuals.Add(instantiateSphere2D(point, true));
+
+                // add center
+                debugVisuals.Add(instantiateSphere2D(trackingSpaceCenter, true, Vector3.one * 0.2f, Color.red));
             }
         }
 

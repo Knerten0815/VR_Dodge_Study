@@ -30,7 +30,7 @@ namespace Dodge_Study
             }
         }
 
-        private void spawnObject()
+        public void spawnObject()
         {
             currentCondition = pickRandomCondition();
 
