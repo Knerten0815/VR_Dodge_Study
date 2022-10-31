@@ -2,12 +2,12 @@
 
 namespace Dodge_Study
 {
-    public class CollisionObject : MonoBehaviour
+    public class TrialObject : MonoBehaviour
     {
         public bool collisionDetected= false;
 
         private float speed = 0;
-        private CollisonObjectSpawner cos = null;
+        private TrialObjectSpawner cos = null;
         private Vector3 direction;
         private float timer = 0;
         private float arrivalInSeconds = 0;
@@ -24,20 +24,21 @@ namespace Dodge_Study
             {
                 float calculatedSpeed = cos.distanceToUser / timer;
                 float calculatedKMSpeed = calculatedSpeed * 3.6f;
-                Debug.Log("Travelled " + cos.distanceToUser + "m in " + timer + " seconds. Which is " + calculatedKMSpeed + " km/h or " + calculatedSpeed + " m/s. ");
+                /*Debug.Log("Travelled " + cos.distanceToUser + "m in " + timer + " seconds. Which is " + calculatedKMSpeed + " km/h or " + calculatedSpeed + " m/s. ");
                 if (Mathf.Abs(arrivalInSeconds - timer) > 0.01f)
                     Debug.LogError("Detected incorrect speed! Travelled for " + timer + " seconds instead of " + arrivalInSeconds +"!");
-
-                cos.endTest();
-            }                
+                */
+                ExperimentManager.Instance.EndTrial();
+                Destroy(gameObject);
+            }
         }
 
         private void OnCollisionEnter(Collision collision)
         {
-            collisionDetected = true;
+            ExperimentManager.Instance.currentCondition.CollisionDetected = true;
         }
 
-        public void Init(float speed, float angle, CollisonObjectSpawner cos)
+        public void Init(float speed, float angle, TrialObjectSpawner cos)
         {
             this.speed = speed / 3.6f; // convert from km/h to m/s
             this.cos = cos;
@@ -48,7 +49,7 @@ namespace Dodge_Study
             timer = 0;
             arrivalInSeconds = cos.distanceToUser / this.speed;
 
-            Debug.Log("Travelling with " + speed + " km/h or " + this.speed + " m/s. Should arrive in " + arrivalInSeconds + " seconds.");
+            //Debug.Log("Travelling with " + speed + " km/h or " + this.speed + " m/s. Should arrive in " + arrivalInSeconds + " seconds.");
         }
     }
 }

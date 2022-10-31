@@ -750,30 +750,37 @@ public class StatisticsLogger : MonoBehaviour {
     }
 
     //export results of every trial to excels
-    public void LogExperimentSummaryStatisticsResultsSCSV(List<ResultOfTrial> experimentResults,string resultDir, string resultFileName)
+    public void LogExperimentSummaryStatisticsResultsSCSV(string resultDir, string resultFileName)
     {
+        Debug.Log("Writing summary statistics");
         if (!Directory.Exists(resultDir))
             Directory.CreateDirectory(resultDir);
         csvWriter = new StreamWriter(resultDir + resultFileName + ".csv");        
         csvWriter.WriteLine("sep=;");
-        //csvWriter.WriteLine("");
-        for (int experimentTrialId = 0; experimentTrialId < experimentResults.Count; experimentTrialId++) {            
-            var experimentResult = experimentResults[experimentTrialId].result;
-            var endState = experimentResults[experimentTrialId].EndStateToString();            
-            var firstLine = string.Format("TrialId = {0};EndState = {1}", experimentTrialId, endState);
-            csvWriter.WriteLine(firstLine);
-            if (experimentResult.Count > 0)
+
+        // Set up the headers
+        csvWriter.Write("EndState;");
+        csvWriter.Write("experiment_start_time;");                          // ----- aber als erstes muss hier de TrialID (aus TrialData, nicht experimentTrialId) noch irgendwie rein.
+        foreach (string header in experimentResults[0].result[0].Keys)                 // ----- Das hier ist die Wirklich erste Line!
+        {
+            csvWriter.Write(header + ";");
+        }
+        csvWriter.WriteLine();
+
+        for (int experimentResultID = 0; experimentResultID < experimentResults.Count; experimentResultID++) {
+            var experimentDescriptor = experimentResults[experimentResultID].result;
+            var endState = experimentResults[experimentResultID].EndStateToString();            
+            //var firstLine = string.Format("TrialId = {0};EndState = {1}", experimentTrialId, endState);     // --- muss weg! Spalte statt Line!
+            //csvWriter.WriteLine(firstLine);
+            if (experimentDescriptor.Count > 0)
             {
-                // Set up the headers
-                csvWriter.Write("experiment_start_time;");
-                foreach (string header in experimentResult[0].Keys)
-                {
-                    csvWriter.Write(header + ";");
-                }
-                csvWriter.WriteLine();
+
+                // set up headers code was taken from here
+
                 // Write Values            
-                foreach (var experimentResultPerUser in experimentResult)
+                foreach (var experimentResultPerUser in experimentDescriptor)   // hier müssen eigentlich die ganzen Trials aufgelistet werden, nicht die User!
                 {
+                    csvWriter.Write(endState + ";");
                     csvWriter.Write(globalConfiguration.startTimeOfProgram + ";");
                     foreach (string value in experimentResultPerUser.Values)
                     {
@@ -782,8 +789,8 @@ public class StatisticsLogger : MonoBehaviour {
                     csvWriter.WriteLine();
                 }
             }
-            if (experimentTrialId < experimentResults.Count - 1)
-                csvWriter.WriteLine();
+            //if (experimentResultID < experimentResults.Count - 1)
+            //    csvWriter.WriteLine();
         }
         csvWriter.Flush();
         csvWriter.Close();

@@ -84,7 +84,8 @@ public class GlobalConfiguration : MonoBehaviour
     [Tooltip("Target simulated frame rate in auto-pilot mode, the time 1/targetFPS will pass after each update")]
     public float targetFPS = 60;
 
-    [Tooltip("Number of trails will be repeated")]
+    public bool testOnlySomeTrials;
+    [Tooltip("Number of trails will be repeated, if testOnlySomeTrials is TRUE.")]
     [Range(1, 10)]
     public int trialsForRepeating;
 
@@ -340,7 +341,11 @@ public class GlobalConfiguration : MonoBehaviour
 
         // Initialization
         experimentIterator = 0;
-        trialsForCurrentExperiment = trialsForRepeating;
+
+        if (testOnlySomeTrials)     // ----------------------------------------------------------------- added --------------------------------
+            trialsForCurrentExperiment = trialsForRepeating;
+        else
+            trialsForCurrentExperiment = Dodge_Study.ExperimentManager.Instance.untestedConditions.Count;
         
         //pre-defined procedurally generated paths, ensure the same in every trial
         float sumOfDistances, sumOfRotations;
@@ -1278,7 +1283,7 @@ public class GlobalConfiguration : MonoBehaviour
     }
 
     //endState of experiment, 0 indicates normal end, -1 indicates invalid data, 1 indicates end manually
-    void EndExperiment(int endState)
+    public void EndExperiment(int endState)
     {
         if (experimentIterator >= experimentSetups.Count)
             return;
@@ -1350,7 +1355,7 @@ public class GlobalConfiguration : MonoBehaviour
         File.WriteAllText(statisticsLogger.Get_TMP_DERECTORY() + @"\" + experimentSetupsListIterator + "-" + experimentSetupsList.Count + " " + experimentIterator + "-" + experimentSetups.Count + ".txt", "");
 
         // Prepared for new experiment
-        //experimentIterator++; ------------------------------------------------------------------------------------------------------------------------------- nope! Always do the same experiment ;)
+        experimentIterator++;
         
         experimentInProgress = false;
 
@@ -1361,7 +1366,7 @@ public class GlobalConfiguration : MonoBehaviour
             GetResultDirAndFileName(statisticsLogger.SUMMARY_STATISTICS_DIRECTORY, out string resultDir, out string fileName);
 
             Debug.Log(string.Format("Save data to resultDir:{0}, fileName:{1}", resultDir, fileName));
-            statisticsLogger.LogExperimentSummaryStatisticsResultsSCSV(statisticsLogger.experimentResults, resultDir, fileName);
+            statisticsLogger.LogExperimentSummaryStatisticsResultsSCSV(resultDir, fileName);
 
             //initialize experiment results 
             statisticsLogger.InitializeExperimentResults();
@@ -1443,6 +1448,8 @@ public class GlobalConfiguration : MonoBehaviour
         for (int i = 0; i < avatarNum; i++)
             initialConfigurations.Add(InitialConfiguration.Copy(defaultInitialConfiguration[i % defaultInitialConfiguration.Count]));
     }
+
+    // Called from EndExperiment
     List<Dictionary<string, string>> GetExperimentDescriptor(ExperimentSetup setup)
     {
         var descriptorList = new List<Dictionary<string, string>>();
@@ -1450,6 +1457,7 @@ public class GlobalConfiguration : MonoBehaviour
         {
             var descriptor = new Dictionary<string, string>();
             descriptorList.Add(descriptor);
+            /*/ -------------------------------------- VR-Dodge-Study --------------------------------------------------------------
             descriptor["trackingSpace"] = setup.trackingSpaceChoice.ToString();
             if (setup.trackingSpaceChoice.Equals(TrackingSpaceChoice.Square))
                 descriptor["squareWidth"] = setup.squareWidth.ToString();
@@ -1458,6 +1466,15 @@ public class GlobalConfiguration : MonoBehaviour
             descriptor["pathSeedChoice"] = setup.avatars[i].pathSeedChoice.ToString();
             descriptor["redirector"] = RedirectionManager.RedirectorToRedirectorChoice(setup.avatars[i].redirector).ToString();
             descriptor["resetter"] = RedirectionManager.ResetterToResetChoice(setup.avatars[i].resetter).ToString();
+            */
+            
+            Dodge_Study.TrialData trialData = Dodge_Study.ExperimentManager.Instance.currentCondition;
+            descriptor["trialID"] = trialData.TrialID.ToString();
+            descriptor["form"] = trialData.GetForm().ToString();
+            descriptor["size"] = trialData.GetSize().ToString();
+            descriptor["speed"] = trialData.GetSpeed().ToString();
+            descriptor["angle"] = trialData.GetAngle().ToString();
+            /// --------------------------------------------------------------------------------------------------------------------
         }
         return descriptorList;
     }

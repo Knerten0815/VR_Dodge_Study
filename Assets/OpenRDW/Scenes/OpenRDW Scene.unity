@@ -591,6 +591,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 113074718}
   m_CullTransparentMesh: 0
+--- !u!1 &119069540
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 119069541}
+  - component: {fileID: 119069542}
+  m_Layer: 0
+  m_Name: Experiment Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &119069541
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 119069540}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.072404966, y: 1.729054, z: 1.7064141}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &119069542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 119069540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf80282e79609764f97220b6129a74db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  config: {fileID: 226199562}
+  spawner: {fileID: 798203669}
+  trialIsRunning: 0
 --- !u!1 &136602609
 GameObject:
   m_ObjectHideFlags: 0
@@ -1918,7 +1964,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d97f4f04aa3aa6e4abc407f0d0d45fcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementController: 2
+  movementController: 0
   runInBackstage: 0
   loadFromTxt: 0
   multiCmdFiles: 0
@@ -1933,7 +1979,8 @@ MonoBehaviour:
   RESET_TRIGGER_BUFFER: 0.1
   simulatedTime: 0
   targetFPS: 50
-  trialsForRepeating: 1
+  testOnlySomeTrials: 1
+  trialsForRepeating: 3
   experimentIterator: 0
   experimentSetupsListIterator: 0
   experimentInProgress: 0
@@ -6116,7 +6163,7 @@ GameObject:
   - component: {fileID: 798203671}
   - component: {fileID: 798203672}
   m_Layer: 0
-  m_Name: Collision Object Spawner
+  m_Name: Trial Object Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6134,7 +6181,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0e4986dbdeb01a42bf1e0c899fd1083, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testIsRunning: 0
   formPrefabs:
   - {fileID: 5075395970476053711, guid: dfae282c19bc12147b04d971873fa7e9, type: 3}
   - {fileID: 7136108927601410147, guid: 34c6c2e4eb517e54fbadde99216d5f9f, type: 3}

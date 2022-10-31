@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PathSeedChoice = GlobalConfiguration.PathSeedChoice;
 using TrackingSpaceChoice = GlobalConfiguration.TrackingSpaceChoice;
+using Dodge_Study;
 
 public class ExperimentSetup
 {
@@ -33,6 +34,7 @@ public class ExperimentSetup
         }
     }
     public List<AvatarInfo> avatars;
+    public TrialData trialData;     //------------------------added---------- This will not be set in the Constructor, but during runtime, to ensure randomness of trial conditions.
     public TrackingSpaceChoice trackingSpaceChoice;
     public List<Vector2> trackingSpacePoints;
     public float squareWidth;

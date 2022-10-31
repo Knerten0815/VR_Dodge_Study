@@ -2,7 +2,7 @@
 
 namespace Dodge_Study
 {
-    public class ExperimentCondition
+    public class TrialData
     {
         // Variables and their possible values. Adjust them here and only here.
         public enum Form { Sphere, MorningStar, Particles, Car }
@@ -37,7 +37,7 @@ namespace Dodge_Study
         /// <summary>
         /// The ID of a specific condition. Is made up of the 4 Variable indices. This only works if all variables have less than 10 states.
         /// </summary>
-        public int ConditionId { get { return conditionId; } }
+        public int TrialID { get { return trialId; } }
 
         /// <summary>
         /// Has this condition caused a collision?
@@ -49,7 +49,7 @@ namespace Dodge_Study
         private int speedIndex;
         private int angleIndex;
         private bool collisionDetected = false;
-        private int conditionId;
+        private int trialId;
 
         /// <summary>
         /// 
@@ -58,14 +58,14 @@ namespace Dodge_Study
         /// <param name="sizeIndex">0 = small; 1 = big;</param>
         /// <param name="speedIndex">0 = 3 km/h; 1 = 10 km/h; 2 = 30 km/h</param>
         /// <param name="angleIndex">0 = +51°; 1 = +34°; 2 = +17°; 3 = 0°; 4 = -17°; 5 = -34°; 6 = -51°</param>
-        public ExperimentCondition(int formIndex, int sizeIndex, int speedIndex, int angleIndex)
+        public TrialData(int formIndex, int sizeIndex, int speedIndex, int angleIndex)
         {
             this.formIndex = formIndex;
             this.sizeIndex = sizeIndex;
             this.speedIndex = speedIndex;
             this.angleIndex = angleIndex;
 
-            conditionId = formIndex * 1000 + sizeIndex * 100 + speedIndex * 10 + angleIndex;
+            trialId = formIndex * 1000 + sizeIndex * 100 + speedIndex * 10 + angleIndex;
         }
 
         public Form GetForm() { return (Form)formIndex; }
