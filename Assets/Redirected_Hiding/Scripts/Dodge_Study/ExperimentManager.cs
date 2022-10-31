@@ -44,10 +44,11 @@ namespace Dodge_Study
         {
             if (trialIsRunning)
             {
-                spawner.despawnObject();
-
                 trialIsRunning = false;
-                config.EndExperiment(0);
+                if (currentCondition.CollisionDetected)
+                    config.EndExperiment(2);
+                else
+                    config.EndExperiment(0);
 
                 currentCondition = null;
             }

@@ -28,10 +28,5 @@ namespace Dodge_Study
             currentCollisionObject = go.AddComponent<TrialObject>();
             currentCollisionObject.Init(ecpC.GetSpeed(), ecpC.GetAngle(), this);
         }
-
-        public void despawnObject()
-        {
-            Destroy(currentCollisionObject.gameObject);
-        }
     }
 }
