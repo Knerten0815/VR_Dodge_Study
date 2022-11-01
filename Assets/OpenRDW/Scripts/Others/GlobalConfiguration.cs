@@ -1340,7 +1340,7 @@ public class GlobalConfiguration : MonoBehaviour
             List<Dictionary<string, List<float>>> oneDimensionalSamples;
             List<Dictionary<string, List<Vector2>>> twoDimensionalSamples;
             statisticsLogger.GetExperimentResultsForSampledVariables(out oneDimensionalSamples, out twoDimensionalSamples);
-            statisticsLogger.LogAllExperimentSamples(TrialIdToString(experimentIterator), oneDimensionalSamples, twoDimensionalSamples);
+            Dodge_Study.ExperimentManager.Instance.LogAllSamples(experimentIterator, oneDimensionalSamples, twoDimensionalSamples);     // ----------------------------------- statisticsLogger.LogAllExperimentSamples(TrialIdToString(experimentIterator), oneDimensionalSamples, twoDimensionalSamples);
         }
 
         //save images
@@ -1349,7 +1349,6 @@ public class GlobalConfiguration : MonoBehaviour
             statisticsLogger.LogExperimentRealPathPictures(experimentIterator);
             statisticsLogger.LogExperimentVirtualPathPictures(experimentIterator);
         }
-            
 
         //create temporary files to indicate the stage of the experiment
         File.WriteAllText(statisticsLogger.Get_TMP_DERECTORY() + @"\" + experimentSetupsListIterator + "-" + experimentSetupsList.Count + " " + experimentIterator + "-" + experimentSetups.Count + ".txt", "");
@@ -1383,7 +1382,6 @@ public class GlobalConfiguration : MonoBehaviour
                 experimentIterator = 0;
                 experimentSetups = experimentSetupsList[experimentSetupsListIterator];
             }
-
         }
     }
     public void GetResultDirAndFileName(string defaultDir,out string resultDir,out string fileName) {

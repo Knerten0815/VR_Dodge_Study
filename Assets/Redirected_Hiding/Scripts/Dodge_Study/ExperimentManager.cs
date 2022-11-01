@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace Dodge_Study
@@ -14,6 +16,9 @@ namespace Dodge_Study
         public TrialData currentCondition = null;
         public bool trialIsRunning;
 
+        private string[][] AllSampleCSVLines;
+        private string sampleDirectory;
+
         private static ExperimentManager _instance;
         public static ExperimentManager Instance { get { return _instance; } }
 
@@ -25,6 +30,12 @@ namespace Dodge_Study
                 _instance = this;
 
             setupAllConditions();
+            
+            sampleDirectory = Utilities.GetProjectPath() + "Experiment Results/" + Utilities.GetTimeStringForFileName() + "/" + "Sampled Metrics/";
+            Utilities.CreateDirectoryIfNeeded(sampleDirectory);
+
+            AllSampleCSVLines = new string[untestedConditions.Count][];
+
             //trackingSpaceBoundaries = TrackingSpaceGenerator.GetTrackingSpace(out trackingSpaceCenter);  <---------- this will completly freeze Unity
         }
 
@@ -82,6 +93,94 @@ namespace Dodge_Study
             }
 
             Debug.Log("Setup experiment with " + untestedConditions.Count + " conditions.");
+        }
+        
+        //save results to local
+        public void LogAllSamples(int trialIteration, List<Dictionary<string, List<float>>> oneDimensionalSamplesMaps, List<Dictionary<string, List<Vector2>>> twoDimensionalSamplesMaps)
+        {
+            StreamWriter csvWriter = new StreamWriter(sampleDirectory + "trialIteration_" + trialIteration + "_samples.csv");
+            int lineCount = oneDimensionalSamplesMaps[0].First().Value.Count;
+
+            // Set up the headers
+            foreach (string header in twoDimensionalSamplesMaps[0].Keys)
+            {
+                csvWriter.Write(header + ";");
+            }
+            foreach (string header in oneDimensionalSamplesMaps[0].Keys)
+            {
+                csvWriter.Write( header + ";");
+            }
+
+            // Write values
+            for (int i = 1; i < lineCount; i++)
+            {
+                csvWriter.WriteLine();
+                foreach (KeyValuePair<string, List<Vector2>> keyListPair in twoDimensionalSamplesMaps[0])
+                {
+                    if (i < keyListPair.Value.Count)
+                        csvWriter.Write(keyListPair.Value[i].x.ToString().Replace(",", ".") + ", " + keyListPair.Value[i].y.ToString().Replace(",", ".") + ";");
+                    else
+                        csvWriter.Write(";");
+                }
+
+                foreach (KeyValuePair<string, List<float>> keyListPair in oneDimensionalSamplesMaps[0])
+                {
+                    if (i < keyListPair.Value.Count)
+                        csvWriter.Write(keyListPair.Value[i] + ";");
+                    else
+                        csvWriter.Write(";");
+                }
+            }
+        }
+
+        public void SaveSamplesForLogging(int trialIteration, List<Dictionary<string, List<float>>> oneDimensionalSamplesMaps, List<Dictionary<string, List<Vector2>>> twoDimensionalSamplesMaps)
+        {
+            int lineCount = oneDimensionalSamplesMaps[0].First().Value.Count + 1;
+            AllSampleCSVLines[trialIteration] = new string[lineCount];
+
+            // Set up the headers
+            foreach (string header in twoDimensionalSamplesMaps[0].Keys)
+            {
+                AllSampleCSVLines[trialIteration][0] = header + ";";
+            }
+            foreach (string header in oneDimensionalSamplesMaps[0].Keys)
+            {
+                AllSampleCSVLines[trialIteration][0] += header + ";";
+            }
+
+            for (int i = 1; i < lineCount; i++)
+            {
+                foreach (KeyValuePair<string, List<Vector2>> keyListPair in twoDimensionalSamplesMaps[0])
+                {
+                    if (i < keyListPair.Value.Count)
+                        AllSampleCSVLines[trialIteration][i] = keyListPair.Value[i].x.ToString().Replace(",", ".") + ", " + keyListPair.Value[i].y.ToString().Replace(",", ".") + ";";
+                    else
+                        AllSampleCSVLines[trialIteration][i] = ";";
+                }
+
+                foreach (KeyValuePair<string, List<float>> keyListPair in oneDimensionalSamplesMaps[0])
+                {
+                    if (i < keyListPair.Value.Count)
+                        AllSampleCSVLines[trialIteration][i] += keyListPair.Value[i] + ";";
+                    else
+                        AllSampleCSVLines[trialIteration][i] += ";";
+                }
+            }
+        }
+
+
+        public void LogAllSavedData()
+        {
+            StreamWriter csvWriter;
+
+            for (int i = 0; i < AllSampleCSVLines.Length; i++)
+            {
+                csvWriter = new StreamWriter(sampleDirectory + "trialIteration_" + i + "_samples.csv");
+                for(int j = 0; j < AllSampleCSVLines[i].Length; j++)
+                {
+                    csvWriter.WriteLine(AllSampleCSVLines[i][j]);
+                }
+            }
         }
     }
 }

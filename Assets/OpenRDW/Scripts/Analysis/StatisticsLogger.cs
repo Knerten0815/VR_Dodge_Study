@@ -34,6 +34,9 @@ public class StatisticsLogger : MonoBehaviour {
                 case 1:
                     experimentState = "Manually";
                     break;
+                case 2:
+                    experimentState = "Collision";
+                    break;
                 default:
                     experimentState = "Undefined";
                     break;
@@ -759,6 +762,7 @@ public class StatisticsLogger : MonoBehaviour {
         csvWriter.WriteLine("sep=;");
 
         // Set up the headers
+        csvWriter.Write("TrialIteration;");
         csvWriter.Write("EndState;");
         csvWriter.Write("experiment_start_time;");                          // ----- aber als erstes muss hier de TrialID (aus TrialData, nicht experimentTrialId) noch irgendwie rein.
         foreach (string header in experimentResults[0].result[0].Keys)                 // ----- Das hier ist die Wirklich erste Line!
@@ -780,6 +784,7 @@ public class StatisticsLogger : MonoBehaviour {
                 // Write Values            
                 foreach (var experimentResultPerUser in experimentDescriptor)   // hier müssen eigentlich die ganzen Trials aufgelistet werden, nicht die User!
                 {
+                    csvWriter.Write(experimentResultID + ";");
                     csvWriter.Write(endState + ";");
                     csvWriter.Write(globalConfiguration.startTimeOfProgram + ";");
                     foreach (string value in experimentResultPerUser.Values)
@@ -804,7 +809,7 @@ public class StatisticsLogger : MonoBehaviour {
 
         //set background to white
         Utilities.SetTextureToSingleColor(texRealPathGraph, backgroundColor);
-
+        
         var trackingSpacePoints = experimentSetup.trackingSpacePoints;
         var obstaclePolygons = experimentSetup.obstaclePolygons;
         var trackingBoundary = RD_Hiding.SingletonFoEveryton.Instance.trackingSpaceBoundaries;                                                                                 // ---------------- added -------------- //
@@ -822,6 +827,7 @@ public class StatisticsLogger : MonoBehaviour {
             //var virtualPathColor = globalConfiguration.avatarColors[uId];
             var realPosList = avatarStatistics[uId].userRealPositionSamples;
             var deltaWeight = (1 - pathStartAlpha) / realPosList.Count;
+            
             
             for (int i = 0; i < realPosList.Count - 1; i++) {
                 var w = (pathStartAlpha + deltaWeight * i);
@@ -846,7 +852,7 @@ public class StatisticsLogger : MonoBehaviour {
 
         //set background to transparent
         Utilities.SetTextureToSingleColor(texVirtualPathGraph, Color.clear);
-
+        
         var trackingSpacePoints = experimentSetup.trackingSpacePoints;
         var obstaclePolygons = experimentSetup.obstaclePolygons;
         var trackingBoundary = RD_Hiding.SingletonFoEveryton.Instance.trackingSpaceBoundaries;                                                                                        // ---------------- added -------------- //
@@ -879,6 +885,7 @@ public class StatisticsLogger : MonoBehaviour {
             var virtualPosList = avatarStatistics[uId].userVirtualPositionSamples;
             var deltaWeight = (1 - pathStartAlpha) / virtualPosList.Count;
 
+            
             for (int i = 0; i < virtualPosList.Count - 1; i++)
             {
                 var w = (pathStartAlpha + deltaWeight * i);
@@ -949,6 +956,48 @@ public class StatisticsLogger : MonoBehaviour {
                 LogTwoDimensionalExperimentSamples(experimentSamplesDirectory + "userId_" + i + "/", twoDimensionalSamples.Key , twoDimensionalSamples.Value);
             }
         }
+    }
+
+    public void KevinsIdeaOfLoggingSamples(string experimentDecriptorString, List<Dictionary<string, List<float>>> oneDimensionalSamplesMaps, List<Dictionary<string, List<Vector2>>> twoDimensionalSamplesMaps)
+    {
+        Utilities.CreateDirectoryIfNeeded(SAMPLED_METRICS_DIRECTORY);
+        csvWriter = new StreamWriter(SAMPLED_METRICS_DIRECTORY + experimentDecriptorString + "_samples.csv");
+
+        // Set up the headers
+        foreach (string header in twoDimensionalSamplesMaps[0].Keys)
+        {
+            csvWriter.Write(header + ";");
+        }
+        foreach (string header in oneDimensionalSamplesMaps[0].Keys)
+        {
+            csvWriter.Write(header + ";");
+        }
+
+        int firstKeyValuePairsCountOfValues = oneDimensionalSamplesMaps[0].First().Value.Count;
+
+        for (int i = 0; i < firstKeyValuePairsCountOfValues; i++)
+        {
+            csvWriter.WriteLine();
+
+            foreach (KeyValuePair<string, List<Vector2>> keyListPair in twoDimensionalSamplesMaps[0])
+            {
+                if (i < keyListPair.Value.Count)
+                    csvWriter.Write(keyListPair.Value[i].x.ToString().Replace(",", ".") + ", " + keyListPair.Value[i].y.ToString().Replace(",", ".") + ";");
+                else
+                    csvWriter.Write(";");
+            }
+
+            foreach (KeyValuePair<string, List<float>> keyListPair in oneDimensionalSamplesMaps[0])
+            {
+                if (i < keyListPair.Value.Count)
+                    csvWriter.Write(keyListPair.Value[i] + ";");
+                else
+                    csvWriter.Write(";");
+            }
+        }
+
+        csvWriter.Flush();
+        csvWriter.Close();
     }
     public bool IfResetCountExceedLimit(int id) {
         return avatarStatistics[id].resetCount > MaxResetCount;

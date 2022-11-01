@@ -2032,7 +2032,7 @@ MonoBehaviour:
   trailVisualTime: 20
   realTrailColor: {r: 1, g: 0, b: 0, a: 0}
   virtualTrailColor: {r: 0, g: 0, b: 1, a: 0}
-  exportImage: 1
+  exportImage: 0
   exportVideo: 0
   statisticsLogger: {fileID: 0}
   passiveHaptics: 0
