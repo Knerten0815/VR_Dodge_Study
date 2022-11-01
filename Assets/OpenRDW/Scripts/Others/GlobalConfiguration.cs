@@ -706,7 +706,7 @@ public class GlobalConfiguration : MonoBehaviour
 
     public void PlayerIsReadyMenue()
     {
-        StartNextExperiment();
+        //StartNextExperiment();
 
         readyToStart = true;
 

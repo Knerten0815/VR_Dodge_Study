@@ -50,7 +50,7 @@ namespace WorldSpaceTransitions
             }
         }
 
-        void OnEnable()
+        void Start()
         {
             FadingTransition.instance.fadeInWorldTransition();
             SetSection();

@@ -28,7 +28,7 @@ namespace Dodge_Study
                 Destroy(this);
             else
                 _instance = this;
-
+            
             setupAllConditions();
             
             sampleDirectory = Utilities.GetProjectPath() + "Experiment Results/" + Utilities.GetTimeStringForFileName() + "/" + "Sampled Metrics/";
@@ -38,12 +38,17 @@ namespace Dodge_Study
 
             //trackingSpaceBoundaries = TrackingSpaceGenerator.GetTrackingSpace(out trackingSpaceCenter);  <---------- this will completly freeze Unity
         }
+        private void Start()
+        {
+            config.statisticsLogger.InitializeAllValues();
+        }
 
         [ContextMenu("Start Trial")]
         public void StartTrial()
         {
             if (!trialIsRunning)
             {
+                config.PlayerIsReadyMenue();
                 trialIsRunning = true;
                 pickRandomCondition();
                 spawner.spawnObject();
