@@ -675,7 +675,7 @@ public class StatisticsLogger : MonoBehaviour {
 
     void Awake()
     {
-        RESULT_DIRECTORY = "Experiment Results/";
+        RESULT_DIRECTORY = "/ExperimentResults/";
         RESULT_WITH_TIME_DIRECTORY = Utilities.GetTimeStringForFileName() + "/";
         SUMMARY_STATISTICS_DIRECTORY = "Summary Statistics/";
         SAMPLED_METRICS_DIRECTORY = "Sampled Metrics/";
@@ -690,12 +690,14 @@ public class StatisticsLogger : MonoBehaviour {
         globalConfiguration = GetComponent<GlobalConfiguration>();
         RESULT_DIRECTORY = Utilities.GetProjectPath() + RESULT_DIRECTORY;
         RESULT_WITH_TIME_DIRECTORY = RESULT_DIRECTORY + RESULT_WITH_TIME_DIRECTORY;
-        SUMMARY_STATISTICS_DIRECTORY = RESULT_WITH_TIME_DIRECTORY + SUMMARY_STATISTICS_DIRECTORY;
+        SUMMARY_STATISTICS_DIRECTORY = RESULT_WITH_TIME_DIRECTORY;// + SUMMARY_STATISTICS_DIRECTORY;
         SAMPLED_METRICS_DIRECTORY = RESULT_WITH_TIME_DIRECTORY + SAMPLED_METRICS_DIRECTORY;
         GRAPH_DERECTORY = RESULT_WITH_TIME_DIRECTORY + GRAPH_DERECTORY;
         TMP_DERECTORY = RESULT_WITH_TIME_DIRECTORY + TMP_DERECTORY;
         VIDEO_DERECTORY = RESULT_WITH_TIME_DIRECTORY + VIDEO_DERECTORY;
         SCREENSHOTS_DERECTORY = RESULT_WITH_TIME_DIRECTORY + SCREENSHOTS_DERECTORY;
+
+        Debug.Log("Statistics logger summary stats directory: " + SUMMARY_STATISTICS_DIRECTORY);
 
         //create relative directories        
         Utilities.CreateDirectoryIfNeeded(RESULT_DIRECTORY);
@@ -705,7 +707,7 @@ public class StatisticsLogger : MonoBehaviour {
         Utilities.CreateDirectoryIfNeeded(GRAPH_DERECTORY);
         Utilities.CreateDirectoryIfNeeded(TMP_DERECTORY);
         Utilities.CreateDirectoryIfNeeded(VIDEO_DERECTORY);
-        Utilities.CreateDirectoryIfNeeded(SCREENSHOTS_DERECTORY);        
+        Utilities.CreateDirectoryIfNeeded(SCREENSHOTS_DERECTORY);
 
         obstacleColor = globalConfiguration.obstacleColor;
     }

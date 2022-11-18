@@ -390,7 +390,7 @@ public static class Utilities
     }
     public static string GetTimeString()
     {
-        return System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+        return System.DateTime.Now.ToString("yyyy-MM-dd_HHmm");
     }
     public static string GetTimeStringForFileName() {
         return GetTimeString().Replace(':', '-');
@@ -399,11 +399,11 @@ public static class Utilities
     // The Path will already have "/" at the end
     public static string GetProjectPath()
     {
-        #if UNITY_EDITOR
-                return Application.dataPath.Substring(0, Application.dataPath.Length - 7) + "/";
-        #else
-                    return Application.dataPath;
-        #endif
+#if UNITY_EDITOR
+        return Application.dataPath.Substring(0, Application.dataPath.Length - 7) + "/";
+#else
+        return Application.persistentDataPath;
+#endif
     }
 
     public static void CreateDirectoryIfNeeded(string directory)

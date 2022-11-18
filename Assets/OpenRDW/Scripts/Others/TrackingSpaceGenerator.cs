@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-using UnityEngine.XR;
+using RD_Hiding;
+using System.Linq;
 
 public class TrackingSpaceGenerator
 {
@@ -500,7 +501,7 @@ public class TrackingSpaceGenerator
         trackingSpacePoints = GetTrackingSpace(out center);
 
         initialConfigurations = new List<InitialConfiguration>();
-        Vector2 playerPos = -center;
+        Vector2 playerPos = center;
         Vector2 playerForward = new Vector2(0, 1);
 
         initialConfigurations.Add(new InitialConfiguration(playerPos, playerForward));
@@ -508,9 +509,9 @@ public class TrackingSpaceGenerator
 
     public static List<Vector2> GetTrackingSpace(out Vector2 center)
     {
+        /* --- Unity XR Code
         var hmdDevices = new List<InputDevice>();
         InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.HeadMounted, hmdDevices);
-
         List<Vector3> Vec3trackingSpacePoints = new List<Vector3>();
 
         foreach (var device in hmdDevices)
@@ -537,11 +538,36 @@ public class TrackingSpaceGenerator
         else
         {
             Debug.LogError("Failed to fetch Tracking Space Points: No Device to fetch from!");
-            GenerateCircleTrackingSpace(out trackingSpacePoints, out _, 1f, 50);
-            //GenerateRectangleTrackingSpace(0, out trackingSpacePoints, out _, out _);
-        }        
+            //GenerateCircleTrackingSpace(out trackingSpacePoints, out _, 1f, 50);
+            GenerateRectangleTrackingSpace(0, out trackingSpacePoints, out _, out _);
+        }    */
 
-        Vec3center = Vec3center / Vec3trackingSpacePoints.Count;
+        //Debug.Log("boundary configured: " + OVRManager.boundary.GetConfigured());
+
+        Vector3[] ovrPoints = OVRManager.boundary.GetGeometry(OVRBoundary.BoundaryType.PlayArea);
+
+        List<Vector2> trackingSpacePoints = new List<Vector2>();
+        Vector3 Vec3center = Vector3.zero;
+
+        if (ovrPoints != null && ovrPoints.Length != 0)
+        {
+            Debug.Log(ovrPoints.Length);
+            foreach (Vector3 vec3Point in ovrPoints)
+            {
+                trackingSpacePoints.Add(new Vector2(vec3Point.x, vec3Point.z));
+                Vec3center += vec3Point;
+            }
+
+            trackingSpacePoints.Reverse();
+        }
+        else
+        {
+            Debug.LogError("Failed to fetch Tracking Space Points: No Device to fetch from!");
+            //GenerateCircleTrackingSpace(out trackingSpacePoints, out _, 1f, 50);
+            GenerateRectangleTrackingSpace(0, out trackingSpacePoints, out _, out _);
+        }
+
+        Vec3center = Vec3center / ovrPoints.Length;
         center = new Vector2(Vec3center.x, Vec3center.z);        
 
         return trackingSpacePoints;
@@ -641,17 +667,17 @@ public class TrackingSpaceGenerator
 
     public static float GetTrackingSpaceArea()
     {
-        List<Vector2> trackingSpacepoints = RD_Hiding.SingletonFoEveryton.Instance.trackingSpaceBoundaries;
+        var boundary = PositioningManager.Instance.boundary;
 
         // Algorithm for area calculation taken from wikipedia:
         // https://de.wikipedia.org/wiki/Polygon#Fl%C3%A4cheninhalt
 
         float result = 0;
-        int n = trackingSpacepoints.Count;
+        int n = boundary.Count;
 
         for (int i = 0; i <= n - 1; i++)
         {
-            result += (trackingSpacepoints[i].y + trackingSpacepoints[(i + 1) % n].y) * (trackingSpacepoints[i].x - trackingSpacepoints[(i + 1) % n].x);
+            result += (boundary[i].y + boundary[(i + 1) % n].y) * (boundary[i].x - boundary[(i + 1) % n].x);
         }
 
         return result / 2;

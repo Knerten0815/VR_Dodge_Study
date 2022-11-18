@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.XR.CoreUtils;
 using UnityEngine;
@@ -53,11 +54,6 @@ namespace RD_Hiding
 
         void Start()
         {
-            if (config.movementController == GlobalConfiguration.MovementController.HMD)
-            {
-                trackingSpaceBoundaries = TrackingSpaceGenerator.GetTrackingSpace(out trackingSpaceCenter);
-            }
-
             //check Tracking Space dimensions
             if (!ignoreWarning)
             {
@@ -187,7 +183,7 @@ namespace RD_Hiding
         public void drawTrackingBoundaries()
         {
             // draw trackingSpaceBoundaries
-            if (trackingSpaceBoundaries.Count == 0)
+            if (PositioningManager.Instance.boundary.Count == 0)
             {
                 // draw 5x5 m tracking boundary if not headset is used
                 TrackingSpaceGenerator.GenerateRectangleTrackingSpace(0, out trackingSpaceBoundaries, out _, out _, 5f, 5f);
@@ -198,11 +194,11 @@ namespace RD_Hiding
             }
             else
             {
-                foreach (var point in trackingSpaceBoundaries)
+                foreach (var point in PositioningManager.Instance.boundary)
                     debugVisuals.Add(instantiateSphere2D(point, true));
 
                 // add center
-                debugVisuals.Add(instantiateSphere2D(trackingSpaceCenter, true, Vector3.one * 0.2f, Color.red));
+                debugVisuals.Add(instantiateSphere2D(PositioningManager.Instance.boundaryCenter, true, Vector3.one * 0.2f, Color.red));
             }
         }
 
