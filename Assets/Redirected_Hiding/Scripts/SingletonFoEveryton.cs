@@ -112,17 +112,6 @@ namespace RD_Hiding
             return longestDistance;
         }
 
-        public void SetRelativeCameraPosition()
-        {
-            PositioningManager.Instance.boundaryPoints = TrackingSpaceGenerator.GetTrackingSpace(out PositioningManager.Instance.boundaryCenter);
-            camRig.GetComponent<XROrigin>().MoveCameraToWorldLocation(new Vector3(-PositioningManager.Instance.boundaryCenter.x, 0, -PositioningManager.Instance.boundaryCenter.y));
-
-            for(int i = 0; i < PositioningManager.Instance.boundaryPoints.Count; i++)
-            {
-                PositioningManager.Instance.boundaryPoints[i] += new Vector2(camRig.transform.position.x, camRig.transform.position.z);
-            }
-        }
-
         public GameObject instantiateSphere2D(Vector2 position, bool isPartOfTrackingSpace)
         {
             return instantiateSphere2D(position, isPartOfTrackingSpace, (Vector3.one * 0.1f), Color.yellow);

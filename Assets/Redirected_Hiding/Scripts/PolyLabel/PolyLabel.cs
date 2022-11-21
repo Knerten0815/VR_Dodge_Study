@@ -27,7 +27,7 @@ namespace SkiaDemo1
     {
         private const float EPSILON = 1E-8f;
 
-        public static float[] GetPolyLabel(float[][][] polygon, float precision = 1f)
+        public static float[] GetPolyLabel(float[][][] polygon, out float distanceToPolygon, float precision = 1f) // ----------------------------- added float distanceToPolygon -------------------------------------------------------
         {
             //Find the bounding box of the outer ring
             float minX = 0, minY = 0, maxX = 0, maxY = 0;
@@ -52,6 +52,7 @@ namespace SkiaDemo1
             //A priority queue of cells in order of their "potential" (max distance to polygon)
             PriorityQueue<float, Cell> cellQueue = new PriorityQueue<float, Cell>();
 
+            distanceToPolygon = 0; // --------------------------------------------------------------- added -------------------------------------------------------
             if (FloatEquals(cellSize, 0))
                 return new[] { minX, minY };
 
@@ -67,7 +68,6 @@ namespace SkiaDemo1
 
             //Take centroid as the first best guess
             Cell bestCell = GetCentroidCell(polygon);
-            Debug.Log("Centroid by PolyLabel: x = " + bestCell.X + ", y = " + bestCell.Y);
 
             //Special case for rectangular polygons
             Cell bboxCell = new Cell(minX + width / 2, minY + height / 2, 0, polygon);
@@ -104,6 +104,7 @@ namespace SkiaDemo1
                 numProbes += 4;
             }
 
+            distanceToPolygon = bestCell.D;     // ----------------------------- added -------------------------------------------------------
             return (new[] { bestCell.X, bestCell.Y });
         }
 

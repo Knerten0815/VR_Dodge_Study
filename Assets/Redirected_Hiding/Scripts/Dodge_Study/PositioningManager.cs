@@ -8,6 +8,7 @@ namespace Dodge_Study
     {
         public List<Vector2> boundaryPoints;
         public Vector2 boundaryCenter;
+        float centerMargin;
 
         private static PositioningManager _instance;
         public static PositioningManager Instance { get { return _instance; } }
@@ -19,7 +20,8 @@ namespace Dodge_Study
             else
                 _instance = this;
 
-            boundaryPoints = TrackingSpaceGenerator.GetTrackingSpace(out boundaryCenter);
+            boundaryPoints = TrackingSpaceGenerator.GetTrackingSpace(out boundaryCenter, out centerMargin);
+            Debug.Log("Distance from center to tracking space is " + centerMargin);
         }
     }
 }

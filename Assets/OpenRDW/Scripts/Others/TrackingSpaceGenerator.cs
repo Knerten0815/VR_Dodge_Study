@@ -497,7 +497,7 @@ public class TrackingSpaceGenerator
     public static void GenerateTrackingBoundaryTrackingSpace(out List<Vector2> trackingSpacePoints, out List<InitialConfiguration> initialConfigurations)
     {
         Vector2 center;
-        trackingSpacePoints = GetTrackingSpace(out center);
+        trackingSpacePoints = GetTrackingSpace(out center, out _);
 
         initialConfigurations = new List<InitialConfiguration>();
         Vector2 playerPos = -center;
@@ -506,7 +506,7 @@ public class TrackingSpaceGenerator
         initialConfigurations.Add(new InitialConfiguration(playerPos, playerForward));
     }
 
-    public static List<Vector2> GetTrackingSpace(out Vector2 center)
+    public static List<Vector2> GetTrackingSpace(out Vector2 center, out float centerMargin)
     {
         /* --- Unity XR Code
         var hmdDevices = new List<InputDevice>();
@@ -552,7 +552,6 @@ public class TrackingSpaceGenerator
                 trackingSpacePoints.Add(new Vector2(vec3Point.x, vec3Point.z));
                 Vec3center += vec3Point;
             }
-            center = getPointOfInaccessability(trackingSpacePoints);
 
             trackingSpacePoints.Reverse();
         }
@@ -564,19 +563,20 @@ public class TrackingSpaceGenerator
             center = Vector2.zero;
         }
 
+        center = getPointOfInaccessability(trackingSpacePoints, out centerMargin);
+
         Vec3center = Vec3center / ovrPoints.Length;
-        Debug.Log("Centroid by me: " + new Vector2(Vec3center.x, Vec3center.z));
         //center = new Vector2(Vec3center.x, Vec3center.z);        
 
         return trackingSpacePoints;
     }
 
-    private static Vector2 getPointOfInaccessability(List<Vector2> polygonPoints)
+    private static Vector2 getPointOfInaccessability(List<Vector2> polygonPoints, out float margin)
     {
         float[][][] polygon = new float[1][][];
         polygon[0] = ConvertPolygonToFloatArray(polygonPoints);
 
-        float[] output = SkiaDemo1.PolyLabel.GetPolyLabel(polygon);
+        float[] output = SkiaDemo1.PolyLabel.GetPolyLabel(polygon, out margin, 0.05f);
 
         Vector2 poi = Vector2.zero;
 
@@ -594,7 +594,7 @@ public class TrackingSpaceGenerator
             poi = poi / polygonPoints.Count;
         }
 
-        Debug.Log("Point of inaccessibilty inside the tracking space is " + poi);
+        //Debug.Log("Point of inaccessibilty inside the tracking space is: x = " + poi.x + "; y = " + poi.y);
         return poi;
     }
 
@@ -743,9 +743,6 @@ public class TrackingSpaceGenerator
         Vector2 playerForward = new Vector2(0, 1);
 
         initialConfigurations.Add(new InitialConfiguration(playerPos, playerForward));
-
-        if(RD_Hiding.SingletonFoEveryton.Instance.getMovementController == GlobalConfiguration.MovementController.HMD)
-            RD_Hiding.SingletonFoEveryton.Instance.SetRelativeCameraPosition();
     }
 
     //generate the mesh of tracking space or obstacle, center is (0,0), enumerate other vertices to generate triangles    
