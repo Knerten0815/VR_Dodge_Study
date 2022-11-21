@@ -1,6 +1,13 @@
 /Experiment Results
 /ExperimentResults
 
+/[Aa]ssets/Oculus/LipSync/
+/[Aa]ssets/Oculus/SampleFramework/Core/TouchControllers/Materials/Textures/
+/[Aa]ssets/Oculus/SampleFramework/Usage/Locomotion/Textures/
+/[Aa]ssets/Oculus/SampleFramework/Usage/SharedAssets/Skyboxes/
+/[Aa]ssets/Oculus/SharedAssets/Skyboxes/
+/[Aa]ssets/Oculus/VR/Textures/
+
 # This .gitignore file should be placed at the root of your Unity project directory
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore

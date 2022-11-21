@@ -30,16 +30,14 @@ namespace Dodge_Study
                 _instance = this;
             
             setupAllConditions();
-
-            sampleDirectory = Utilities.GetProjectPath() + "/ExperimentResults/" + Utilities.GetTimeStringForFileName() + "/" + "Sampled Metrics/"; // Utilities.GetProjectPath() + "Experiment Results/" + Utilities.GetTimeStringForFileName() + "/" + "Sampled Metrics/";
-            Debug.Log("Experiment Manager sample directory: " + sampleDirectory);
+            
+            sampleDirectory = Utilities.GetProjectPath() + "Experiment Results/" + Utilities.GetTimeStringForFileName() + "/" + "Sampled Metrics/";
             Utilities.CreateDirectoryIfNeeded(sampleDirectory);
 
             AllSampleCSVLines = new string[untestedConditions.Count][];
 
             //trackingSpaceBoundaries = TrackingSpaceGenerator.GetTrackingSpace(out trackingSpaceCenter);  <---------- this will completly freeze Unity
         }
-
         private void Start()
         {
             config.statisticsLogger.InitializeAllValues();
