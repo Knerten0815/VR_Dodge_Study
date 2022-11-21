@@ -622,8 +622,8 @@ public class TrackingSpaceGenerator
     /// <returns></returns>
     public static float GetLongestDistanceInBoundaries(out Vector3 start, out Vector3 end)
     {
-        Vector2 Vec2center = RD_Hiding.SingletonFoEveryton.Instance.trackingSpaceCenter;
-        List<Vector2> bounds = RD_Hiding.SingletonFoEveryton.Instance.trackingSpaceBoundaries;
+        Vector2 Vec2center = Dodge_Study.PositioningManager.Instance.boundaryCenter;
+        List<Vector2> bounds = Dodge_Study.PositioningManager.Instance.boundaryPoints;
 
         float longestDistance = 0;
         Vector3 center = Vector3.zero;// new Vector3(Vec2center.x, 0, Vec2center.y);
@@ -661,9 +661,9 @@ public class TrackingSpaceGenerator
     /// <returns>Returns the area of the resembling rectangle</returns>
     public static float GetQuadResemblingTrackingSpace(out Vector3 a, out Vector3 b, out Vector3 c, out Vector3 d)
     {
-        List<Vector2> bounds = RD_Hiding.SingletonFoEveryton.Instance.trackingSpaceBoundaries;
+        List<Vector2> bounds = Dodge_Study.PositioningManager.Instance.boundaryPoints;
         Vector3[] bounds3D = new Vector3[bounds.Count];
-        Vector3 center = new Vector3(RD_Hiding.SingletonFoEveryton.Instance.trackingSpaceCenter.x, 0, RD_Hiding.SingletonFoEveryton.Instance.trackingSpaceCenter.y);
+        Vector3 center = new Vector3(Dodge_Study.PositioningManager.Instance.boundaryCenter.x, 0, Dodge_Study.PositioningManager.Instance.boundaryCenter.y);
 
         for (int i = 0; i < bounds.Count; i++)
             bounds3D[i] = new Vector3(bounds[i].x, 0.1f, bounds[i].y) - center;
@@ -708,7 +708,7 @@ public class TrackingSpaceGenerator
 
     public static float GetTrackingSpaceArea()
     {
-        List<Vector2> trackingSpacepoints = RD_Hiding.SingletonFoEveryton.Instance.trackingSpaceBoundaries;
+        List<Vector2> trackingSpacepoints = Dodge_Study.PositioningManager.Instance.boundaryPoints;
 
         // Algorithm for area calculation taken from wikipedia:
         // https://de.wikipedia.org/wiki/Polygon#Fl%C3%A4cheninhalt

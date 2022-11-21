@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Dodge_Study;
+using System.Collections.Generic;
 using TMPro;
 using Unity.XR.CoreUtils;
 using UnityEngine;
@@ -26,8 +27,8 @@ namespace RD_Hiding
         public GlobalConfiguration.MovementController getMovementController;
 
         public bool drawTrueTrackingBoundaries;
-        public List<Vector2> trackingSpaceBoundaries;
-        public Vector2 trackingSpaceCenter;
+        //public List<Vector2> PositioningManager.Instance.boundaryPoints;
+        //public Vector2 PositioningManager.Instance.boundaryCenter;
 
         private bool firstStart = true;
         private List<GameObject> debugVisuals = new List<GameObject>();
@@ -83,8 +84,8 @@ namespace RD_Hiding
 
         public float GetLongestDistanceInBoundaries(out Vector3 start, out Vector3 end)
         {
-            Vector2 Vec2center = trackingSpaceCenter;
-            List<Vector2> bounds = trackingSpaceBoundaries;
+            Vector2 Vec2center = PositioningManager.Instance.boundaryCenter;
+            List<Vector2> bounds = PositioningManager.Instance.boundaryPoints;
 
             float longestDistance = 0;
             Vector3 center = Vector3.zero;// new Vector3(Vec2center.x, 0, Vec2center.y);
@@ -113,12 +114,12 @@ namespace RD_Hiding
 
         public void SetRelativeCameraPosition()
         {
-            trackingSpaceBoundaries = TrackingSpaceGenerator.GetTrackingSpace(out trackingSpaceCenter);
-            camRig.GetComponent<XROrigin>().MoveCameraToWorldLocation(new Vector3(-trackingSpaceCenter.x, 0, -trackingSpaceCenter.y));
+            PositioningManager.Instance.boundaryPoints = TrackingSpaceGenerator.GetTrackingSpace(out PositioningManager.Instance.boundaryCenter);
+            camRig.GetComponent<XROrigin>().MoveCameraToWorldLocation(new Vector3(-PositioningManager.Instance.boundaryCenter.x, 0, -PositioningManager.Instance.boundaryCenter.y));
 
-            for(int i = 0; i < trackingSpaceBoundaries.Count; i++)
+            for(int i = 0; i < PositioningManager.Instance.boundaryPoints.Count; i++)
             {
-                trackingSpaceBoundaries[i] += new Vector2(camRig.transform.position.x, camRig.transform.position.z);
+                PositioningManager.Instance.boundaryPoints[i] += new Vector2(camRig.transform.position.x, camRig.transform.position.z);
             }
         }
 
@@ -181,23 +182,24 @@ namespace RD_Hiding
 
         public void drawTrackingBoundaries()
         {
+            
             // draw trackingSpaceBoundaries
-            if (trackingSpaceBoundaries.Count == 0)
+            if (PositioningManager.Instance.boundaryPoints.Count == 0)
             {
                 // draw 5x5 m tracking boundary if not headset is used
-                TrackingSpaceGenerator.GenerateRectangleTrackingSpace(0, out trackingSpaceBoundaries, out _, out _, 5f, 5f);
-                debugVisuals.Add(DrawLine(trackingSpaceBoundaries[0], trackingSpaceBoundaries[1]));
-                debugVisuals.Add(DrawLine(trackingSpaceBoundaries[1], trackingSpaceBoundaries[2]));
-                debugVisuals.Add(DrawLine(trackingSpaceBoundaries[2], trackingSpaceBoundaries[3]));
-                debugVisuals.Add(DrawLine(trackingSpaceBoundaries[3], trackingSpaceBoundaries[0]));
+                TrackingSpaceGenerator.GenerateRectangleTrackingSpace(0, out PositioningManager.Instance.boundaryPoints, out _, out _, 5f, 5f);
+                debugVisuals.Add(DrawLine(PositioningManager.Instance.boundaryPoints[0], PositioningManager.Instance.boundaryPoints[1]));
+                debugVisuals.Add(DrawLine(PositioningManager.Instance.boundaryPoints[1], PositioningManager.Instance.boundaryPoints[2]));
+                debugVisuals.Add(DrawLine(PositioningManager.Instance.boundaryPoints[2], PositioningManager.Instance.boundaryPoints[3]));
+                debugVisuals.Add(DrawLine(PositioningManager.Instance.boundaryPoints[3], PositioningManager.Instance.boundaryPoints[0]));
             }
             else
             {
-                foreach (var point in trackingSpaceBoundaries)
+                foreach (var point in PositioningManager.Instance.boundaryPoints)
                     debugVisuals.Add(instantiateSphere2D(point, true));
 
                 // add center
-                debugVisuals.Add(instantiateSphere2D(trackingSpaceCenter, true, Vector3.one * 0.2f, Color.red));
+                debugVisuals.Add(instantiateSphere2D(PositioningManager.Instance.boundaryCenter, true, Vector3.one * 0.2f, Color.red));
             }
         }
 
