@@ -508,9 +508,9 @@ public class TrackingSpaceGenerator
 
     public static List<Vector2> GetTrackingSpace(out Vector2 center)
     {
+        /* --- Unity XR Code
         var hmdDevices = new List<InputDevice>();
         InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.HeadMounted, hmdDevices);
-
         List<Vector3> Vec3trackingSpacePoints = new List<Vector3>();
 
         foreach (var device in hmdDevices)
@@ -537,14 +537,81 @@ public class TrackingSpaceGenerator
         else
         {
             Debug.LogError("Failed to fetch Tracking Space Points: No Device to fetch from!");
-            GenerateCircleTrackingSpace(out trackingSpacePoints, out _, 1f, 50);
-            //GenerateRectangleTrackingSpace(0, out trackingSpacePoints, out _, out _);
-        }        
+            //GenerateCircleTrackingSpace(out trackingSpacePoints, out _, 1f, 50);
+            GenerateRectangleTrackingSpace(0, out trackingSpacePoints, out _, out _);
+        }    */
+        Vector3[] ovrPoints = OVRManager.boundary.GetGeometry(OVRBoundary.BoundaryType.PlayArea);
 
-        Vec3center = Vec3center / Vec3trackingSpacePoints.Count;
-        center = new Vector2(Vec3center.x, Vec3center.z);        
+        List<Vector2> trackingSpacePoints = new List<Vector2>();
+        Vector3 Vec3center = Vector3.zero;
+
+        if (ovrPoints != null && ovrPoints.Length != 0)
+        {
+            foreach (Vector3 vec3Point in ovrPoints)
+            {
+                trackingSpacePoints.Add(new Vector2(vec3Point.x, vec3Point.z));
+                Vec3center += vec3Point;
+            }
+            center = getPointOfInaccessability(trackingSpacePoints);
+
+            trackingSpacePoints.Reverse();
+        }
+        else
+        {
+            Debug.LogError("Failed to fetch Tracking Space Points: No Device to fetch from!");
+            //GenerateCircleTrackingSpace(out trackingSpacePoints, out _, 1f, 50);
+            GenerateRectangleTrackingSpace(0, out trackingSpacePoints, out _, out _);
+            center = Vector2.zero;
+        }
+
+        Vec3center = Vec3center / ovrPoints.Length;
+        Debug.Log("Centroid by me: " + new Vector2(Vec3center.x, Vec3center.z));
+        //center = new Vector2(Vec3center.x, Vec3center.z);        
 
         return trackingSpacePoints;
+    }
+
+    private static Vector2 getPointOfInaccessability(List<Vector2> polygonPoints)
+    {
+        float[][][] polygon = new float[1][][];
+        polygon[0] = ConvertPolygonToFloatArray(polygonPoints);
+
+        float[] output = SkiaDemo1.PolyLabel.GetPolyLabel(polygon);
+
+        Vector2 poi = Vector2.zero;
+
+        if (output.Length == 2)
+        {
+            poi.x = output[0];
+            poi.y = output[1];
+        }
+        else
+        {
+            Debug.LogWarning("Point of inaccessibilty inside the tracking space could not be found. Reverting to centroid of tracking space.");
+            foreach (Vector2 vec2 in polygonPoints)
+                poi += vec2;
+
+            poi = poi / polygonPoints.Count;
+        }
+
+        Debug.Log("Point of inaccessibilty inside the tracking space is " + poi);
+        return poi;
+    }
+
+    private static float[][] ConvertPolygonToFloatArray(List<Vector2> polygonPoints)
+    {
+        var polygon = new float[polygonPoints.Count][];
+
+        var pointCount = 0;
+        foreach (var point in polygonPoints)
+        {
+            polygon[pointCount] = new float[2];
+            polygon[pointCount][0] = point.x;
+            polygon[pointCount][1] = point.y;
+            pointCount++;
+        }
+
+        return polygon;
     }
 
     /// <summary>

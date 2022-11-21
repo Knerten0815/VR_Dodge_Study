@@ -53,11 +53,6 @@ namespace RD_Hiding
 
         void Start()
         {
-            if (config.movementController == GlobalConfiguration.MovementController.HMD)
-            {
-                trackingSpaceBoundaries = TrackingSpaceGenerator.GetTrackingSpace(out trackingSpaceCenter);
-            }
-
             //check Tracking Space dimensions
             if (!ignoreWarning)
             {
