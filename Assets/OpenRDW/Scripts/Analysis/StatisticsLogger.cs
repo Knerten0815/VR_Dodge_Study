@@ -211,7 +211,7 @@ public class StatisticsLogger : MonoBehaviour {
         }
     }
     //store statistic data of every avatar
-    List<AvatarStatistics> avatarStatistics;
+    public List<AvatarStatistics> avatarStatistics;
 
     List<float> samplingIntervals = new List<float>();
     float lastSamplingTime = 0;    
@@ -361,12 +361,12 @@ public class StatisticsLogger : MonoBehaviour {
             //oneDimensionalSample.Add("normalized_distances_to_boundary", GetTrackingAreaNormalizedList(us.distanceToNearestBoundarySamples));
             oneDimensionalSample.Add("distances_to_center", us.distanceToCenterSamples);
             //oneDimensionalSample.Add("normalized_distances_to_center", GetTrackingAreaNormalizedList(distanceToCenterSamples));
-            oneDimensionalSample.Add("g_t", us.translationGainSamples);
-            oneDimensionalSample.Add("injected_translations", us.injectedTranslationSamples);
+            //oneDimensionalSample.Add("g_t", us.translationGainSamples);
+           // oneDimensionalSample.Add("injected_translations", us.injectedTranslationSamples);
             oneDimensionalSample.Add("g_r", us.rotationGainSamples);
             oneDimensionalSample.Add("injected_rotations_from_rotation_gain", us.injectedRotationFromRotationGainSamples);
-            oneDimensionalSample.Add("g_c", us.curvatureGainSamples);
-            oneDimensionalSample.Add("injected_rotations_from_curvature_gain", us.injectedRotationFromCurvatureGainSamples);
+            //oneDimensionalSample.Add("g_c", us.curvatureGainSamples);
+            //oneDimensionalSample.Add("injected_rotations_from_curvature_gain", us.injectedRotationFromCurvatureGainSamples);
             oneDimensionalSample.Add("injected_rotations", us.injectedRotationSamples);
             oneDimensionalSample.Add("virtual_distances_between_resets", us.virtualDistancesTravelledBetweenResets);
             oneDimensionalSample.Add("time_elapsed_between_resets", us.timeElapsedBetweenResets);
@@ -669,9 +669,9 @@ public class StatisticsLogger : MonoBehaviour {
     const string XML_ELEMENT = "Experiment";
 
     StreamWriter csvWriter;
-
-    private Texture2D texRealPathGraph;//tex for simulation real path logging
-    private Texture2D texVirtualPathGraph;//tex for simulation virtual path logging
+    
+    public Texture2D texRealPathGraph;//tex for simulation real path logging
+    public Texture2D texVirtualPathGraph;//tex for simulation virtual path logging
 
     void Awake()
     {
@@ -764,8 +764,8 @@ public class StatisticsLogger : MonoBehaviour {
         // Set up the headers
         csvWriter.Write("TrialIteration;");
         csvWriter.Write("EndState;");
-        csvWriter.Write("experiment_start_time;");                          // ----- aber als erstes muss hier de TrialID (aus TrialData, nicht experimentTrialId) noch irgendwie rein.
-        foreach (string header in experimentResults[0].result[0].Keys)                 // ----- Das hier ist die Wirklich erste Line!
+        csvWriter.Write("experiment_start_time;");
+        foreach (string header in experimentResults[0].result[0].Keys)
         {
             csvWriter.Write(header + ";");
         }
@@ -773,16 +773,12 @@ public class StatisticsLogger : MonoBehaviour {
 
         for (int experimentResultID = 0; experimentResultID < experimentResults.Count; experimentResultID++) {
             var experimentDescriptor = experimentResults[experimentResultID].result;
-            var endState = experimentResults[experimentResultID].EndStateToString();            
-            //var firstLine = string.Format("TrialId = {0};EndState = {1}", experimentTrialId, endState);     // --- muss weg! Spalte statt Line!
-            //csvWriter.WriteLine(firstLine);
+            var endState = experimentResults[experimentResultID].EndStateToString();
+
             if (experimentDescriptor.Count > 0)
             {
-
-                // set up headers code was taken from here
-
                 // Write Values            
-                foreach (var experimentResultPerUser in experimentDescriptor)   // hier müssen eigentlich die ganzen Trials aufgelistet werden, nicht die User!
+                foreach (var experimentResultPerUser in experimentDescriptor)
                 {
                     csvWriter.Write(experimentResultID + ";");
                     csvWriter.Write(endState + ";");
@@ -794,8 +790,6 @@ public class StatisticsLogger : MonoBehaviour {
                     csvWriter.WriteLine();
                 }
             }
-            //if (experimentResultID < experimentResults.Count - 1)
-            //    csvWriter.WriteLine();
         }
         csvWriter.Flush();
         csvWriter.Close();
@@ -839,7 +833,7 @@ public class StatisticsLogger : MonoBehaviour {
         texRealPathGraph.Apply();
         
         //Export as png file
-        Utilities.ExportTexture2dToPng(GRAPH_DERECTORY + string.Format("{0}_{1}_realPath.png", experimentSetupId, Utilities.GetTimeStringForFileName()), texRealPathGraph);        
+        Utilities.ExportTexture2dToPng(GRAPH_DERECTORY + string.Format("Iteration{0}_ID{1}_realPath.png", experimentSetupId, experimentSetup.trialData.TrialID), texRealPathGraph);
 
     }
 
@@ -901,7 +895,7 @@ public class StatisticsLogger : MonoBehaviour {
         texVirtualPathGraph.Apply();
 
         //Export as png file
-        Utilities.ExportTexture2dToPng(GRAPH_DERECTORY + string.Format("{0}_{1}_virutalPath.png", experimentSetupId, Utilities.GetTimeStringForFileName()), texVirtualPathGraph);
+        Utilities.ExportTexture2dToPng(GRAPH_DERECTORY + string.Format("Iteration{0}_ID{1}_virtualPath.png", experimentSetupId, experimentSetup.trialData.TrialID), texVirtualPathGraph);
     }
 
     public void LogOneDimensionalExperimentSamples(string experimentSamplesDirectory, string measuredMetric, List<float> values)

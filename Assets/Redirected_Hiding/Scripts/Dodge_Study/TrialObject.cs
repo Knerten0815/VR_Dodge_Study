@@ -43,7 +43,7 @@ namespace Dodge_Study
             this.speed = speed / 3.6f; // convert from km/h to m/s
             this.cos = cos;
 
-            direction = -transform.position.normalized;
+            direction = (PositioningManager.Instance.centerTrans.position - transform.position).normalized;
             direction.y = 0;
             transform.Rotate(Vector3.up * (angle + 180));   // face the user
             timer = 0;

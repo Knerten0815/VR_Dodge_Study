@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using static StatisticsLogger;
 
 namespace Dodge_Study
 {
@@ -15,9 +16,19 @@ namespace Dodge_Study
         private List<TrialData> testedConditions = new List<TrialData>();
         public TrialData currentCondition = null;
         public bool trialIsRunning;
+        public bool useRedirection;
+
+        [HideInInspector] public List<ExperimentSetup> setups = new List<ExperimentSetup>();
+
+        [SerializeField] private StatisticsLogger logger;
+        [SerializeField] private Color backgroundColor;
+        [SerializeField] private Color realPathColor;
+        [SerializeField] private Color trackingSpaceColor;
+        [SerializeField] private Color boundaryColor;
+        [SerializeField] private Color[] virtualPathColors;
 
         private string[][] AllSampleCSVLines;
-        private string sampleDirectory;
+        private string sampleDirectory, graphDirectory;
 
         private static ExperimentManager _instance;
         public static ExperimentManager Instance { get { return _instance; } }
@@ -32,11 +43,10 @@ namespace Dodge_Study
             setupAllConditions();
             
             sampleDirectory = Utilities.GetProjectPath() + "/ExperimentResults/" + Utilities.GetTimeStringForFileName() + "/" + "Sampled Metrics/";
+            graphDirectory = Utilities.GetProjectPath() + "/ExperimentResults/" + Utilities.GetTimeStringForFileName() + "/" + "Graphs/";
             Utilities.CreateDirectoryIfNeeded(sampleDirectory);
 
             AllSampleCSVLines = new string[untestedConditions.Count][];
-
-            //trackingSpaceBoundaries = TrackingSpaceGenerator.GetTrackingSpace(out trackingSpaceCenter);  <---------- this will completly freeze Unity
         }
         private void Start()
         {
@@ -173,7 +183,6 @@ namespace Dodge_Study
             }
         }
 
-
         public void LogAllSavedData()
         {
             StreamWriter csvWriter;
@@ -186,6 +195,52 @@ namespace Dodge_Study
                     csvWriter.WriteLine(AllSampleCSVLines[i][j]);
                 }
             }
+        }
+
+        public void AddSetup(ExperimentSetup setup)
+        {
+            setups.Add(setup);
+        }
+
+        public void LogExperimentRealPathPictures(int experimentSetupId)
+        {
+            var experimentSetup = setups[experimentSetupId];
+            //set background to white
+            Utilities.SetTextureToSingleColor(logger.texRealPathGraph, backgroundColor);
+
+            var trackingSpacePoints = experimentSetup.trackingSpacePoints;
+            var obstaclePolygons = experimentSetup.obstaclePolygons;
+            var trackingBoundary = Dodge_Study.PositioningManager.Instance.boundaryPoints;                                                                                 // ---------------- added -------------- //
+            if (trackingBoundary.Count == 0)
+                TrackingSpaceGenerator.GenerateRectangleTrackingSpace(0, out trackingBoundary, out obstaclePolygons, out _, 5f, 5f);
+            for (int i = 0; i < trackingBoundary.Count; i++)
+                Utilities.DrawLine(logger.texRealPathGraph, trackingBoundary[i], trackingBoundary[(i + 1) % trackingBoundary.Count], logger.realSideLength, logger.borderThickness, boundaryColor);                   // ---------------- added -------------- //
+            for (int i = 0; i < trackingSpacePoints.Count; i++)
+                Utilities.DrawLine(logger.texRealPathGraph, trackingSpacePoints[i], trackingSpacePoints[(i + 1) % trackingSpacePoints.Count], logger.realSideLength, logger.borderThickness, trackingSpaceColor); // ---------------- added -------------- //
+            foreach (var obstaclePolygon in obstaclePolygons)
+                Utilities.DrawPolygon(logger.texRealPathGraph, obstaclePolygon, logger.realSideLength, logger.borderThickness, boundaryColor);
+            //for (int i = 0; i < obstaclePolygon.Count; i++)
+            //    Utilities.DrawLine(tex, obstaclePolygon[i], obstaclePolygon[(i + 1) % obstaclePolygon.Count], sideLength, borderThickness, obstacleColor);
+            for (int uId = 0; uId < logger.avatarStatistics.Count; uId++)
+            {
+                //var virtualPathColor = globalConfiguration.avatarColors[uId];
+                var realPosList = logger.avatarStatistics[uId].userRealPositionSamples;
+                var deltaWeight = (1 - logger.pathStartAlpha) / realPosList.Count;
+
+
+                for (int i = 0; i < realPosList.Count - 1; i++)
+                {
+                    var w = (logger.pathStartAlpha + deltaWeight * i);
+                    //Debug.Log("realPosList[i]:" + realPosList[i].ToString("f3"));
+                    Utilities.DrawLine(logger.texRealPathGraph, realPosList[i], realPosList[i + 1], logger.realSideLength, logger.pathThickness, w * realPathColor + (1 - w) * backgroundColor, (w + deltaWeight) * realPathColor + (1 - w - deltaWeight) * backgroundColor);
+                }
+            }
+
+            logger.texRealPathGraph.Apply();
+
+            //Export as png file
+            Utilities.ExportTexture2dToPng(graphDirectory + string.Format("Iteration{0}_ID{1}_realPath.png", experimentSetupId, experimentSetup.trialData.TrialID), logger.texRealPathGraph);
+
         }
     }
 }

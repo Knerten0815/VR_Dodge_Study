@@ -6,6 +6,7 @@ using AvatarInfo = ExperimentSetup.AvatarInfo;
 using System.IO;
 using UnityEngine.XR;
 using System.Globalization;
+using Dodge_Study;
 
 //Store common parameters 
 public class GlobalConfiguration : MonoBehaviour
@@ -1346,8 +1347,7 @@ public class GlobalConfiguration : MonoBehaviour
         //save images
         if (exportImage)
         {
-            statisticsLogger.LogExperimentRealPathPictures(experimentIterator);
-            statisticsLogger.LogExperimentVirtualPathPictures(experimentIterator);
+            ExperimentManager.Instance.AddSetup(experimentSetups[experimentIterator]);
         }
 
         //create temporary files to indicate the stage of the experiment
@@ -1366,6 +1366,14 @@ public class GlobalConfiguration : MonoBehaviour
 
             Debug.Log(string.Format("Save data to resultDir:{0}, fileName:{1}", resultDir, fileName));
             statisticsLogger.LogExperimentSummaryStatisticsResultsSCSV(resultDir, fileName);
+
+            //save images at the end
+            for(int i = 0; i < experimentSetups.Count; i++)
+            {
+                ExperimentManager.Instance.LogExperimentRealPathPictures(i);
+                if(ExperimentManager.Instance.useRedirection)
+                    statisticsLogger.LogExperimentVirtualPathPictures(i);
+            }
 
             //initialize experiment results 
             statisticsLogger.InitializeExperimentResults();

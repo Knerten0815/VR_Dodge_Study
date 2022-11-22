@@ -39,11 +39,6 @@ namespace Dodge_Study
             Debug.Log("Distance from center to tracking space is " + centerMargin);
         }
 
-        private void Update()
-        {
-            Debug.Log("Transform: " + centerTrans.position + "; Constant: " + boundaryCenter);
-        }
-
         public void showCenter(bool showCenter)
         {
             centerTrans.gameObject.SetActive(showCenter);
