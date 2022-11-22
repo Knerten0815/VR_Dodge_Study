@@ -30,12 +30,6 @@ namespace RD_Hiding
             circleDiameter = redirectionManager.globalConfiguration.squareWidth;
             resetRingDiameter = circleDiameter * 4;
             redirector = redirectionManager.redirector;
-
-            /*
-            // draw resetRing
-            foreach (var point in redirectionManager.globalConfiguration.trackingSpacePoints)
-                SingletonFoEveryton.Instance.instantiateSphere(point.normalized * resetRingDiameter, true);
-            */
         }
 
         public override bool IsResetRequired()
@@ -46,7 +40,7 @@ namespace RD_Hiding
         public override void InitializeReset()
         {
             Debug.Log("Initalize Reset.");
-            spawnShepherd();
+            //spawnShepherd();
         }
 
         public override void InjectResetting()
@@ -83,6 +77,7 @@ namespace RD_Hiding
             redirectionManager.simulatedWalker.RotateInPlace(rotateAngle * rotateDir);
         }
 
+        /* ---- no more shepherds needed...
         private void spawnShepherd()
         {
             Vector3 shepPos = redirectionManager.currPosReal.normalized * resetRingDiameter;
@@ -90,22 +85,6 @@ namespace RD_Hiding
             shepGO.transform.SetParent(SingletonFoEveryton.Instance.shepherdTarget.transform);
             shepPos.y = -3;
             shepGO.transform.localPosition = shepPos;
-
-            /* --- material or shader switch unfortantely are not instant
-            SingletonFoEveryton.Instance.planeRenderer.material = SingletonFoEveryton.Instance.groundplaneDissolveMat;
-            StartCoroutine(waitForShepherdAscend());
-            */
-        }
-
-        /*
-        IEnumerator waitForShepherdAscend()
-        {
-            while(shepGO != null && shepGO.transform.position.y < 1.5f)
-            {
-                yield return null;
-            }
-
-            SingletonFoEveryton.Instance.planeRenderer.material = SingletonFoEveryton.Instance.groundPlaneMat;
         }
         */
     }

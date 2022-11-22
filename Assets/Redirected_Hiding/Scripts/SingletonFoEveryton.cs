@@ -1,34 +1,22 @@
 ﻿using Dodge_Study;
 using System.Collections.Generic;
 using TMPro;
-using Unity.XR.CoreUtils;
 using UnityEngine;
-using UnityEngine.XR;
 
 namespace RD_Hiding
 {
     public class SingletonFoEveryton : MonoBehaviour
     {
         public GameObject trackingSpaceRoot;
-        public GameObject shepherdTarget;
         public GlobalConfiguration config;
-        public GameObject camRig;
         public GameObject startUI;
         public float distanceToActivateStartUI = 0.1f;
         public RayToggler leftRayToggler, rightRayToggler;
-        public GameObject dronePreFab;
-        /*public MeshRenderer planeRenderer;
-        public Material groundPlaneMat, groundplaneDissolveMat;*/
+        
         [SerializeField] bool ignoreWarning; 
         [SerializeField] GameObject warningUI;
-        [SerializeField] float minArea, maxArea, minDiagonal, maxDiagonal;
-        [SerializeField] TMP_Text diagonaleValue, areaValue, resemblingArea, diagonalWarning, areaWarning;
-        public bool getLoadFromTxt;
-        public GlobalConfiguration.MovementController getMovementController;
-
-        public bool drawTrueTrackingBoundaries;
-        //public List<Vector2> PositioningManager.Instance.boundaryPoints;
-        //public Vector2 PositioningManager.Instance.boundaryCenter;
+        [SerializeField] float minArea, maxArea;
+        [SerializeField] TMP_Text areaWarning;
 
         private bool firstStart = true;
         private List<GameObject> debugVisuals = new List<GameObject>();
@@ -44,11 +32,6 @@ namespace RD_Hiding
                 Destroy(this);
             else
                 _instance = this;
-
-            getLoadFromTxt = config.loadFromTxt;
-            getMovementController = config.movementController;
-
-            //trackingSpaceBoundaries = TrackingSpaceGenerator.GetTrackingSpace(out trackingSpaceCenter);  <---------- this will completly freeze Unity
         }
         #endregion
 
@@ -57,12 +40,10 @@ namespace RD_Hiding
             //check Tracking Space dimensions
             if (!ignoreWarning)
             {
-                float area = TrackingSpaceGenerator.GetTrackingSpaceArea();
-                float diagonal = TrackingSpaceGenerator.GetLongestDistanceInBoundaries(out _, out _);
+                float area = PositioningManager.Instance.centerMargin;
                 areaWarning.text = area.ToString("0.00");
-                diagonalWarning.text = diagonal.ToString("0.00");
 
-                if (area > maxArea || area < minArea || diagonal > maxArea || diagonal < minArea)
+                if (area > maxArea || area < minArea)
                 {
                     Debug.Log("TrackingSpace is too small. Opening Warning UI.");
                     warningUI.SetActive(true);
@@ -80,36 +61,6 @@ namespace RD_Hiding
                 leftRayToggler.alwaysShowRays = true;
                 rightRayToggler.alwaysShowRays = true;
             }
-        }
-
-        public float GetLongestDistanceInBoundaries(out Vector3 start, out Vector3 end)
-        {
-            Vector2 Vec2center = PositioningManager.Instance.boundaryCenter;
-            List<Vector2> bounds = PositioningManager.Instance.boundaryPoints;
-
-            float longestDistance = 0;
-            Vector3 center = Vector3.zero;// new Vector3(Vec2center.x, 0, Vec2center.y);
-            start = Vector3.zero;
-            end = Vector3.zero;
-
-            //iterate through all points, except the last one. All diagonals of the last point will get calculated in the j-loops by the end.
-            for (int i = 0; i < bounds.Count - 1; i++)
-            {
-                //iterate through all points, beginning by the next point. No need to calculate points before i.
-                for (int j = i + 1; j < bounds.Count; j++)
-                {
-                    float magnitude = (bounds[i] - bounds[j]).magnitude;
-
-                    if (magnitude > longestDistance)
-                    {
-                        longestDistance = magnitude;
-                        start = new Vector3(bounds[i].x, 0.1f, bounds[i].y) - center;
-                        end = new Vector3(bounds[j].x, 0.1f, bounds[j].y) - center;
-                    }
-                }
-            }
-
-            return longestDistance;
         }
 
         public GameObject instantiateSphere2D(Vector2 position, bool isPartOfTrackingSpace)
@@ -152,23 +103,6 @@ namespace RD_Hiding
         }
 
         #region debug visuals
-        public void DrawDiagonaleAndSetValue()
-        {
-            diagonaleValue.text = TrackingSpaceGenerator.GetLongestDistanceInBoundaries(out Vector3 start, out Vector3 end).ToString("0.00");
-            DrawLine(start, end);
-        }
-
-        public void DrawResemblingRectangleAndSetValue()
-        {
-            resemblingArea.text = TrackingSpaceGenerator.GetQuadResemblingTrackingSpace(out Vector3 a, out Vector3 b, out Vector3 c, out Vector3 d).ToString("0.00");
-            DrawLine(a, b);
-            DrawLine(b, c);
-            DrawLine(c, d);
-            DrawLine(d, a);
-            DrawLine(b, d);
-            debugVisuals.Add(instantiateSphere2D(Vector2.zero, false));
-        }
-
         public void drawTrackingBoundaries()
         {
             
@@ -190,11 +124,6 @@ namespace RD_Hiding
                 // add center
                 debugVisuals.Add(instantiateSphere2D(PositioningManager.Instance.boundaryCenter, true, Vector3.one * 0.2f, Color.red));
             }
-        }
-
-        public void SetAreaValue()
-        {
-            areaValue.text = TrackingSpaceGenerator.GetTrackingSpaceArea().ToString("0.00");
         }
 
         public void DestroyDebugVisuals()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEngine.XR;
+using System.Linq;
 
 public class TrackingSpaceGenerator
 {
@@ -508,67 +509,49 @@ public class TrackingSpaceGenerator
 
     public static List<Vector2> GetTrackingSpace(out Vector2 center, out float centerMargin)
     {
-        /* --- Unity XR Code
+        List<Vector3> Vec3BoundaryPoints = new List<Vector3>();
+
+#if UNITY_EDITOR
+        
+        // this doesn't work in the quest build somehow...
         var hmdDevices = new List<InputDevice>();
-        InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.HeadMounted, hmdDevices);
-        List<Vector3> Vec3trackingSpacePoints = new List<Vector3>();
+        InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.HeadMounted, hmdDevices);        
 
         foreach (var device in hmdDevices)
         {
-            if (device.subsystem.TryGetBoundaryPoints(Vec3trackingSpacePoints))
-                Debug.Log("Fetched " + Vec3trackingSpacePoints.Count + " TrackingSpacePoints.");
+            if (device.subsystem.TryGetBoundaryPoints(Vec3BoundaryPoints))
+                Debug.Log("Fetched " + Vec3BoundaryPoints.Count + " TrackingSpacePoints.");
             else
                 Debug.LogError("Failed to fetch Tracking Space Points from device.");
         }
+        
+#else
+        //... However, this will cause Unity to freeze when entering playmode for the second time.
+        Vec3BoundaryPoints = OVRManager.boundary.GetGeometry(OVRBoundary.BoundaryType.OuterBoundary).ToList<Vector3>();
+#endif
 
-        List<Vector2> trackingSpacePoints = new List<Vector2>();
+        List<Vector2> Vec2BoundaryPoints = new List<Vector2>();
         Vector3 Vec3center = Vector3.zero;
 
-        if(Vec3trackingSpacePoints.Count != 0)
+        if (Vec3BoundaryPoints != null && Vec3BoundaryPoints.Count != 0)
         {
-            foreach (Vector3 vec3Point in Vec3trackingSpacePoints)
+            foreach (Vector3 vec3Point in Vec3BoundaryPoints)
             {
-                trackingSpacePoints.Add(new Vector2(vec3Point.x, vec3Point.z));
-                Vec3center += vec3Point;
+                Vec2BoundaryPoints.Add(new Vector2(vec3Point.x, vec3Point.z));
             }
 
-            trackingSpacePoints.Reverse();
+            Vec2BoundaryPoints.Reverse();
         }
         else
         {
             Debug.LogError("Failed to fetch Tracking Space Points: No Device to fetch from!");
-            //GenerateCircleTrackingSpace(out trackingSpacePoints, out _, 1f, 50);
-            GenerateRectangleTrackingSpace(0, out trackingSpacePoints, out _, out _);
-        }    */
-        Vector3[] ovrPoints = OVRManager.boundary.GetGeometry(OVRBoundary.BoundaryType.PlayArea);
-
-        List<Vector2> trackingSpacePoints = new List<Vector2>();
-        Vector3 Vec3center = Vector3.zero;
-
-        if (ovrPoints != null && ovrPoints.Length != 0)
-        {
-            foreach (Vector3 vec3Point in ovrPoints)
-            {
-                trackingSpacePoints.Add(new Vector2(vec3Point.x, vec3Point.z));
-                Vec3center += vec3Point;
-            }
-
-            trackingSpacePoints.Reverse();
-        }
-        else
-        {
-            Debug.LogError("Failed to fetch Tracking Space Points: No Device to fetch from!");
-            //GenerateCircleTrackingSpace(out trackingSpacePoints, out _, 1f, 50);
-            GenerateRectangleTrackingSpace(0, out trackingSpacePoints, out _, out _);
+            GenerateRectangleTrackingSpace(0, out Vec2BoundaryPoints, out _, out _);
             center = Vector2.zero;
         }
+        
+        center = getPointOfInaccessability(Vec2BoundaryPoints, out centerMargin);     
 
-        center = getPointOfInaccessability(trackingSpacePoints, out centerMargin);
-
-        Vec3center = Vec3center / ovrPoints.Length;
-        //center = new Vector2(Vec3center.x, Vec3center.z);        
-
-        return trackingSpacePoints;
+        return Vec2BoundaryPoints;
     }
 
     private static Vector2 getPointOfInaccessability(List<Vector2> polygonPoints, out float margin)
@@ -612,117 +595,7 @@ public class TrackingSpaceGenerator
         }
 
         return polygon;
-    }
-
-    /// <summary>
-    /// this method sucks. But works good for square shaped boundaries
-    /// </summary>
-    /// <param name="start"></param>
-    /// <param name="end"></param>
-    /// <returns></returns>
-    public static float GetLongestDistanceInBoundaries(out Vector3 start, out Vector3 end)
-    {
-        Vector2 Vec2center = Dodge_Study.PositioningManager.Instance.boundaryCenter;
-        List<Vector2> bounds = Dodge_Study.PositioningManager.Instance.boundaryPoints;
-
-        float longestDistance = 0;
-        Vector3 center = Vector3.zero;// new Vector3(Vec2center.x, 0, Vec2center.y);
-        start = Vector3.zero;
-        end = Vector3.zero;
-
-        //iterate through all points, except the last one. All diagonals of the last point will get calculated in the j-loops by the end.
-        for (int i = 0; i < bounds.Count - 1; i++)
-        {
-            //iterate through all points, beginning by the next point. No need to calculate points before i.
-            for (int j = i + 1; j < bounds.Count; j++)
-            {
-                float magnitude = (bounds[i] - bounds[j]).magnitude;
-
-                if (magnitude > longestDistance)
-                {
-                    longestDistance = magnitude;
-                    start = new Vector3(bounds[i].x, 0.1f, bounds[i].y) - center;
-                    end = new Vector3(bounds[j].x, 0.1f, bounds[j].y) - center;
-                }
-            }
-        }
-
-        return longestDistance;
-    }
-
-    /// <summary>
-    /// Gets the two longest diagonals of the tracking Space and takes their start and end points as the quad points.
-    /// This will ony work properly as long as the tracking space resembles a quad, of which the shortest side needs to be longer than half its diagonal.
-    /// </summary>
-    /// <param name="a"></param>
-    /// <param name="b"></param>
-    /// <param name="c"></param>
-    /// <param name="d"></param>
-    /// <returns>Returns the area of the resembling rectangle</returns>
-    public static float GetQuadResemblingTrackingSpace(out Vector3 a, out Vector3 b, out Vector3 c, out Vector3 d)
-    {
-        List<Vector2> bounds = Dodge_Study.PositioningManager.Instance.boundaryPoints;
-        Vector3[] bounds3D = new Vector3[bounds.Count];
-        Vector3 center = new Vector3(Dodge_Study.PositioningManager.Instance.boundaryCenter.x, 0, Dodge_Study.PositioningManager.Instance.boundaryCenter.y);
-
-        for (int i = 0; i < bounds.Count; i++)
-            bounds3D[i] = new Vector3(bounds[i].x, 0.1f, bounds[i].y) - center;
-
-        float diagonalALength = GetLongestDistanceInBoundaries(out a, out c);
-        b = Vector3.zero;
-        d = Vector3.zero;
-        float cornerBuffer = diagonalALength / 2;
-        float diagonalBLength = 0;
-
-        for (int i = 0; i < bounds3D.Length - 1; i++)
-        {
-            for (int j = i + 1; j < bounds3D.Length; j++)
-            {
-                float magnitude = (bounds3D[i] - bounds3D[j]).magnitude;
-
-                if(magnitude > diagonalBLength)
-                {
-                    if((bounds3D[i] - a).magnitude > cornerBuffer && (bounds3D[i] - c).magnitude > cornerBuffer && (bounds3D[j] - a).magnitude > cornerBuffer && (bounds3D[j] - c).magnitude > cornerBuffer)
-                    {
-                        diagonalBLength = magnitude;
-                        b = bounds3D[i];
-                        d = bounds3D[j];
-                    }                    
-                }
-            }
-        }
-
-        Vector3 diagonalA = a - c;
-        Vector3 diagonalB = b - d;
-
-        float alpha = Vector3.Angle(diagonalA, diagonalB);
-        Debug.Log("Angle between diagonals: " + alpha);
-
-        float area = (diagonalALength * diagonalBLength * Mathf.Sin(alpha)) / 2;
-
-        Debug.Log("correct calculation: " + area);
-        Debug.Log("rectangle calculation: " + ((a - b).magnitude * (b - c).magnitude));
-
-        return area;
-    }
-
-    public static float GetTrackingSpaceArea()
-    {
-        List<Vector2> trackingSpacepoints = Dodge_Study.PositioningManager.Instance.boundaryPoints;
-
-        // Algorithm for area calculation taken from wikipedia:
-        // https://de.wikipedia.org/wiki/Polygon#Fl%C3%A4cheninhalt
-
-        float result = 0;
-        int n = trackingSpacepoints.Count;
-
-        for (int i = 0; i <= n - 1; i++)
-        {
-            result += (trackingSpacepoints[i].y + trackingSpacepoints[(i + 1) % n].y) * (trackingSpacepoints[i].x - trackingSpacepoints[(i + 1) % n].x);
-        }
-
-        return result / 2;
-    }
+    }    
 
     /// <summary>
     /// Generates a circle chaped tracking space.

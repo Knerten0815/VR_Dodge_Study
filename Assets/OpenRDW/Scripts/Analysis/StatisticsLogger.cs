@@ -675,7 +675,7 @@ public class StatisticsLogger : MonoBehaviour {
 
     void Awake()
     {
-        RESULT_DIRECTORY = "Experiment Results/";
+        RESULT_DIRECTORY = "/ExperimentResults/";
         RESULT_WITH_TIME_DIRECTORY = Utilities.GetTimeStringForFileName() + "/";
         SUMMARY_STATISTICS_DIRECTORY = "Summary Statistics/";
         SAMPLED_METRICS_DIRECTORY = "Sampled Metrics/";

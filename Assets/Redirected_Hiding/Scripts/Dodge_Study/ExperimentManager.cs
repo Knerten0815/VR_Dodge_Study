@@ -31,7 +31,7 @@ namespace Dodge_Study
             
             setupAllConditions();
             
-            sampleDirectory = Utilities.GetProjectPath() + "Experiment Results/" + Utilities.GetTimeStringForFileName() + "/" + "Sampled Metrics/";
+            sampleDirectory = Utilities.GetProjectPath() + "/ExperimentResults/" + Utilities.GetTimeStringForFileName() + "/" + "Sampled Metrics/";
             Utilities.CreateDirectoryIfNeeded(sampleDirectory);
 
             AllSampleCSVLines = new string[untestedConditions.Count][];
