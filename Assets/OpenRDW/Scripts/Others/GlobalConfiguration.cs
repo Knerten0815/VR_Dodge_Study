@@ -1380,8 +1380,6 @@ public class GlobalConfiguration : MonoBehaviour
                     statisticsLogger.LogExperimentRealPathPictures(i, realPathColor, experimentSetups[i], ExperimentManager.Instance.savedStats[i]);
                     if (ExperimentManager.Instance.useRedirection)
                         statisticsLogger.LogExperimentVirtualPathPictures(i, virtualPathColor, experimentSetups[i], ExperimentManager.Instance.savedStats[i]);
-
-                    Debug.Log("Logged paths for " + (i+1) + " out of " + experimentSetups.Count + " trials. ");
                 }
             }
 
@@ -1484,7 +1482,7 @@ public class GlobalConfiguration : MonoBehaviour
             */
             
             Dodge_Study.TrialData trialData = Dodge_Study.ExperimentManager.Instance.currentCondition;
-            descriptor["trialID"] = trialData.TrialID.ToString();
+            descriptor["trialID"] = trialData.TrialID;
             descriptor["form"] = trialData.GetForm().ToString();
             descriptor["size"] = trialData.GetSize().ToString();
             descriptor["speed"] = trialData.GetSpeed().ToString();

@@ -7,7 +7,7 @@ namespace Dodge_Study
         // Variables and their possible values. Adjust them here and only here.
         public enum Form { Sphere, MorningStar, Particles, Car }
         public static float[] sizes = new float[] { 1f, 1.2f };
-        public static float[] speeds = new float[] { 10, 10, 30 };
+        public static float[] speeds = new float[] { 10, 15, 30 };
         public static float[] angles = new float[] { 51, 34, 17, 0, -17, -34, -51 };          
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Dodge_Study
         /// <summary>
         /// The ID of a specific condition. Is made up of the 4 Variable indices. This only works if all variables have less than 10 states.
         /// </summary>
-        public int TrialID { get { return trialId; } }
+        public string TrialID { get { return trialID; } }
 
         /// <summary>
         /// Has this condition caused a collision?
@@ -49,7 +49,7 @@ namespace Dodge_Study
         private int speedIndex;
         private int angleIndex;
         private bool collisionDetected = false;
-        private int trialId;
+        private string trialID;
 
         /// <summary>
         /// 
@@ -65,7 +65,7 @@ namespace Dodge_Study
             this.speedIndex = speedIndex;
             this.angleIndex = angleIndex;
 
-            trialId = formIndex * 1000 + sizeIndex * 100 + speedIndex * 10 + angleIndex;
+            trialID = "" + formIndex + sizeIndex + speedIndex + angleIndex;
         }
 
         public Form GetForm() { return (Form)formIndex; }

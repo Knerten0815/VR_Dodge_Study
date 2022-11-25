@@ -109,13 +109,13 @@ public class VideoRecorder : MonoBehaviour
         videoDirectory = statisticsLogger.VIDEO_DERECTORY;
         tmpPictureDirectory = statisticsLogger.RESULT_DIRECTORY + "TmpPictures";
 
-        print("Capturing to: " + tmpPictureDirectory + "/");
+        //print("Capturing to: " + tmpPictureDirectory + "/");
         if (System.IO.Directory.Exists(tmpPictureDirectory)) {
             Directory.Delete(tmpPictureDirectory, true);
         }
 
         System.IO.Directory.CreateDirectory(tmpPictureDirectory);
-        Debug.Log("Create Directory");
+        //Debug.Log("Create Directory");
         
         frameQueue = new Queue<byte[]>();
 

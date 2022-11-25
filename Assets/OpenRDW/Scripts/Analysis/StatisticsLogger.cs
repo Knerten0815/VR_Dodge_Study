@@ -703,8 +703,6 @@ public class StatisticsLogger : MonoBehaviour {
         Utilities.CreateDirectoryIfNeeded(SUMMARY_STATISTICS_DIRECTORY);
         Utilities.CreateDirectoryIfNeeded(SAMPLED_METRICS_DIRECTORY);
         Utilities.CreateDirectoryIfNeeded(GRAPH_DERECTORY);
-        Utilities.CreateDirectoryIfNeeded(GRAPH_DERECTORY + "Real/");
-        Utilities.CreateDirectoryIfNeeded(GRAPH_DERECTORY + "Virtual/");
         Utilities.CreateDirectoryIfNeeded(TMP_DERECTORY);
         Utilities.CreateDirectoryIfNeeded(VIDEO_DERECTORY);
         Utilities.CreateDirectoryIfNeeded(SCREENSHOTS_DERECTORY);        

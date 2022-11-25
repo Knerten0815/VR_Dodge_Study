@@ -33,8 +33,9 @@ namespace Dodge_Study
             }
         }
 
-        private void OnCollisionEnter(Collision collision)
+        private void OnTriggerEnter(Collider other)
         {
+            //Debug.Log(" - BÄM! - Collision detected!");
             ExperimentManager.Instance.currentCondition.CollisionDetected = true;
         }
 

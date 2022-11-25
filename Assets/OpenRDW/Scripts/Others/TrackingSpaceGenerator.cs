@@ -496,17 +496,17 @@ public class TrackingSpaceGenerator
     //generate tracking space based on the boundary of the actual tracking space.
     public static void GenerateTrackingBoundaryTrackingSpace(out List<Vector2> trackingSpacePoints, out List<InitialConfiguration> initialConfigurations)
     {
-        Vector2 center;
-        trackingSpacePoints = GetTrackingSpace(out center, out _);
+        Vector2 center;//, mostDistantPoint;
+        trackingSpacePoints = GetTrackingSpace(out center, out _);//, out mostDistantPoint);
 
         initialConfigurations = new List<InitialConfiguration>();
-        Vector2 playerPos = -center;
+        Vector2 playerPos = Vector2.zero;
         Vector2 playerForward = new Vector2(0, 1);
 
         initialConfigurations.Add(new InitialConfiguration(playerPos, playerForward));
     }
 
-    public static List<Vector2> GetTrackingSpace(out Vector2 center, out float centerMargin)
+    public static List<Vector2> GetTrackingSpace(out Vector2 center, out float centerMargin)//, out Vector2 mostDistantPoint)
     {
         List<Vector3> Vec3BoundaryPoints = new List<Vector3>();
 
@@ -547,13 +547,13 @@ public class TrackingSpaceGenerator
             GenerateRectangleTrackingSpace(0, out Vec2BoundaryPoints, out _, out _);
             center = Vector2.zero;
         }
-        
-        center = getPointOfInaccessability(Vec2BoundaryPoints, out centerMargin);     
+
+        center = getPointOfInaccessability(Vec2BoundaryPoints, out centerMargin);//, out mostDistantPoint);
 
         return Vec2BoundaryPoints;
     }
 
-    private static Vector2 getPointOfInaccessability(List<Vector2> polygonPoints, out float margin)
+    private static Vector2 getPointOfInaccessability(List<Vector2> polygonPoints, out float margin)//, out Vector2 mostDistantPoint)
     {
         float[][][] polygon = new float[1][][];
         polygon[0] = ConvertPolygonToFloatArray(polygonPoints);
@@ -575,7 +575,14 @@ public class TrackingSpaceGenerator
 
             poi = poi / polygonPoints.Count;
         }
-
+        /*
+        mostDistantPoint = poi;
+        foreach (Vector2 vec2 in polygonPoints)
+        {
+            if ((vec2 - poi).magnitude > (mostDistantPoint - poi).magnitude)
+                mostDistantPoint = vec2;
+        }
+        */
         //Debug.Log("Point of inaccessibilty inside the tracking space is: x = " + poi.x + "; y = " + poi.y);
         return poi;
     }

@@ -24,8 +24,8 @@ namespace Dodge_Study
         [SerializeField] private Color boundaryColor, radiusColor;
         [SerializeField] private Color[] graphColors;
 
-        private string[][] AllSampleCSVLines;
-        private string sampleDirectory, graphDirectory;
+        //private string[][] AllSampleCSVLines = new string[untestedConditions.Count][];
+        private string sampleDirectory, graphDirectory, timeString;
         private System.Random rnd;
 
         private static ExperimentManager _instance;
@@ -40,12 +40,14 @@ namespace Dodge_Study
                 _instance = this;
             
             setupAllConditions();
-            
-            sampleDirectory = Utilities.GetProjectPath() + "/ExperimentResults/" + Utilities.GetTimeStringForFileName() + "/" + "Sampled Metrics/";
-            graphDirectory = Utilities.GetProjectPath() + "/ExperimentResults/" + Utilities.GetTimeStringForFileName() + "/" + "Graphs/";
-            Utilities.CreateDirectoryIfNeeded(sampleDirectory);
 
-            AllSampleCSVLines = new string[untestedConditions.Count][];
+            timeString = Utilities.GetTimeStringForFileName();
+            sampleDirectory = Utilities.GetProjectPath() + "/ExperimentResults/" + timeString + "/" + "Sampled Metrics/";
+            graphDirectory = Utilities.GetProjectPath() + "/ExperimentResults/" + timeString + "/" + "Graphs/";
+            Utilities.CreateDirectoryIfNeeded(sampleDirectory);
+            Utilities.CreateDirectoryIfNeeded(graphDirectory);
+            Utilities.CreateDirectoryIfNeeded(graphDirectory + "Real/");
+            Utilities.CreateDirectoryIfNeeded(graphDirectory + "Virtual/");
 
             rnd = new System.Random();
         }
@@ -161,58 +163,7 @@ namespace Dodge_Study
                         csvWriter.Write(";");
                 }
             }
-        }
-
-        #region unused sample saving code
-        public void SaveSamplesForLogging(int trialIteration, List<Dictionary<string, List<float>>> oneDimensionalSamplesMaps, List<Dictionary<string, List<Vector2>>> twoDimensionalSamplesMaps)
-        {
-            int lineCount = oneDimensionalSamplesMaps[0].First().Value.Count + 1;
-            AllSampleCSVLines[trialIteration] = new string[lineCount];
-
-            // Set up the headers
-            foreach (string header in twoDimensionalSamplesMaps[0].Keys)
-            {
-                AllSampleCSVLines[trialIteration][0] = header + ";";
-            }
-            foreach (string header in oneDimensionalSamplesMaps[0].Keys)
-            {
-                AllSampleCSVLines[trialIteration][0] += header + ";";
-            }
-
-            for (int i = 1; i < lineCount; i++)
-            {
-                foreach (KeyValuePair<string, List<Vector2>> keyListPair in twoDimensionalSamplesMaps[0])
-                {
-                    if (i < keyListPair.Value.Count)
-                        AllSampleCSVLines[trialIteration][i] = keyListPair.Value[i].x.ToString().Replace(",", ".") + ", " + keyListPair.Value[i].y.ToString().Replace(",", ".") + ";";
-                    else
-                        AllSampleCSVLines[trialIteration][i] = ";";
-                }
-
-                foreach (KeyValuePair<string, List<float>> keyListPair in oneDimensionalSamplesMaps[0])
-                {
-                    if (i < keyListPair.Value.Count)
-                        AllSampleCSVLines[trialIteration][i] += keyListPair.Value[i] + ";";
-                    else
-                        AllSampleCSVLines[trialIteration][i] += ";";
-                }
-            }
-        }
-
-        public void LogAllSavedData()
-        {
-            StreamWriter csvWriter;
-
-            for (int i = 0; i < AllSampleCSVLines.Length; i++)
-            {
-                csvWriter = new StreamWriter(sampleDirectory + "trialIteration_" + i + "_samples.csv");
-                for(int j = 0; j < AllSampleCSVLines[i].Length; j++)
-                {
-                    csvWriter.WriteLine(AllSampleCSVLines[i][j]);
-                }
-            }
-        }
-        #endregion#
+        }        
 
         public void SaveSamplesForGraphExport(AvatarStatistics stats)
         {
@@ -278,9 +229,62 @@ namespace Dodge_Study
 
             texBoundary.Apply();
 
-            string filePath = config.statisticsLogger.GRAPH_DERECTORY + string.Format("Tracking_Space-" + config.statisticsLogger.RESULT_WITH_TIME_DIRECTORY.Replace(config.statisticsLogger.RESULT_DIRECTORY, "").Replace("/", "") + ".png");
+            string filePath = graphDirectory + "Tracking_Space_" + timeString + ".png";
             //Export as png file
             Utilities.ExportTexture2dToPng(filePath, texBoundary);
         }
+
+        #region unused sample saving code
+        /*
+        public void SaveSamplesForLogging(int trialIteration, List<Dictionary<string, List<float>>> oneDimensionalSamplesMaps, List<Dictionary<string, List<Vector2>>> twoDimensionalSamplesMaps)
+        {
+            int lineCount = oneDimensionalSamplesMaps[0].First().Value.Count + 1;
+            AllSampleCSVLines[trialIteration] = new string[lineCount];
+
+            // Set up the headers
+            foreach (string header in twoDimensionalSamplesMaps[0].Keys)
+            {
+                AllSampleCSVLines[trialIteration][0] = header + ";";
+            }
+            foreach (string header in oneDimensionalSamplesMaps[0].Keys)
+            {
+                AllSampleCSVLines[trialIteration][0] += header + ";";
+            }
+
+            for (int i = 1; i < lineCount; i++)
+            {
+                foreach (KeyValuePair<string, List<Vector2>> keyListPair in twoDimensionalSamplesMaps[0])
+                {
+                    if (i < keyListPair.Value.Count)
+                        AllSampleCSVLines[trialIteration][i] = keyListPair.Value[i].x.ToString().Replace(",", ".") + ", " + keyListPair.Value[i].y.ToString().Replace(",", ".") + ";";
+                    else
+                        AllSampleCSVLines[trialIteration][i] = ";";
+                }
+
+                foreach (KeyValuePair<string, List<float>> keyListPair in oneDimensionalSamplesMaps[0])
+                {
+                    if (i < keyListPair.Value.Count)
+                        AllSampleCSVLines[trialIteration][i] += keyListPair.Value[i] + ";";
+                    else
+                        AllSampleCSVLines[trialIteration][i] += ";";
+                }
+            }
+        }
+
+        public void LogAllSavedData()
+        {
+            StreamWriter csvWriter;
+
+            for (int i = 0; i < AllSampleCSVLines.Length; i++)
+            {
+                csvWriter = new StreamWriter(sampleDirectory + "trialIteration_" + i + "_samples.csv");
+                for (int j = 0; j < AllSampleCSVLines[i].Length; j++)
+                {
+                    csvWriter.WriteLine(AllSampleCSVLines[i][j]);
+                }
+            }
+        }
+        */
+        #endregion#
     }
 }
