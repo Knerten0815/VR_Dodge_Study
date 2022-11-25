@@ -1341,13 +1341,13 @@ public class GlobalConfiguration : MonoBehaviour
             List<Dictionary<string, List<float>>> oneDimensionalSamples;
             List<Dictionary<string, List<Vector2>>> twoDimensionalSamples;
             statisticsLogger.GetExperimentResultsForSampledVariables(out oneDimensionalSamples, out twoDimensionalSamples);
-            Dodge_Study.ExperimentManager.Instance.LogAllSamples(experimentIterator, oneDimensionalSamples, twoDimensionalSamples);     // ----------------------------------- statisticsLogger.LogAllExperimentSamples(TrialIdToString(experimentIterator), oneDimensionalSamples, twoDimensionalSamples);
+            ExperimentManager.Instance.LogAllSamples(experimentIterator, oneDimensionalSamples, twoDimensionalSamples);     // ----------------------------------- statisticsLogger.LogAllExperimentSamples(TrialIdToString(experimentIterator), oneDimensionalSamples, twoDimensionalSamples);
         }
 
         //save images
         if (exportImage)
         {
-            ExperimentManager.Instance.AddSetup(experimentSetups[experimentIterator]);
+            ExperimentManager.Instance.SaveSamplesForGraphExport(statisticsLogger.avatarStatistics[0]);
         }
 
         //create temporary files to indicate the stage of the experiment
@@ -1368,16 +1368,25 @@ public class GlobalConfiguration : MonoBehaviour
             statisticsLogger.LogExperimentSummaryStatisticsResultsSCSV(resultDir, fileName);
 
             //save images at the end
-            for(int i = 0; i < experimentSetups.Count; i++)
+            if (exportImage)
             {
-                ExperimentManager.Instance.LogExperimentRealPathPictures(i);
-                if(ExperimentManager.Instance.useRedirection)
-                    statisticsLogger.LogExperimentVirtualPathPictures(i);
+                ExperimentManager.Instance.LogBoundaryPicture();
+
+                for (int i = 0; i < experimentSetups.Count; i++)
+                {
+                    Color realPathColor, virtualPathColor;
+                    realPathColor = ExperimentManager.Instance.pickGraphColors(out virtualPathColor);
+
+                    statisticsLogger.LogExperimentRealPathPictures(i, realPathColor, experimentSetups[i], ExperimentManager.Instance.savedStats[i]);
+                    if (ExperimentManager.Instance.useRedirection)
+                        statisticsLogger.LogExperimentVirtualPathPictures(i, virtualPathColor, experimentSetups[i], ExperimentManager.Instance.savedStats[i]);
+
+                    Debug.Log("Logged paths for " + (i+1) + " out of " + experimentSetups.Count + " trials. ");
+                }
             }
 
             //initialize experiment results 
             statisticsLogger.InitializeExperimentResults();
-
 
             experimentSetupsListIterator++;
             if (experimentSetupsListIterator >= experimentSetupsList.Count)

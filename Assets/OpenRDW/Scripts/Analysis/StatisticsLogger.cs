@@ -703,6 +703,8 @@ public class StatisticsLogger : MonoBehaviour {
         Utilities.CreateDirectoryIfNeeded(SUMMARY_STATISTICS_DIRECTORY);
         Utilities.CreateDirectoryIfNeeded(SAMPLED_METRICS_DIRECTORY);
         Utilities.CreateDirectoryIfNeeded(GRAPH_DERECTORY);
+        Utilities.CreateDirectoryIfNeeded(GRAPH_DERECTORY + "Real/");
+        Utilities.CreateDirectoryIfNeeded(GRAPH_DERECTORY + "Virtual/");
         Utilities.CreateDirectoryIfNeeded(TMP_DERECTORY);
         Utilities.CreateDirectoryIfNeeded(VIDEO_DERECTORY);
         Utilities.CreateDirectoryIfNeeded(SCREENSHOTS_DERECTORY);        
@@ -794,7 +796,57 @@ public class StatisticsLogger : MonoBehaviour {
         csvWriter.Flush();
         csvWriter.Close();
     }
-    
+
+    public void LogExperimentRealPathPictures(int experimentIteration, Color graphColor, ExperimentSetup experimentSetup, AvatarStatistics avatarStatistics)
+    {
+        //set background to white
+        Utilities.SetTextureToSingleColor(texRealPathGraph, Color.clear);
+
+        var realPosList = Dodge_Study.ExperimentManager.Instance.offSetGraphPoints(avatarStatistics.userRealPositionSamples);
+        var deltaWeight = (1 - pathStartAlpha) / realPosList.Count;
+
+        for (int i = 0; i < realPosList.Count - 1; i++)
+        {
+            var w = (pathStartAlpha + deltaWeight * i);
+            var startColor = graphColor;
+            startColor.a = w;
+            var endColor = graphColor;
+            endColor.a = (w + deltaWeight);
+            Utilities.DrawLine(texRealPathGraph, realPosList[i], realPosList[i + 1], realSideLength, pathThickness, startColor, endColor);
+        }
+
+        texRealPathGraph.Apply();
+
+        //Export as png file
+        Utilities.ExportTexture2dToPng(GRAPH_DERECTORY + "Real/" + string.Format("Iteration{0}_ID{1}_realPath.png", experimentIteration, experimentSetup.trialData.TrialID), texRealPathGraph);
+    }
+
+    //save path, boundaries, obstacles as a image
+    public void LogExperimentVirtualPathPictures(int experimentIteration, Color graphColor, ExperimentSetup experimentSetup, AvatarStatistics avatarStatistics)
+    {
+        //set background to transparent
+        Utilities.SetTextureToSingleColor(texVirtualPathGraph, Color.clear);
+
+        var virtualPosList = Dodge_Study.ExperimentManager.Instance.offSetGraphPoints(avatarStatistics.userVirtualPositionSamples);
+        var deltaWeight = (1 - pathStartAlpha) / virtualPosList.Count;
+
+        for (int i = 0; i < virtualPosList.Count - 1; i++)
+        {
+            var w = (pathStartAlpha + deltaWeight * i);
+            var startColor = graphColor;
+            startColor.a = w;
+            var endColor = graphColor;
+            endColor.a = (w + deltaWeight);
+            Utilities.DrawLine(texVirtualPathGraph, virtualPosList[i], virtualPosList[i + 1], realSideLength, pathThickness, startColor, endColor);
+        }
+
+        texVirtualPathGraph.Apply();
+
+        //Export as png file
+        Utilities.ExportTexture2dToPng(GRAPH_DERECTORY + "Virtual/" + string.Format("Iteration{0}_ID{1}_virtualPath.png", experimentIteration, experimentSetup.trialData.TrialID), texVirtualPathGraph);
+    }
+
+    #region old log methods
     //save path, boundaries, obstacles as a image
     public void LogExperimentRealPathPictures(int experimentSetupId) {
         var experimentSetups = globalConfiguration.experimentSetups;
@@ -815,8 +867,9 @@ public class StatisticsLogger : MonoBehaviour {
             Utilities.DrawLine(texRealPathGraph, trackingSpacePoints[i], trackingSpacePoints[(i + 1) % trackingSpacePoints.Count], realSideLength, borderThickness, trackingSpaceColor);        
         foreach (var obstaclePolygon in obstaclePolygons)
             Utilities.DrawPolygon(texRealPathGraph, obstaclePolygon, realSideLength, borderThickness, obstacleColor);
-            //for (int i = 0; i < obstaclePolygon.Count; i++)
-            //    Utilities.DrawLine(tex, obstaclePolygon[i], obstaclePolygon[(i + 1) % obstaclePolygon.Count], sideLength, borderThickness, obstacleColor);
+        //for (int i = 0; i < obstaclePolygon.Count; i++)
+        //    Utilities.DrawLine(tex, obstaclePolygon[i], obstaclePolygon[(i + 1) % obstaclePolygon.Count], sideLength, borderThickness, obstacleColor);
+        Debug.Log(avatarStatistics.Count + "avatarstatistics");
         for (int uId = 0; uId < avatarStatistics.Count; uId++) {
             //var virtualPathColor = globalConfiguration.avatarColors[uId];
             var realPosList = avatarStatistics[uId].userRealPositionSamples;
@@ -897,6 +950,8 @@ public class StatisticsLogger : MonoBehaviour {
         //Export as png file
         Utilities.ExportTexture2dToPng(GRAPH_DERECTORY + string.Format("Iteration{0}_ID{1}_virtualPath.png", experimentSetupId, experimentSetup.trialData.TrialID), texVirtualPathGraph);
     }
+
+    #endregion
 
     public void LogOneDimensionalExperimentSamples(string experimentSamplesDirectory, string measuredMetric, List<float> values)
     {        

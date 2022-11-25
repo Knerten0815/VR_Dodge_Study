@@ -36,7 +36,7 @@ namespace Dodge_Study
         {
             boundaryPoints = TrackingSpaceGenerator.GetTrackingSpace(out boundaryCenter, out centerMargin);
             centerTrans.localPosition = new Vector3(boundaryCenter.x, 0, boundaryCenter.y);
-            Debug.Log("Distance from center to tracking space is " + centerMargin);
+            Debug.Log("Boundary Center is at " + boundaryCenter.x + ", " + boundaryCenter.y);
         }
 
         public void showCenter(bool showCenter)

@@ -22,12 +22,11 @@ public class TrackingSpaceGenerator
     private const float DEFAULT_OBSTACLE_WIDTH = 1;//default square obstacle side length
 
     private const float TARGET_AREA = 400;
-    private static GameObject longestDiagonal;
 
     //generate polygon tracking space with sidenum, center is (0,0)
     public static List<Vector2> GeneratePolygonTrackingSpacePoints(int sideNum, float radius = DEFAULT_TRACKING_SPACE_RADIUS)
     {
-        var center = Vector2.zero;        
+        var center = Vector2.zero;
         var trackingSpacePoints = new List<Vector2>();
         var sampledRotation = 360f / sideNum;//inner angle
         Vector2 startVec;
