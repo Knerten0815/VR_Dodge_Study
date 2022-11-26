@@ -1005,47 +1005,6 @@ public class StatisticsLogger : MonoBehaviour {
         }
     }
 
-    public void KevinsIdeaOfLoggingSamples(string experimentDecriptorString, List<Dictionary<string, List<float>>> oneDimensionalSamplesMaps, List<Dictionary<string, List<Vector2>>> twoDimensionalSamplesMaps)
-    {
-        Utilities.CreateDirectoryIfNeeded(SAMPLED_METRICS_DIRECTORY);
-        csvWriter = new StreamWriter(SAMPLED_METRICS_DIRECTORY + experimentDecriptorString + "_samples.csv");
-
-        // Set up the headers
-        foreach (string header in twoDimensionalSamplesMaps[0].Keys)
-        {
-            csvWriter.Write(header + ";");
-        }
-        foreach (string header in oneDimensionalSamplesMaps[0].Keys)
-        {
-            csvWriter.Write(header + ";");
-        }
-
-        int firstKeyValuePairsCountOfValues = oneDimensionalSamplesMaps[0].First().Value.Count;
-
-        for (int i = 0; i < firstKeyValuePairsCountOfValues; i++)
-        {
-            csvWriter.WriteLine();
-
-            foreach (KeyValuePair<string, List<Vector2>> keyListPair in twoDimensionalSamplesMaps[0])
-            {
-                if (i < keyListPair.Value.Count)
-                    csvWriter.Write(keyListPair.Value[i].x.ToString().Replace(",", ".") + ", " + keyListPair.Value[i].y.ToString().Replace(",", ".") + ";");
-                else
-                    csvWriter.Write(";");
-            }
-
-            foreach (KeyValuePair<string, List<float>> keyListPair in oneDimensionalSamplesMaps[0])
-            {
-                if (i < keyListPair.Value.Count)
-                    csvWriter.Write(keyListPair.Value[i] + ";");
-                else
-                    csvWriter.Write(";");
-            }
-        }
-
-        csvWriter.Flush();
-        csvWriter.Close();
-    }
     public bool IfResetCountExceedLimit(int id) {
         return avatarStatistics[id].resetCount > MaxResetCount;
     }
