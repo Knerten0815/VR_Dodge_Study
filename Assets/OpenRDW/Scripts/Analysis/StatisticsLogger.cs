@@ -815,8 +815,10 @@ public class StatisticsLogger : MonoBehaviour {
 
         texRealPathGraph.Apply();
 
+        string rdirString = Dodge_Study.ExperimentManager.Instance.useRedirection ? "rdir" : "noRdir";
+        string path = GRAPH_DERECTORY + "Real/" + string.Format("Iteration{0}_ID{1}_real_{2}.png", experimentIteration, experimentSetup.trialData.TrialID, rdirString);
         //Export as png file
-        Utilities.ExportTexture2dToPng(GRAPH_DERECTORY + "Real/" + string.Format("Iteration{0}_ID{1}_realPath.png", experimentIteration, experimentSetup.trialData.TrialID), texRealPathGraph);
+        Utilities.ExportTexture2dToPng(path, texRealPathGraph);
     }
 
     //save path, boundaries, obstacles as a image
@@ -840,8 +842,10 @@ public class StatisticsLogger : MonoBehaviour {
 
         texVirtualPathGraph.Apply();
 
+        string rdirString = Dodge_Study.ExperimentManager.Instance.useRedirection ? "rdir" : "noRdir";
+        string path = GRAPH_DERECTORY + "Virtual/" + string.Format("Iteration{0}_ID{1}_virt_{2}.png", experimentIteration, experimentSetup.trialData.TrialID, rdirString);
         //Export as png file
-        Utilities.ExportTexture2dToPng(GRAPH_DERECTORY + "Virtual/" + string.Format("Iteration{0}_ID{1}_virtualPath.png", experimentIteration, experimentSetup.trialData.TrialID), texVirtualPathGraph);
+        Utilities.ExportTexture2dToPng(path, texVirtualPathGraph);
     }
 
     #region old log methods
