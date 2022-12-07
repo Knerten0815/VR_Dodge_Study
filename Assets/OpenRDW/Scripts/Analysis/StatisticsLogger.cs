@@ -102,13 +102,18 @@ public class StatisticsLogger : MonoBehaviour {
         public float minCurvatureGain = float.MaxValue;
 
         // -------------------------------------------------------------------------------------------- VR-Dodge-Study parameters -----------------------------------------------------------------------------------
-        public float maxYawDeltaVirtual;
-        public float maxYawDeltaReal;
-        public float maxDistanceToStart;
-        public Vector3 positionAtMaxDistanceToStart;
-        public Vector3 rotationAtMaxYaw;
-        public bool collisionDetected;
-        // also sumOfInjectedRotationFromRotationGain
+        public float maxYawVirtual;
+        public float maxYawReal;
+        public float maxDistanceToCenter; //- check distanceToCenterSamples and or distanceToCenterSamplesBuffer
+        public Vector3 realPosAtMaxDistanceToCenter, virtPosAtMaxDistanceToCenter;    // - see above
+        public Vector3 rotAtMaxRealYaw, rotAtMaxVirtYaw;
+        public Vector3 posAtMaxRealYaw, posAtMaxVirtYaw;
+        public bool collisionDetected; //-done
+        public List<float> injectedRotAccumulationSamplesBuffer = new List<float>();
+        public List<float> realRotAccumulationSamplesBuffer = new List<float>();
+        public List<Vector3> realRotSamplesBuffer = new List<Vector3>();            // TODO:  Log rotations
+        public List<Vector3> virtRotSamplesBuffer = new List<Vector3>();
+        // also sumOfInjectedRotationFromRotationGain //-done
         // => Rotation der virtuellen Welt nach Repositionierung der Versuchsperson, relativ zur Rotation der virtuellen Welt zu Beginn eines Ausweichmanövers
         // -------------------------------------------------------------------------------------------- VR-Dodge-Study parameters ------------------------------------------------------------------------------------
 
@@ -207,14 +212,38 @@ public class StatisticsLogger : MonoBehaviour {
             distanceToNearestBoundarySamples = new List<float>();
             distanceToNearestBoundarySamplesBuffer = new List<float>();
             distanceToCenterSamples = new List<float>();
-            distanceToCenterSamplesBuffer = new List<float>();            
-        }
+            distanceToCenterSamplesBuffer = new List<float>();
+
+            // --------------------------- VR-Dodge-Study ----------------------------------
+            maxYawVirtual = 0;
+            maxYawReal = 0;
+            maxDistanceToCenter = 0; 
+            realPosAtMaxDistanceToCenter = Vector3.zero;
+            virtPosAtMaxDistanceToCenter = Vector3.zero;
+            rotAtMaxRealYaw = Vector3.zero;
+            rotAtMaxVirtYaw = Vector3.zero;
+            posAtMaxRealYaw = Vector3.zero;
+            posAtMaxVirtYaw = Vector3.zero;
+            collisionDetected = false;
+            injectedRotAccumulationSamplesBuffer = new List<float>();
+            realRotAccumulationSamplesBuffer = new List<float>();
+            realRotSamplesBuffer = new List<Vector3>();                 // TODO:  Log rotations
+            virtRotSamplesBuffer = new List<Vector3>();
+        // --------------------------- VR-Dodge-Study ----------------------------------
+    }
     }
     //store statistic data of every avatar
     public List<AvatarStatistics> avatarStatistics;
 
     List<float> samplingIntervals = new List<float>();
-    float lastSamplingTime = 0;    
+    float lastSamplingTime = 0;
+
+    // ---------------------- VR-Dodge Study ---------------------------------
+    private float positiveYawAccumulation = 0;
+    private float negativeYawAccumulation = 0;
+    private float positiveVirtYawAccumulation = 0;
+    private float negativeVirtYawAccumulation = 0;
+    // ---------------------- VR-Dodge Study ---------------------------------
 
     //the logging state
     enum LoggingState { not_started, logging, paused, complete };
@@ -390,11 +419,37 @@ public class StatisticsLogger : MonoBehaviour {
         }
     }
 
-    public void Event_User_Rotated(float rotationInDegrees)
+    public void Event_User_Rotated(AvatarStatistics us, float realRotDelta)    // ------------------------------------- changed. This method was previously empty -----------------------------------------------------
     {
         if (state == LoggingState.logging)
         {
+            Debug.Log("Real Rotaion delta: " + realRotDelta);
+            if(realRotDelta > 0)
+            {
+                negativeYawAccumulation = 0; //reset negative rotation accumulation
+                positiveYawAccumulation += realRotDelta;
+                us.realRotAccumulationSamplesBuffer.Add(positiveYawAccumulation);
 
+                if (positiveYawAccumulation > Mathf.Abs(us.maxYawReal))
+                {
+                    us.maxYawReal = positiveYawAccumulation;
+                    us.posAtMaxRealYaw = Vector3.zero;      // --------- TODO: At Position and Rotation for Max Yaws
+                    us.rotAtMaxRealYaw = Vector3.zero;
+                }
+            }
+            else
+            {
+                positiveYawAccumulation = 0; // reset positive rot accumulation
+                negativeYawAccumulation += realRotDelta;
+                us.realRotAccumulationSamplesBuffer.Add(negativeYawAccumulation);
+
+                if (negativeYawAccumulation < -Mathf.Abs(us.maxYawReal))
+                {
+                    us.maxYawReal = negativeYawAccumulation;
+                    us.posAtMaxRealYaw = Vector3.zero;
+                    us.rotAtMaxRealYaw = Vector3.zero;
+                }
+            }
         }
     }
 
@@ -455,9 +510,37 @@ public class StatisticsLogger : MonoBehaviour {
             //rotationGainSamplesBuffer.Add(g_r * redirectionManager.userMovementManager.lastDeltaTime);
             us.rotationGainSamplesBuffer.Add(rotationGainFactor * globalConfiguration.GetDeltaTime());
             //injectedRotationFromRotationGainSamplesBuffer.Add(Mathf.Abs(rotationApplied) * redirectionManager.userMovementManager.lastDeltaTime);
-            us.injectedRotationFromRotationGainSamplesBuffer.Add(Mathf.Abs(rotationApplied) * globalConfiguration.GetDeltaTime());
+            us.injectedRotationFromRotationGainSamplesBuffer.Add(rotationApplied * globalConfiguration.GetDeltaTime());                     // ---------- removed Mathf.Abs to show direction change. Since curvature gain is disabled, the absolute rotation gain will be shown in injectedRotationSamplesBuffer anyway
             //injectedRotationSamplesBuffer.Add(Mathf.Abs(rotationApplied) * redirectionManager.userMovementManager.lastDeltaTime);
             us.injectedRotationSamplesBuffer.Add(Mathf.Abs(rotationApplied) * globalConfiguration.GetDeltaTime());
+
+
+            Debug.Log("Virtual Rotation added: " + rotationApplied);
+            if (rotationApplied > 0)
+            {
+                negativeVirtYawAccumulation = 0; //reset negative rotation accumulation
+                positiveVirtYawAccumulation += rotationApplied;
+                us.injectedRotAccumulationSamplesBuffer.Add(positiveVirtYawAccumulation);
+                if (positiveVirtYawAccumulation > Mathf.Abs(us.maxYawVirtual))
+                {
+                    us.maxYawVirtual = positiveVirtYawAccumulation;
+                    us.posAtMaxVirtYaw = Vector3.zero;        // -------------------------- TODO: add position and rotation at max Virt Yaw
+                    us.rotAtMaxVirtYaw = Vector3.zero;
+                }
+            }
+            else
+            {
+                positiveVirtYawAccumulation = 0; // reset positive rot accumulation
+                negativeVirtYawAccumulation += rotationApplied;
+                us.injectedRotAccumulationSamplesBuffer.Add(negativeVirtYawAccumulation);
+
+                if (negativeVirtYawAccumulation < -Mathf.Abs(us.maxYawVirtual))
+                {
+                    us.maxYawVirtual = negativeVirtYawAccumulation;
+                    us.posAtMaxVirtYaw = Vector3.zero;
+                    us.rotAtMaxVirtYaw = Vector3.zero;
+                }
+            }
         }
     }
 
@@ -510,7 +593,7 @@ public class StatisticsLogger : MonoBehaviour {
             var rm = userGameobject.GetComponent<RedirectionManager>();
             var us = avatarStatistics[i];
             // Now we are letting the developer determine the movement manually in update, and we pull the info from redirector
-            Event_User_Rotated(rm.deltaDir);
+            Event_User_Rotated(us, rm.deltaDir);
             Event_User_Translated(us, Utilities.FlattenedPos2D(rm.deltaPos));
 
             us.userRealPositionSamplesBuffer.Add(Utilities.FlattenedPos2D(rm.currPosReal));

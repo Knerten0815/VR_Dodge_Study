@@ -106,6 +106,7 @@ public abstract class SteerToRedirector : Redirector {
         // Implement additional rotation with smoothing
         float finalRotation = (1.0f - SMOOTHING_FACTOR) * lastRotationApplied + SMOOTHING_FACTOR * rotationProposed;
         //float finalRotation = rotationProposed;
+        float virtRotDelta = finalRotation - lastRotationApplied;           // ------------------- added -------------------
         lastRotationApplied = finalRotation;
         
         if (!curvatureGainUsed)
