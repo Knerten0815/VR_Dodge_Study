@@ -128,7 +128,7 @@ namespace Dodge_Study
         }
         
         //save results to local
-        public void LogAllSamples(int trialIteration, List<Dictionary<string, List<float>>> oneDimensionalSamplesMaps, List<Dictionary<string, List<Vector2>>> twoDimensionalSamplesMaps)
+        public void LogAllSamples(int trialIteration, List<Dictionary<string, List<float>>> oneDimensionalSamplesMaps, List<Dictionary<string, List<Vector2>>> twoDimensionalSamplesMaps, List<Dictionary<string, List<Vector3>>> threeDimensionalSamplesMaps)
         {
             StreamWriter csvWriter = new StreamWriter(sampleDirectory + "trialIteration_" + trialIteration + "_samples.csv");
             int lineCount = oneDimensionalSamplesMaps[0].First().Value.Count;
@@ -141,6 +141,10 @@ namespace Dodge_Study
             foreach (string header in oneDimensionalSamplesMaps[0].Keys)
             {
                 csvWriter.Write( header + ";");
+            }
+            foreach (string header in threeDimensionalSamplesMaps[0].Keys)
+            {
+                csvWriter.Write(header + ";");
             }
 
             // Write values
@@ -159,6 +163,14 @@ namespace Dodge_Study
                 {
                     if (i < keyListPair.Value.Count)
                         csvWriter.Write(keyListPair.Value[i] + ";");
+                    else
+                        csvWriter.Write(";");
+                }
+
+                foreach (KeyValuePair<string, List<Vector3>> keyListPair in threeDimensionalSamplesMaps[0])
+                {
+                    if (i < keyListPair.Value.Count)
+                        csvWriter.Write(keyListPair.Value[i].x.ToString().Replace(",", ".") + ", " + keyListPair.Value[i].y.ToString().Replace(",", ".") + ", " + keyListPair.Value[i].z.ToString().Replace(",", ".") + ";");
                     else
                         csvWriter.Write(";");
                 }

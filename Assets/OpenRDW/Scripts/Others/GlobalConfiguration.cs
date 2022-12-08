@@ -1340,8 +1340,9 @@ public class GlobalConfiguration : MonoBehaviour
         {
             List<Dictionary<string, List<float>>> oneDimensionalSamples;
             List<Dictionary<string, List<Vector2>>> twoDimensionalSamples;
+            List<Dictionary<string, List<Vector3>>> threeDimensionalSamples;
             statisticsLogger.GetExperimentResultsForSampledVariables(out oneDimensionalSamples, out twoDimensionalSamples);
-            ExperimentManager.Instance.LogAllSamples(experimentIterator, oneDimensionalSamples, twoDimensionalSamples);     // ----------------------------------- statisticsLogger.LogAllExperimentSamples(TrialIdToString(experimentIterator), oneDimensionalSamples, twoDimensionalSamples);
+            ExperimentManager.Instance.LogAllSamples(experimentIterator, oneDimensionalSamples, twoDimensionalSamples, threeDimensionalSamples);     // ----------------------------------- statisticsLogger.LogAllExperimentSamples(TrialIdToString(experimentIterator), oneDimensionalSamples, twoDimensionalSamples);
         }
 
         //save images
@@ -1481,7 +1482,7 @@ public class GlobalConfiguration : MonoBehaviour
             descriptor["resetter"] = RedirectionManager.ResetterToResetChoice(setup.avatars[i].resetter).ToString();
             */
             
-            Dodge_Study.TrialData trialData = Dodge_Study.ExperimentManager.Instance.currentCondition;
+            TrialData trialData = ExperimentManager.Instance.currentCondition;
             descriptor["trialID"] = trialData.TrialID;
             descriptor["form"] = trialData.GetForm().ToString();
             descriptor["size"] = trialData.GetSize().ToString();

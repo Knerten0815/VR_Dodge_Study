@@ -38,7 +38,7 @@ public abstract class Redirector : MonoBehaviour
             transform.RotateAround(Utilities.FlattenedPos3D(redirectionManager.headTransform.position), Vector3.up, rotationInDegrees);
             GetComponentInChildren<KeyboardController>().SetLastRotation(rotationInDegrees);
             if (redirectionManager.deltaDir != 0)
-                redirectionManager.globalConfiguration.statisticsLogger.Event_Rotation_Gain(redirectionManager.movementManager.avatarId, rotationInDegrees / redirectionManager.deltaDir, rotationInDegrees);
+                redirectionManager.globalConfiguration.statisticsLogger.Event_Rotation_Gain(redirectionManager.movementManager.avatarId, rotationInDegrees / redirectionManager.deltaDir, rotationInDegrees, redirectionManager.currDirReal, redirectionManager.currDir, redirectionManager.currPosReal, redirectionManager.currPos);
         }
     }
 
