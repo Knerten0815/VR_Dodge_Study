@@ -109,12 +109,12 @@ public class StatisticsLogger : MonoBehaviour {
         public Vector3 realRotAtMaxRealYaw, virtRotAtMaxRealYaw, realRotAtMaxVirtYaw, virtRotAtMaxVirtYaw;      // actual head rotations, when maximum yaw rotations were achieved
         public Vector3 realPosAtMaxRealYaw, virtPosAtMaxRealYaw, realPosAtMaxVirtYaw, virtPosAtMaxVirtYaw;      // actual head positions, when maximum yaw rotations were achieved
         public bool collisionDetected;                                                                          // did the test person successfuly dodge
-        public List<float> virtRotAccumulationSamples = new List<float>();                            // the values grow, as long as the test person rotates in one direction. Can be used to read rotation in degrees of every movement
+        public List<float> addVirtRotAccumulationSamples = new List<float>();                            // the values grow, as long as the test person rotates in one direction. Can be used to read rotation in degrees of every movement
         public List<float> realRotAccumulationSamples = new List<float>();                                // see above. But for real rotation, instead of virtual rotation
         public List<Vector3> realRotSamples = new List<Vector3>();                                        // logging the actual rotations
         public List<Vector3> virtRotSamples = new List<Vector3>();                                        // logging the virtual rotations
         // --------------------------- Buffers ----------------------
-        public List<float> virtRotAccumulationSamplesBuffer = new List<float>();
+        public List<float> addVirtRotAccumulationSamplesBuffer = new List<float>();
         public List<float> realRotAccumulationSamplesBuffer = new List<float>();
         public List<Vector3> realRotSamplesBuffer = new List<Vector3>();
         public List<Vector3> virtRotSamplesBuffer = new List<Vector3>();
@@ -234,11 +234,11 @@ public class StatisticsLogger : MonoBehaviour {
             virtPosAtMaxRealYaw = Vector3.zero;
             virtPosAtMaxVirtYaw = Vector3.zero;
             collisionDetected = false;
-            virtRotAccumulationSamples = new List<float>();
+            addVirtRotAccumulationSamples = new List<float>();
             realRotAccumulationSamples = new List<float>();
             realRotSamples = new List<Vector3>();
             virtRotSamples = new List<Vector3>();
-            virtRotAccumulationSamplesBuffer = new List<float>();
+            addVirtRotAccumulationSamplesBuffer = new List<float>();
             realRotAccumulationSamplesBuffer = new List<float>();
             realRotSamplesBuffer = new List<Vector3>();
             virtRotSamplesBuffer = new List<Vector3>();
@@ -254,8 +254,9 @@ public class StatisticsLogger : MonoBehaviour {
     // ---------------------- VR-Dodge Study ---------------------------------
     private float positiveYawAccumulation = 0;
     private float negativeYawAccumulation = 0;
-    private float positiveVirtYawAccumulation = 0;
-    private float negativeVirtYawAccumulation = 0;
+    private float currentYawAccumulation = 0;
+    private float virtualRightRotation = 0;
+    private float virtualLeftRotation = 0;
     // ---------------------- VR-Dodge Study ---------------------------------
 
     //the logging state
@@ -437,7 +438,7 @@ public class StatisticsLogger : MonoBehaviour {
 
             //---------------- VR-Dodge-Study ----------------------------------
             oneDimensionalSample.Add("real_rotation_accumulation", us.realRotAccumulationSamples);
-            oneDimensionalSample.Add("virtual_rotation_accumulation", us.virtRotAccumulationSamples);
+            oneDimensionalSample.Add("additional_virtual_rotation_accumulation", us.addVirtRotAccumulationSamples);
 
             threeDimensionalSample.Add("real_rotation", us.realRotSamples);
             threeDimensionalSample.Add("virtual_rotation", us.virtRotSamples);
@@ -460,27 +461,19 @@ public class StatisticsLogger : MonoBehaviour {
         }
     }
 
-    public void Event_User_Rotated(AvatarStatistics us, float realRotDelta, Vector3 currDirReal, Vector3 currDirVirt, Vector3 currPosReal, Vector3 currPosVirt)    // ------------------------------------- changed. This method was previously empty -----------------------------------------------------
+    // this is called after Event_Rotation_Gain, which is kinda unintuitive
+    public void Event_User_Rotated(AvatarStatistics us, float realRotDelta, Vector3 currDirReal, Vector3 currDirVirt, Vector3 currPosReal, Vector3 currPosVirt)    // ------------------------------------- changed. This method was previously empty. -----------------------------------------------------
     {
         if (state == LoggingState.logging)
         {
-            Debug.Log("Real Rotaion delta: " + realRotDelta);
+            //Debug.Log("Real Rotaion delta: " + realRotDelta);
             if(realRotDelta > 0)
             {
                 //if(realRotDelta / Time.deltaTime >= 1.5f)
                     negativeYawAccumulation = 0; //reset negative rotation accumulation
 
                 positiveYawAccumulation += realRotDelta;
-                us.realRotAccumulationSamplesBuffer.Add(positiveYawAccumulation);
-
-                if (positiveYawAccumulation > Mathf.Abs(us.maxYawReal))
-                {
-                    us.maxYawReal = positiveYawAccumulation;
-                    us.realPosAtMaxRealYaw = currPosReal;
-                    us.virtPosAtMaxRealYaw = currPosVirt;
-                    us.realRotAtMaxRealYaw = currDirReal;
-                    us.virtRotAtMaxRealYaw = currDirVirt;
-                }
+                currentYawAccumulation = positiveYawAccumulation;
             }
             else
             {
@@ -488,16 +481,19 @@ public class StatisticsLogger : MonoBehaviour {
                     positiveYawAccumulation = 0; // reset positive rot accumulation
 
                 negativeYawAccumulation += realRotDelta;
-                us.realRotAccumulationSamplesBuffer.Add(negativeYawAccumulation);
+                currentYawAccumulation = negativeYawAccumulation;
+                
+            }
 
-                if (negativeYawAccumulation < -Mathf.Abs(us.maxYawReal))
-                {
-                    us.maxYawReal = negativeYawAccumulation;
-                    us.realPosAtMaxRealYaw = currPosReal;
-                    us.virtPosAtMaxRealYaw = currPosVirt;
-                    us.realRotAtMaxRealYaw = currDirReal;
-                    us.virtRotAtMaxRealYaw = currDirVirt;
-                }
+            us.realRotAccumulationSamplesBuffer.Add(currentYawAccumulation);
+
+            if (Mathf.Abs(currentYawAccumulation) > Mathf.Abs(us.maxYawReal))
+            {
+                us.maxYawReal = currentYawAccumulation;
+                us.realPosAtMaxRealYaw = currPosReal;
+                us.virtPosAtMaxRealYaw = currPosVirt;
+                us.realRotAtMaxRealYaw = currDirReal;
+                us.virtRotAtMaxRealYaw = currDirVirt;
             }
         }
     }
@@ -564,37 +560,35 @@ public class StatisticsLogger : MonoBehaviour {
             us.injectedRotationSamplesBuffer.Add(Mathf.Abs(rotationApplied) * globalConfiguration.GetDeltaTime());
 
 
-
-            Debug.Log("Virtual Rotation added: " + rotationApplied);
-            if (rotationApplied > 0)
+            // ------------------------------- VR-Dodge-Study -----------------------------------------------------
+            float virtYawAccumulation;
+            if(currentYawAccumulation > 0)  // if user is rotating right
             {
-                negativeVirtYawAccumulation = 0; //reset negative rotation accumulation
-                positiveVirtYawAccumulation += rotationApplied;
-                us.virtRotAccumulationSamplesBuffer.Add(positiveVirtYawAccumulation);
-                if (positiveVirtYawAccumulation > Mathf.Abs(us.maxYawVirtual))
-                {
-                    us.maxYawVirtual = positiveVirtYawAccumulation;
-                    us.realPosAtMaxVirtYaw = currPosReal;
-                    us.virtPosAtMaxVirtYaw = currPosVirt;
-                    us.realRotAtMaxVirtYaw = currDirReal;
-                    us.virtRotAtMaxVirtYaw = currDirVirt;
-                }
+                virtualLeftRotation = 0;    // reset left rotation accumulation
+                virtualRightRotation += rotationApplied;
+                us.addVirtRotAccumulationSamplesBuffer.Add(virtualRightRotation);
+
+                virtYawAccumulation = currentYawAccumulation + virtualRightRotation;
             }
             else
             {
-                positiveVirtYawAccumulation = 0; // reset positive rot accumulation
-                negativeVirtYawAccumulation += rotationApplied;
-                us.virtRotAccumulationSamplesBuffer.Add(negativeVirtYawAccumulation);
+                virtualRightRotation = 0;
+                virtualLeftRotation += rotationApplied;
+                us.addVirtRotAccumulationSamplesBuffer.Add(virtualLeftRotation);
 
-                if (negativeVirtYawAccumulation < -Mathf.Abs(us.maxYawVirtual))
-                {
-                    us.maxYawVirtual = negativeVirtYawAccumulation;
-                    us.realPosAtMaxVirtYaw = currPosReal;
-                    us.virtPosAtMaxVirtYaw = currPosVirt;
-                    us.realRotAtMaxVirtYaw = currDirReal;
-                    us.virtRotAtMaxVirtYaw = currDirVirt;
-                }
+                virtYawAccumulation = currentYawAccumulation + virtualLeftRotation;
             }
+
+
+            if (Mathf.Abs(virtYawAccumulation) > Mathf.Abs(us.maxYawVirtual)) // if this is the maximum virtual rotation
+            {
+                us.maxYawVirtual = virtYawAccumulation;
+                us.realPosAtMaxVirtYaw = currPosReal;
+                us.virtPosAtMaxVirtYaw = currPosVirt;
+                us.realRotAtMaxVirtYaw = currDirReal;
+                us.virtRotAtMaxVirtYaw = currDirVirt;
+            }
+            // ------------------------------- VR-Dodge-Study -----------------------------------------------------
         }
     }
 
@@ -688,7 +682,7 @@ public class StatisticsLogger : MonoBehaviour {
 
             // ------------------- VR-Dodge-Study ------------------------------------
             GetSampleFromBuffer(ref us.realRotAccumulationSamples, ref us.realRotAccumulationSamplesBuffer);
-            GetSampleFromBuffer(ref us.virtRotAccumulationSamples, ref us.virtRotAccumulationSamplesBuffer);
+            GetSampleFromBuffer(ref us.addVirtRotAccumulationSamples, ref us.addVirtRotAccumulationSamplesBuffer);
             GetSampleFromBuffer(ref us.realRotSamples, ref us.realRotSamplesBuffer);
             GetSampleFromBuffer(ref us.virtRotSamples, ref us.virtRotSamplesBuffer);
             // -----------------------------------------------------------------------

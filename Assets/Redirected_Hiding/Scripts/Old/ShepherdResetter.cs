@@ -39,7 +39,7 @@ namespace RD_Hiding
 
         public override void InitializeReset()
         {
-            Debug.Log("Initalize Reset.");
+            //Debug.Log("Initalize Reset.");
             //spawnShepherd();
         }
 
@@ -54,7 +54,7 @@ namespace RD_Hiding
 
         public override void EndReset()
         {
-            Debug.Log("End Reset.");
+            //Debug.Log("End Reset.");
             DestroyHUD();
             Destroy(shepGO);
         }
