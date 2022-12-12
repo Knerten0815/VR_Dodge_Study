@@ -94,6 +94,8 @@ namespace Dodge_Study
                     config.EndExperiment(0);
 
                 currentCondition = null;
+
+                PositioningManager.Instance.checkPositioning = true;
             }
         }
 

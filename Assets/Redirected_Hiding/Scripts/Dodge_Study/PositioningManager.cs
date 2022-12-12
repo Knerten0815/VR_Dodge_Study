@@ -16,16 +16,19 @@ namespace Dodge_Study
         public RedirectionManager rm;
 
         [SerializeField] Camera cam;
-        [SerializeField] GameObject LookAtTarget;
+        [SerializeField] GameObject LookAtTarget, Crosshair;
         [SerializeField] MeshRenderer targetRndr;
+        [SerializeField] MeshRenderer[] bootRndrs;
         [SerializeField] Material hitMat, noHitMat;
         [SerializeField] Image loadCircle;
-        [SerializeField] TMP_Text txt;
+        [SerializeField] TMP_Text countdown, command;
         [SerializeField] float secondsToStareAtTarget;
+        [SerializeField] Light positioningLight;
+        [SerializeField] Color incorrect, correct;
 
         private Transform userTrans, lookDirTrans;
         private InputDevice device;
-        public bool checkPositioning;
+        public bool checkPositioning, userIsReady;
         private bool isPositioned, isDirected;
         private Coroutine loadRoutine;
 
@@ -54,10 +57,17 @@ namespace Dodge_Study
         private void Update()
         {
             LookAtTarget.SetActive(checkPositioning);
+            positioningLight.gameObject.SetActive(checkPositioning);
+            Crosshair.SetActive(checkPositioning);
 
             if (checkPositioning)
             {
-                
+                Vector3 commandPosition = LookAtTarget.transform.position;
+                commandPosition.y = command.transform.position.y;
+                command.transform.position = commandPosition;
+                command.transform.rotation = LookAtTarget.transform.rotation;
+                command.text = "Stell dich in die Mitte und schau auf die Zielscheibe.";
+
                 // boiler plate for getting the lookAt-ray. Redirected walking is a mess.
                 Quaternion deviceRot;
                 device.TryGetFeatureValue(CommonUsages.deviceRotation, out deviceRot);
@@ -66,33 +76,16 @@ namespace Dodge_Study
                 lookDirTrans.rotation = Quaternion.Euler(deviceRot.eulerAngles.x, userTrans.eulerAngles.y, userTrans.eulerAngles.z);
                 Ray r = new Ray(userTrans.position, lookDirTrans.TransformDirection(Vector3.forward));
 
-
                 RaycastHit hitInfo;
                 if (Physics.Raycast(r, out hitInfo) && hitInfo.collider.tag == "Target")
                 {
                     isDirected = true;
-                    if (loadRoutine == null)
-                    {
-                        Debug.Log("starting Coroutine");
-
-                        targetRndr.material = hitMat;
-                        loadRoutine = StartCoroutine(loadingCircle());
-                    }
+                    targetRndr.material = hitMat;
                 }
                 else
                 {
                     isDirected = false;
-                    if (loadRoutine != null)
-                    {
-                        Debug.Log("stopping Coroutine");
-
-                        targetRndr.material = noHitMat;
-                        StopAllCoroutines();
-                        loadRoutine = null;
-
-                        loadCircle.fillAmount = 0;
-                        txt.gameObject.SetActive(false);
-                    }
+                    targetRndr.material = noHitMat;
                 }
 
                 /*// test ray
@@ -102,18 +95,35 @@ namespace Dodge_Study
                 lookDirTrans.position = r.origin + r.direction;
                 lookDirTrans.rotation = deviceRot;*/
 
-
                 float distance = Utilities.FlattenedPos2D(userTrans.position - centerTrans.position).magnitude;
-                if (Mathf.Abs(distance) < 0.1f)
+                if (Mathf.Abs(distance) < 0.2f)
+                {
+                    positioningLight.color = correct;
+                    foreach(MeshRenderer rndr in bootRndrs)
+                        rndr.material = hitMat;
                     isPositioned = true;
+                }
                 else
+                {
+                    foreach (MeshRenderer rndr in bootRndrs)
+                        rndr.material = noHitMat;
+                    positioningLight.color = incorrect;
                     isPositioned = false;
+                }
 
-
-                if (Physics.Raycast(userTrans.position, userTrans.TransformDirection(Vector3.forward)))
-                    isDirected = true;
+                if (isDirected && isPositioned)
+                {
+                    if(loadRoutine == null)
+                        loadRoutine = StartCoroutine(stayDirected());
+                }
                 else
-                    isDirected = false;
+                {
+                    StopAllCoroutines();
+                    loadRoutine = null;
+
+                    loadCircle.fillAmount = 0;
+                    loadCircle.gameObject.SetActive(false);
+                }
             }
         }
 
@@ -125,6 +135,7 @@ namespace Dodge_Study
             
             lookDirTrans = new GameObject().transform;
             userTrans = cam.transform;
+            command.text = "Stell dich in die Mitte und schau auf die Zielscheibe.";
 
             var hmdDevices = new List<InputDevice>();
             InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.HeadMounted, hmdDevices);
@@ -136,27 +147,19 @@ namespace Dodge_Study
             }
         }
 
-        IEnumerator loadingCircle()
+        IEnumerator stayDirected()
         {
             loadCircle.fillAmount = 0;
-            txt.gameObject.SetActive(true);
+            loadCircle.gameObject.SetActive(true);
 
             float thirdOfLoadTime = secondsToStareAtTarget / 3;
             float timer = 0;
             int countDown = 3;
 
-            Debug.Log("ThirdOfloadTime = " + thirdOfLoadTime);
-
-            while (isDirected && countDown > 0)
+            while (isDirected && isPositioned &&  countDown > 0)
             {
-                
-                Debug.Log("FillAmount = " + loadCircle.fillAmount);
-                Debug.Log("Countdown = " + countDown);
-                
-                loadCircle.fillAmount += secondsToStareAtTarget / Time.deltaTime;
+                loadCircle.fillAmount += Time.deltaTime / secondsToStareAtTarget;
                 timer += Time.deltaTime;
-                Debug.Log("Timer = " + timer);
-
 
                 if (timer >= thirdOfLoadTime)
                 {
@@ -164,17 +167,17 @@ namespace Dodge_Study
                     countDown--;
                 }
 
-                txt.text = countDown.ToString();
-                Debug.Log("isDirected = " + isDirected);
-                Debug.Log("while = " + (isDirected && countDown > 0));
+                countdown.text = countDown.ToString();
                 yield return new WaitForEndOfFrame();
             }
 
-            Debug.Log("Countdown = " + countDown);
-
             loadCircle.fillAmount = 0;
-            txt.gameObject.SetActive(false);
+            loadCircle.gameObject.SetActive(false);
+            checkPositioning = false;
+            ExperimentManager.Instance.StartTrial();
+            command.text = "Weich aus!";
             yield return null;
+
         }
 
         public void showCenter(bool showCenter)
