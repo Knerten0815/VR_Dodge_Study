@@ -177,7 +177,6 @@ namespace Dodge_Study
             ExperimentManager.Instance.StartTrial();
             command.text = "Weich aus!";
             yield return null;
-
         }
 
         public void showCenter(bool showCenter)

@@ -396,9 +396,9 @@ public class MovementManager : MonoBehaviour {
         // ESSENTIAL BUG FOUND: If you set the user first and then the redirection recipient, then the user will be moved, so you have to make sure to do it afterwards!
         //Debug.Log("Target User Position: " + setup.initialConfiguration.initialPosition.ToString("f4"));
 
-        redirectionManager.headTransform.position = Utilities.UnFlatten(initialConfiguration.initialPosition, redirectionManager.headTransform.position.y);
+        //redirectionManager.headTransform.position = Utilities.UnFlatten(initialConfiguration.initialPosition, redirectionManager.headTransform.position.y);
         //Debug.Log("Result User Position: " + redirectionManager.userHeadTransform.transform.position.ToString("f4"));
-        redirectionManager.headTransform.rotation = Quaternion.LookRotation(Utilities.UnFlatten(initialConfiguration.initialForward), Vector3.up);
+        //redirectionManager.headTransform.rotation = Quaternion.LookRotation(Utilities.UnFlatten(initialConfiguration.initialForward), Vector3.up);
 
         redirectionManager.Initialize();//initialize when restart a experiment 
         
