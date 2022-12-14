@@ -8,6 +8,7 @@ TagManager:
   - AvatarNetworkingTransform
   - NetworkingTransform
   - Target
+  - Goal
   layers:
   - Default
   - TransparentFX

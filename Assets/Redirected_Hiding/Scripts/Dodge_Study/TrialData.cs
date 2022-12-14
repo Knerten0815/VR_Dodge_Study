@@ -5,10 +5,10 @@ namespace Dodge_Study
     public class TrialData
     {
         // Variables and their possible values. Adjust them here and only here.
-        public enum Form { Sphere, MorningStar, Particles, Car }
-        public static float[] sizes = new float[] { 1f, 1.2f };
+        public enum Form { Sphere, MorningStar, Cylinder, Car }
+        public static float[] sizes = new float[] { 0.5f, 0.8f };
         public static float[] speeds = new float[] { 10, 15, 30 };
-        public static float[] angles = new float[] { 51, 34, 17, 0, -17, -34, -51 };          
+        public static float[] angles = new float[] { 36, 24, 12, 0, -12, -24, -36 };
 
         /// <summary>
         /// Indexed with 0. Values:

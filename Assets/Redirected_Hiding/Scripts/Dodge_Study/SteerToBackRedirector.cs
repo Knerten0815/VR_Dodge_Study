@@ -16,7 +16,7 @@ namespace Dodge_Study
         public override void PickRedirectionTarget()
         {
             //Vector3 trackingAreaPosition = Utilities.FlattenedPos3D(redirectionManager.trackingSpace.position);
-            Vector3 userToTarget = Vector3.back - redirectionManager.currPos;
+            Vector3 userToTarget = PositioningManager.Instance.backPosTrans.position - redirectionManager.currPos;
 
             //Compute steering target for S2B
             float unsignedAngleToTarget = Vector3.Angle(userToTarget, redirectionManager.currDir);//unsigned angle
@@ -36,7 +36,7 @@ namespace Dodge_Study
             }
             else
             {
-                currentTarget.position = Vector3.back;
+                currentTarget = PositioningManager.Instance.backPosTrans;
                 if (!noTmpTarget)
                 {
                     Destroy(tmpTarget);

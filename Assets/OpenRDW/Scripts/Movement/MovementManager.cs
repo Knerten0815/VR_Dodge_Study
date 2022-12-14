@@ -391,8 +391,8 @@ public class MovementManager : MonoBehaviour {
         redirectionManager.targetWaypoint.gameObject.SetActive(true);
 
         // Resetting User and World Positions and Orientations
-        transform.position = Vector3.zero;
-        transform.rotation = Quaternion.identity;
+        //transform.position = Vector3.zero;
+        //transform.rotation = Quaternion.identity;
         // ESSENTIAL BUG FOUND: If you set the user first and then the redirection recipient, then the user will be moved, so you have to make sure to do it afterwards!
         //Debug.Log("Target User Position: " + setup.initialConfiguration.initialPosition.ToString("f4"));
 
@@ -468,7 +468,7 @@ public class MovementManager : MonoBehaviour {
     //visualization relative, update other avatar representations...
     public void UpdateVisualizations() {
         //update avatar
-        headFollower.UpdateManually();
+        //headFollower.UpdateManually();
         //update trail   
         redirectionManager.trailDrawer.UpdateManually();
         for (int i = 0; i < otherAvatarRepresentations.Count; i++) {            

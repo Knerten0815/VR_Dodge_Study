@@ -346,7 +346,7 @@ public class GlobalConfiguration : MonoBehaviour
         if (testOnlySomeTrials)     // ----------------------------------------------------------------- added --------------------------------
             trialsForCurrentExperiment = trialsForRepeating;
         else
-            trialsForCurrentExperiment = Dodge_Study.ExperimentManager.Instance.untestedConditions.Count;
+            trialsForCurrentExperiment = Dodge_Study.ExperimentManager.Instance.conditionCount;
         
         //pre-defined procedurally generated paths, ensure the same in every trial
         float sumOfDistances, sumOfRotations;

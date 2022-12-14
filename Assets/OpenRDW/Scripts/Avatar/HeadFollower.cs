@@ -46,13 +46,19 @@ public class HeadFollower : MonoBehaviour {
     void Start () {
         prePos = transform.position;
     }
-	
+
+    private void Update()   // ------------------------------------------ added ----------------------------------
+    {
+        //UpdateManually();
+    }
+
     public void UpdateManually() {
-        transform.position = redirectionManager.currPos;        
+        transform.position = redirectionManager.currPos;
         if (redirectionManager.currDir != Vector3.zero)
             transform.rotation = Quaternion.LookRotation(redirectionManager.currDir, Vector3.up);
 
         prePos = transform.position;
+        Debug.Log(prePos);
     }    
 
     //change the color of the avatar

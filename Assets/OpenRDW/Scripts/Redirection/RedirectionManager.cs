@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class RedirectionManager : MonoBehaviour {
     public static readonly float MaxSamePosTime = 50;//the max time(in seconds) the avatar can stand on the same position, exceeds this value will make data invalid (stuck in one place)
 
-    public enum RedirectorChoice { None, S2C, S2O, Zigzag, ThomasAPF, MessingerAPF, DynamicAPF, DeepLearning, PassiveHapticAPF, Shepherd, ShepherdAPF };
+    public enum RedirectorChoice { None, S2C, S2O, Zigzag, ThomasAPF, MessingerAPF, DynamicAPF, DeepLearning, PassiveHapticAPF, Shepherd, ShepherdAPF, S2B };
     public enum ResetterChoice { None, TwoOneTurn, APF, Shepherd, ShepherdAPF };
 
 
@@ -149,6 +149,8 @@ public class RedirectionManager : MonoBehaviour {
                 return typeof(RD_Hiding.ShepherdRedirector);
             case RedirectorChoice.ShepherdAPF:
                 return typeof(RD_Hiding.ShepherdAPFRedirector);
+            case RedirectorChoice.S2B:
+                return typeof(Dodge_Study.SteerToBackRedirector);
         }
         return typeof(NullRedirector);
     }
@@ -176,6 +178,8 @@ public class RedirectionManager : MonoBehaviour {
             return RedirectorChoice.Shepherd;
         else if (redirector.Equals(typeof(RD_Hiding.ShepherdAPFRedirector)))
             return RedirectorChoice.ShepherdAPF;
+        else if (redirector.Equals(typeof(Dodge_Study.SteerToBackRedirector)))
+            return RedirectorChoice.S2B;
         return RedirectorChoice.None;
     }
     public static System.Type DecodeRedirector(string s)
@@ -204,6 +208,8 @@ public class RedirectionManager : MonoBehaviour {
                 return typeof(RD_Hiding.ShepherdRedirector);
             case "shepherdapf":
                 return typeof(RD_Hiding.ShepherdAPFRedirector);
+            case "s2b":
+                return typeof(Dodge_Study.SteerToBackRedirector);
             default:
                 return typeof(NullRedirector);
         }

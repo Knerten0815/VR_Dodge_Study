@@ -12,7 +12,7 @@ namespace Dodge_Study
         public List<Vector2> boundaryPoints;
         public Vector2 boundaryCenter;
         public float centerMargin;
-        public Transform centerTrans;
+        public Transform centerTrans, backPosTrans;
         public RedirectionManager rm;
 
         [SerializeField] Camera cam;
@@ -66,7 +66,7 @@ namespace Dodge_Study
                 commandPosition.y = command.transform.position.y;
                 command.transform.position = commandPosition;
                 command.transform.rotation = LookAtTarget.transform.rotation;
-                command.text = "Stell dich in die Mitte und schau auf die Zielscheibe.";
+                command.text = "Stell dich ins Licht und schau auf die Zielscheibe.";
 
                 // boiler plate for getting the lookAt-ray. Redirected walking is a mess.
                 Quaternion deviceRot;
@@ -96,7 +96,7 @@ namespace Dodge_Study
                 lookDirTrans.rotation = deviceRot;*/
 
                 float distance = Utilities.FlattenedPos2D(userTrans.position - centerTrans.position).magnitude;
-                if (Mathf.Abs(distance) < 0.2f)
+                if (Mathf.Abs(distance) < 0.15f)
                 {
                     positioningLight.color = correct;
                     foreach(MeshRenderer rndr in bootRndrs)
@@ -135,7 +135,7 @@ namespace Dodge_Study
             
             lookDirTrans = new GameObject().transform;
             userTrans = cam.transform;
-            command.text = "Stell dich in die Mitte und schau auf die Zielscheibe.";
+            command.text = "Stell dich ins Licht und schau auf die Zielscheibe.";
 
             var hmdDevices = new List<InputDevice>();
             InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.HeadMounted, hmdDevices);

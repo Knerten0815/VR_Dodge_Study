@@ -113,11 +113,14 @@ public class StatisticsLogger : MonoBehaviour {
         public List<float> realRotAccumulationSamples = new List<float>();                                // see above. But for real rotation, instead of virtual rotation
         public List<Vector3> realRotSamples = new List<Vector3>();                                        // logging the actual rotations
         public List<Vector3> virtRotSamples = new List<Vector3>();                                        // logging the virtual rotations
+        public List<Vector2> relativeVirtualPositionSamples = new List<Vector2>();
         // --------------------------- Buffers ----------------------
         public List<float> addVirtRotAccumulationSamplesBuffer = new List<float>();
         public List<float> realRotAccumulationSamplesBuffer = new List<float>();
         public List<Vector3> realRotSamplesBuffer = new List<Vector3>();
-        public List<Vector3> virtRotSamplesBuffer = new List<Vector3>();
+        public List<Vector3> virtRotSamplesBuffer = new List<Vector3>();        
+        public List<Vector2> relativeVirtualPositionSamplesBuffer = new List<Vector2>();
+        public Vector2 boundaryCenterAtStart;
         // also sumOfInjectedRotationFromRotationGain //-done
         // => Rotation der virtuellen Welt nach Repositionierung der Versuchsperson, relativ zur Rotation der virtuellen Welt zu Beginn eines Ausweichmanövers
         // -------------------------------------------------------------------------------------------- VR-Dodge-Study parameters ------------------------------------------------------------------------------------
@@ -242,6 +245,8 @@ public class StatisticsLogger : MonoBehaviour {
             realRotAccumulationSamplesBuffer = new List<float>();
             realRotSamplesBuffer = new List<Vector3>();
             virtRotSamplesBuffer = new List<Vector3>();
+            relativeVirtualPositionSamplesBuffer = new List<Vector2>();
+            boundaryCenterAtStart = Utilities.FlattenedPos2D(Dodge_Study.PositioningManager.Instance.centerTrans.position);
         // --------------------------- VR-Dodge-Study ----------------------------------
     }
     }
@@ -439,6 +444,7 @@ public class StatisticsLogger : MonoBehaviour {
             //---------------- VR-Dodge-Study ----------------------------------
             oneDimensionalSample.Add("real_rotation_accumulation", us.realRotAccumulationSamples);
             oneDimensionalSample.Add("additional_virtual_rotation_accumulation", us.addVirtRotAccumulationSamples);
+            twoDimensionalSample.Add("relative_virt_position", us.relativeVirtualPositionSamples);
 
             threeDimensionalSample.Add("real_rotation", us.realRotSamples);
             threeDimensionalSample.Add("virtual_rotation", us.virtRotSamples);
@@ -656,7 +662,8 @@ public class StatisticsLogger : MonoBehaviour {
                 us.realPosAtMaxDistanceToCenter = rm.currPosReal;
                 us.virtPosAtMaxDistanceToCenter = rm.currPos;
             }
-            
+
+            us.relativeVirtualPositionSamplesBuffer.Add(Utilities.FlattenedPos2D(rm.currPos)-us.boundaryCenterAtStart);
             us.realRotSamplesBuffer.Add(rm.currDirReal);
             us.virtRotSamplesBuffer.Add(rm.currDir);
             // ----------------------------------------------------------------------
@@ -681,6 +688,7 @@ public class StatisticsLogger : MonoBehaviour {
             GetSampleFromBuffer(ref us.distanceToCenterSamples, ref us.distanceToCenterSamplesBuffer);
 
             // ------------------- VR-Dodge-Study ------------------------------------
+            GetSampleFromBuffer(ref us.relativeVirtualPositionSamples, ref us.relativeVirtualPositionSamplesBuffer);
             GetSampleFromBuffer(ref us.realRotAccumulationSamples, ref us.realRotAccumulationSamplesBuffer);
             GetSampleFromBuffer(ref us.addVirtRotAccumulationSamples, ref us.addVirtRotAccumulationSamplesBuffer);
             GetSampleFromBuffer(ref us.realRotSamples, ref us.realRotSamplesBuffer);
@@ -989,11 +997,12 @@ public class StatisticsLogger : MonoBehaviour {
         //set background to transparent
         Utilities.SetTextureToSingleColor(texVirtualPathGraph, Color.clear);
 
-        var virtualPosList = Dodge_Study.ExperimentManager.Instance.offSetGraphPoints(avatarStatistics.userVirtualPositionSamples);
+        var virtualPosList = avatarStatistics.relativeVirtualPositionSamples;//Dodge_Study.ExperimentManager.Instance.offSetVirtualGraphPoints(avatarStatistics.userVirtualPositionSamples);
         var deltaWeight = (1 - pathStartAlpha) / virtualPosList.Count;
 
         for (int i = 0; i < virtualPosList.Count - 1; i++)
         {
+            //virtualPosList[i] -= (Dodge_Study.PositioningManager.Instance.boundaryCenter + avatarStatistics.userVirtualPositionSamples[0]);    // offset virtual world center
             var w = (pathStartAlpha + deltaWeight * i);
             var startColor = graphColor;
             startColor.a = w;
