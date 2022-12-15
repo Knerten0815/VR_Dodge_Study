@@ -21,11 +21,12 @@ namespace Dodge_Study
             Vector3 pos;
             hmd.TryGetFeatureValue(CommonUsages.centerEyePosition, out pos);
             pos.y = height;
-            transform.position = pos;
+            pos.z -= 0.0481f;
+            transform.localPosition = pos;
 
             Quaternion rot;
             hmd.TryGetFeatureValue(CommonUsages.centerEyeRotation, out rot);
-            transform.rotation = Quaternion.Euler(0, rot.eulerAngles.y, 0);
+            transform.localRotation = Quaternion.Euler(0, rot.eulerAngles.y, 0);
         }
     }
 }

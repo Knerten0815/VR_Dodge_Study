@@ -26,6 +26,7 @@ namespace Dodge_Study
         [SerializeField] Light positioningLight;
         [SerializeField] Color incorrect, correct;
         [SerializeField] float positioningTolerance = 0.1f;
+        [SerializeField] GameObject trialBoots, nonTrialBoots;
 
         private Transform userTrans, lookDirTrans;
         private InputDevice device;
@@ -76,6 +77,8 @@ namespace Dodge_Study
             LookAtTarget.SetActive(checkPositioning);
             positioningLight.gameObject.SetActive(checkPositioning);
             Crosshair.SetActive(checkPositioning);
+            nonTrialBoots.SetActive(checkPositioning);
+            trialBoots.SetActive(!checkPositioning);
 
             if (checkPositioning)
             {

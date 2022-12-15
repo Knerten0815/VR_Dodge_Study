@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace Dodge_Study
+﻿namespace Dodge_Study
 {
     public class TrialData
     {

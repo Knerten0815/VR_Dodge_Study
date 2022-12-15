@@ -1227,7 +1227,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 226333596}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &199032802
 GameObject:
@@ -2278,7 +2278,7 @@ MonoBehaviour:
   RESET_TRIGGER_BUFFER: 0.1
   simulatedTime: 0
   targetFPS: 50
-  testOnlySomeTrials: 1
+  testOnlySomeTrials: 0
   trialsForRepeating: 15
   experimentIterator: 0
   experimentSetupsListIterator: 0
@@ -2434,7 +2434,7 @@ Transform:
   m_Children:
   - {fileID: 226341600}
   m_Father: {fileID: 226333596}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &226266040
 Transform:
@@ -2536,6 +2536,7 @@ Transform:
   - {fileID: 292870306}
   - {fileID: 527117916}
   - {fileID: 3493632465802571390}
+  - {fileID: 1912727328}
   m_Father: {fileID: 226333596}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2554,7 +2555,6 @@ Transform:
   - {fileID: 226325526}
   - {fileID: 226266040}
   - {fileID: 118615939}
-  - {fileID: 1912727328}
   - {fileID: 226263884}
   - {fileID: 1164335304}
   - {fileID: 198351079}
@@ -9186,7 +9186,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 483e807336683d34c9c4f4fcd64d458b, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.899
+  m_Volume: 0.6
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -9196,7 +9196,7 @@ AudioSource:
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
-  Pan2D: -0.4
+  Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
   BypassListenerEffects: 0
@@ -9427,7 +9427,7 @@ Transform:
   m_Children:
   - {fileID: 1496115740}
   m_Father: {fileID: 226333596}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1178693194
 GameObject:
@@ -13979,7 +13979,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 226333596}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1763036931
 GameObject:
@@ -15237,7 +15237,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 226333596}
+    m_TransformParent: {fileID: 226325526}
     m_Modifications:
     - target: {fileID: 930441675980919259, guid: dfae282c19bc12147b04d971873fa7e9,
         type: 3}
@@ -15267,17 +15267,17 @@ PrefabInstance:
     - target: {fileID: 6376069075609451719, guid: dfae282c19bc12147b04d971873fa7e9,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6376069075609451719, guid: dfae282c19bc12147b04d971873fa7e9,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6376069075609451719, guid: dfae282c19bc12147b04d971873fa7e9,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6376069075609451719, guid: dfae282c19bc12147b04d971873fa7e9,
         type: 3}
@@ -15287,7 +15287,7 @@ PrefabInstance:
     - target: {fileID: 6376069075609451719, guid: dfae282c19bc12147b04d971873fa7e9,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6376069075609451719, guid: dfae282c19bc12147b04d971873fa7e9,
         type: 3}
@@ -16231,6 +16231,8 @@ MonoBehaviour:
   incorrect: {r: 1, g: 1, b: 1, a: 1}
   correct: {r: 0, g: 1, b: 0, a: 1}
   positioningTolerance: 0.08
+  trialBoots: {fileID: 226060826}
+  nonTrialBoots: {fileID: 1912727329}
   checkPositioning: 1
   userIsReady: 0
 --- !u!4 &2113796605
