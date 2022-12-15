@@ -265,6 +265,16 @@ namespace Dodge_Study
             Utilities.ExportTexture2dToPng(filePath, texBoundary);
         }
 
+        public string Vec2ToString(Vector2 vec2)
+        {
+            return "" + vec2.x + ", " + vec2.y;
+        }
+
+        public string Vec3ToString(Vector3 vec3)
+        {
+            return "" + vec3.x + ", " + vec3.y + ", " + vec3.z;
+        }
+
         #region unused sample saving code
         /*
         public void SaveSamplesForLogging(int trialIteration, List<Dictionary<string, List<float>>> oneDimensionalSamplesMaps, List<Dictionary<string, List<Vector2>>> twoDimensionalSamplesMaps)

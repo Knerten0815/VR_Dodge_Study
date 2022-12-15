@@ -377,8 +377,8 @@ public class StatisticsLogger : MonoBehaviour {
             er["injected_rotation_from_curvature_gain_average"] = GetAverage(us.injectedRotationFromCurvatureGainSamples).ToString();
             er["injected_rotation_average"] = GetAverage(us.injectedRotationSamples).ToString();
 
-            er["real_position_average"] = GetAverage(us.userRealPositionSamples).ToString();
-            er["virtual_position_average"] = GetAverage(us.userVirtualPositionSamples).ToString();
+            er["real_position_average"] = Dodge_Study.ExperimentManager.Instance.Vec2ToString(GetAverage(us.userRealPositionSamples));
+            er["virtual_position_average"] = Dodge_Study.ExperimentManager.Instance.Vec2ToString(GetAverage(us.userVirtualPositionSamples));
             er["distance_to_boundary_average"] = GetAverage(us.distanceToNearestBoundarySamples).ToString();
             er["distance_to_center_average"] = GetAverage(us.distanceToCenterSamples).ToString();
 
@@ -390,16 +390,16 @@ public class StatisticsLogger : MonoBehaviour {
             er["max_yaw_real"] = us.maxYawReal.ToString();
             er["max_yaw_virt"] = us.maxYawVirtual.ToString();
             er["max_distance_to_center"] = us.maxDistanceToCenter.ToString();
-            er["real_pos_at_max_dist"] = us.realPosAtMaxDistanceToCenter.ToString();
-            er["virt_pos_at_max_dist"] = us.virtPosAtMaxDistanceToCenter.ToString();
-            er["real_rot_at_real_yaw"] = us.realRotAtMaxRealYaw.ToString();
-            er["virt_rot_at_real_yaw"] = us.virtRotAtMaxRealYaw.ToString();
-            er["real_rot_at_virt_yaw"] = us.realRotAtMaxVirtYaw.ToString();
-            er["virt_rot_at_virt_yaw"] = us.virtRotAtMaxVirtYaw.ToString();
-            er["real_pos_at_real_yaw"] = us.realPosAtMaxRealYaw.ToString();
-            er["virt_pos_at_real_yaw"] = us.virtPosAtMaxRealYaw.ToString();
-            er["real_pos_at_virt_yaw"] = us.realPosAtMaxVirtYaw.ToString();
-            er["virt_pos_at_virt_yaw"] = us.virtPosAtMaxVirtYaw.ToString();
+            er["real_pos_at_max_dist"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(us.realPosAtMaxDistanceToCenter);
+            er["virt_pos_at_max_dist"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(us.virtPosAtMaxDistanceToCenter);
+            er["real_rot_at_real_yaw"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(us.realRotAtMaxRealYaw);
+            er["virt_rot_at_real_yaw"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(us.virtRotAtMaxRealYaw);
+            er["real_rot_at_virt_yaw"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(us.realRotAtMaxVirtYaw);
+            er["virt_rot_at_virt_yaw"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(us.virtRotAtMaxVirtYaw);
+            er["real_pos_at_real_yaw"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(us.realPosAtMaxRealYaw);
+            er["virt_pos_at_real_yaw"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(us.virtPosAtMaxRealYaw);
+            er["real_pos_at_virt_yaw"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(us.realPosAtMaxVirtYaw);
+            er["virt_pos_at_virt_yaw"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(us.virtPosAtMaxVirtYaw);
             // --------------------------------------------------------------------------------------
 
             //if passive haptics mode

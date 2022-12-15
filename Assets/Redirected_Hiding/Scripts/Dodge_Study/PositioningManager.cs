@@ -25,6 +25,7 @@ namespace Dodge_Study
         [SerializeField] float secondsToStareAtTarget;
         [SerializeField] Light positioningLight;
         [SerializeField] Color incorrect, correct;
+        [SerializeField] float positioningTolerance = 0.1f;
 
         private Transform userTrans, lookDirTrans;
         private InputDevice device;
@@ -52,6 +53,22 @@ namespace Dodge_Study
             else
                 OVRManager.instance.trackingOriginType = OVRManager.TrackingOrigin.FloorLevel;
 #endif
+        }
+
+        private void Start()
+        {
+            boundaryPoints = TrackingSpaceGenerator.GetTrackingSpace(out boundaryCenter, out centerMargin);
+            centerTrans.localPosition = new Vector3(boundaryCenter.x, 0, boundaryCenter.y);
+            Debug.Log("Boundary Center is at " + boundaryCenter.x + ", " + boundaryCenter.y);
+
+            lookDirTrans = new GameObject().transform;
+            userTrans = cam.transform;
+            command.text = "Stell dich ins Licht und schau auf die Zielscheibe.";
+
+            var hmdDevices = new List<InputDevice>();
+            InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.HeadMounted, hmdDevices);
+            foreach (var d in hmdDevices)
+                device = d;
         }
 
         private void Update()
@@ -96,7 +113,7 @@ namespace Dodge_Study
                 lookDirTrans.rotation = deviceRot;*/
 
                 float distance = Utilities.FlattenedPos2D(userTrans.position - centerTrans.position).magnitude;
-                if (Mathf.Abs(distance) < 0.15f)
+                if (Mathf.Abs(distance) < positioningTolerance)
                 {
                     positioningLight.color = correct;
                     foreach(MeshRenderer rndr in bootRndrs)
@@ -124,26 +141,6 @@ namespace Dodge_Study
                     loadCircle.fillAmount = 0;
                     loadCircle.gameObject.SetActive(false);
                 }
-            }
-        }
-
-        private void Start()
-        {
-            boundaryPoints = TrackingSpaceGenerator.GetTrackingSpace(out boundaryCenter, out centerMargin);
-            centerTrans.localPosition = new Vector3(boundaryCenter.x, 0, boundaryCenter.y);
-            Debug.Log("Boundary Center is at " + boundaryCenter.x + ", " + boundaryCenter.y);
-            
-            lookDirTrans = new GameObject().transform;
-            userTrans = cam.transform;
-            command.text = "Stell dich ins Licht und schau auf die Zielscheibe.";
-
-            var hmdDevices = new List<InputDevice>();
-            InputDevices.GetDevicesWithCharacteristics(InputDeviceCharacteristics.HeadMounted, hmdDevices);
-
-            foreach (var d in hmdDevices)
-            {
-                device = d;
-                Debug.Log("Found device.");
             }
         }
 

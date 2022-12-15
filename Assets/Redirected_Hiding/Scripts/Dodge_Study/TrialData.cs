@@ -6,9 +6,9 @@ namespace Dodge_Study
     {
         // Variables and their possible values. Adjust them here and only here.
         public enum Form { Sphere, MorningStar, Cylinder, Car }
-        public static float[] sizes = new float[] { 0.4f, 0.9f };
+        public static float[] sizes = new float[] { 0.4f, 1f };
         public static float[] speeds = new float[] { 18, 24, 30 };
-        public static float[] angles = new float[] { 41, 27, 14, 0, -14, -27, -41 };
+        public static float[] angles = new float[] { 40, 27, 13, 0, -13, -27, -40 };
 
         /// <summary>
         /// Indexed with 0. Values:
@@ -72,45 +72,5 @@ namespace Dodge_Study
         public float GetSize() { return sizes[sizeIndex]; }
         public float GetSpeed() { return speeds[speedIndex]; }
         public float GetAngle() { return angles[angleIndex]; }
-
-        /* probably not needed
-         * 
-        
-        
-        public enum Variable { Form, Size, Speed, Angle }
-
-        public float GetFloatVariable(Variable variable)
-        {
-            switch (variable)
-            {
-                case Variable.Size:
-                    return sizes[sizeIndex];
-
-                case Variable.Speed:
-                    return speeds[speedIndex];
-
-                case Variable.Angle:
-                    return angles[angleIndex];
-
-                default:
-                    return -1;
-            }
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="indices">Variable indices: 0 = form; 1 = size; 2 = speed; 3 = angle </param>
-        public ExperimentCondition(int[] indices)
-        {
-            if(indices.Length != 4)
-                throw new System.Exception("An experiment condition needs 4 variables. You are trying to construct it with the wrong array length.");
-
-            formIndex = indices[0];
-            sizeIndex = indices[1];
-            speedIndex = indices[2];
-            angleIndex = indices[3];
-        }
-         */
     }
 }
