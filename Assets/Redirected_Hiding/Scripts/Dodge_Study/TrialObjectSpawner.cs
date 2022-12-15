@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Dodge_Study
 {
@@ -13,12 +15,10 @@ namespace Dodge_Study
 
         private TrialObject currentCollisionObject = null;
         private Transform[] startPositions;
+        private GameObject[] loadInstances;
 
         private void Awake()
         {
-            foreach (GameObject go in formPrefabs)
-                Destroy(Instantiate(go));
-
             startPositions = new Transform[TrialData.angles.Length];
 
             for(int i = 0; i < TrialData.angles.Length; i++)
@@ -33,6 +33,23 @@ namespace Dodge_Study
                 startPositions[i].Rotate(new Vector3(0, TrialData.angles[i] + 180, 0));
                 startPositions[i].SetParent(boundaryCenter.transform);
             }
+        }
+
+        /// <summary>
+        /// load every prefab once, to avoid lag when spawning.
+        /// </summary>
+        private IEnumerator Start()
+        {
+            loadInstances = new GameObject[formPrefabs.Length];
+            for (int i = 0; i < loadInstances.Length; i++)
+            {
+                loadInstances[i] = Instantiate(formPrefabs[i]);
+            }
+
+            yield return null;
+
+            foreach (GameObject go in loadInstances)
+                Destroy(go);
         }
 
         public void spawnObject()

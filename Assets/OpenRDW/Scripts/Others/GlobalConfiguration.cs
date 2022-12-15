@@ -87,7 +87,7 @@ public class GlobalConfiguration : MonoBehaviour
 
     public bool testOnlySomeTrials;
     [Tooltip("Number of trails will be repeated, if testOnlySomeTrials is TRUE.")]
-    [Range(1, 10)]
+    [Range(1, 20)]
     public int trialsForRepeating;
 
     [HideInInspector]
@@ -1361,44 +1361,49 @@ public class GlobalConfiguration : MonoBehaviour
         // Log All Summary Statistics To File
         if (experimentIterator == experimentSetups.Count)
         {
-
-            GetResultDirAndFileName(statisticsLogger.SUMMARY_STATISTICS_DIRECTORY, out string resultDir, out string fileName);
-
-            Debug.Log(string.Format("Save data to resultDir:{0}, fileName:{1}", resultDir, fileName));
-            statisticsLogger.LogExperimentSummaryStatisticsResultsSCSV(resultDir, fileName);
-
-            //save images at the end
-            if (exportImage)
-            {
-                ExperimentManager.Instance.LogBoundaryPicture();
-
-                for (int i = 0; i < experimentSetups.Count; i++)
-                {
-                    Color realPathColor, virtualPathColor;
-                    realPathColor = ExperimentManager.Instance.pickGraphColors(out virtualPathColor);
-
-                    statisticsLogger.LogExperimentRealPathPictures(i, realPathColor, experimentSetups[i], ExperimentManager.Instance.savedStats[i]);
-                    if (ExperimentManager.Instance.useRedirection)
-                        statisticsLogger.LogExperimentVirtualPathPictures(i, virtualPathColor, experimentSetups[i], ExperimentManager.Instance.savedStats[i]);
-                }
-            }
-
-            //initialize experiment results 
-            statisticsLogger.InitializeExperimentResults();
-
-            experimentSetupsListIterator++;
-            if (experimentSetupsListIterator >= experimentSetupsList.Count)
-            {
-                Debug.Log("Last Experiment Complete, experimentSetups.Count == " + experimentSetups.Count);
-                experimentComplete = true;//all trials end
-            }
-            else
-            {//handle next experiment setup
-                experimentIterator = 0;
-                experimentSetups = experimentSetupsList[experimentSetupsListIterator];
-            }
+            LogEverythingAndEndExperiment();
         }
     }
+
+    public void LogEverythingAndEndExperiment()
+    {
+        GetResultDirAndFileName(statisticsLogger.SUMMARY_STATISTICS_DIRECTORY, out string resultDir, out string fileName);
+
+        Debug.Log(string.Format("Save data to resultDir:{0}, fileName:{1}", resultDir, fileName));
+        statisticsLogger.LogExperimentSummaryStatisticsResultsSCSV(resultDir, fileName);
+
+        //save images at the end
+        if (exportImage)
+        {
+            ExperimentManager.Instance.LogBoundaryPicture();
+
+            for (int i = 0; i < experimentSetups.Count; i++)
+            {
+                Color realPathColor, virtualPathColor;
+                realPathColor = ExperimentManager.Instance.pickGraphColors(out virtualPathColor);
+
+                statisticsLogger.LogExperimentRealPathPictures(i, realPathColor, experimentSetups[i], ExperimentManager.Instance.savedStats[i]);
+                if (ExperimentManager.Instance.useRedirection)
+                    statisticsLogger.LogExperimentVirtualPathPictures(i, virtualPathColor, experimentSetups[i], ExperimentManager.Instance.savedStats[i]);
+            }
+        }
+
+        //initialize experiment results 
+        statisticsLogger.InitializeExperimentResults();
+
+        experimentSetupsListIterator++;
+        if (experimentSetupsListIterator >= experimentSetupsList.Count)
+        {
+            Debug.Log("Last Experiment Complete, experimentSetups.Count == " + experimentSetups.Count);
+            experimentComplete = true;//all trials end
+        }
+        else
+        {//handle next experiment setup
+            experimentIterator = 0;
+            experimentSetups = experimentSetupsList[experimentSetupsListIterator];
+        }
+    }
+
     public void GetResultDirAndFileName(string defaultDir,out string resultDir,out string fileName) {
         resultDir = defaultDir;
         fileName = "Result";

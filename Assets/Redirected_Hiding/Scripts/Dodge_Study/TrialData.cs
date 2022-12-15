@@ -6,9 +6,9 @@ namespace Dodge_Study
     {
         // Variables and their possible values. Adjust them here and only here.
         public enum Form { Sphere, MorningStar, Cylinder, Car }
-        public static float[] sizes = new float[] { 0.5f, 0.8f };
-        public static float[] speeds = new float[] { 10, 15, 30 };
-        public static float[] angles = new float[] { 36, 24, 12, 0, -12, -24, -36 };
+        public static float[] sizes = new float[] { 0.4f, 0.9f };
+        public static float[] speeds = new float[] { 18, 24, 30 };
+        public static float[] angles = new float[] { 41, 27, 14, 0, -14, -27, -41 };
 
         /// <summary>
         /// Indexed with 0. Values:

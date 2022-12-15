@@ -68,41 +68,6 @@ namespace Dodge_Study
             }
         }
 
-        [ContextMenu("Start Trial")]
-        public void StartTrial()
-        {
-            if (!trialIsRunning)
-            {
-                config.PlayerIsReadyMenue();
-                trialIsRunning = true;
-                pickRandomCondition();
-                spawner.spawnObject();
-            }
-        }
-
-        [ContextMenu("End Trial")]
-        public void EndTrial()
-        {
-            if (trialIsRunning)
-            {
-                trialIsRunning = false;
-                Debug.Log("Ended Trial: " + currentCondition.TrialID);
-                
-                config.experimentSetups[config.experimentIterator].trialData = currentCondition;
-                
-                if (currentCondition.CollisionDetected)
-                    config.EndExperiment(2);
-                else
-                    config.EndExperiment(0);
-
-                currentCondition = null;
-
-                PositioningManager.Instance.checkPositioning = true;
-
-                progressBar.fillAmount = (conditionCount - untestedConditions.Count) / (float)conditionCount;
-            }
-        }
-
         private TrialData pickRandomCondition()
         {
             currentCondition = untestedConditions[rnd.Next(0, untestedConditions.Count)];
@@ -129,7 +94,50 @@ namespace Dodge_Study
             conditionCount = untestedConditions.Count;
             Debug.Log("Setup experiment with " + conditionCount + " conditions.");
         }
-        
+
+        #region context menu methods
+        [ContextMenu("Start Trial")]
+        public void StartTrial()
+        {
+            if (!trialIsRunning)
+            {
+                config.PlayerIsReadyMenue();
+                trialIsRunning = true;
+                pickRandomCondition();
+                spawner.spawnObject();
+            }
+        }
+
+        [ContextMenu("End Trial")]
+        public void EndTrial()
+        {
+            if (trialIsRunning)
+            {
+                trialIsRunning = false;
+                Debug.Log("Ended Trial: " + currentCondition.TrialID);
+
+                config.experimentSetups[config.experimentIterator].trialData = currentCondition;
+
+                if (currentCondition.CollisionDetected)
+                    config.EndExperiment(2);
+                else
+                    config.EndExperiment(0);
+
+                currentCondition = null;
+
+                PositioningManager.Instance.checkPositioning = true;
+
+                progressBar.fillAmount = (conditionCount - untestedConditions.Count) / (float)conditionCount;
+            }
+        }
+
+        [ContextMenu("- End Experiment -")]
+        public void EndExperiment()
+        {
+            config.LogEverythingAndEndExperiment();
+        }
+        #endregion
+
         //save results to local
         public void LogAllSamples(int trialIteration, List<Dictionary<string, List<float>>> oneDimensionalSamplesMaps, List<Dictionary<string, List<Vector2>>> twoDimensionalSamplesMaps, List<Dictionary<string, List<Vector3>>> threeDimensionalSamplesMaps)
         {
