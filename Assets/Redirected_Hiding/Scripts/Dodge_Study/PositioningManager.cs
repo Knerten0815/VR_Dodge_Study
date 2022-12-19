@@ -27,6 +27,8 @@ namespace Dodge_Study
         [SerializeField] Color incorrect, correct;
         [SerializeField] float positioningTolerance = 0.1f;
         [SerializeField] GameObject trialBoots, nonTrialBoots;
+        [SerializeField] GameObject WarningUI;
+        [SerializeField] TMP_Text warningUIMarginText, debugUIMarginText;
 
         private Transform userTrans, lookDirTrans;
         private InputDevice device;
@@ -58,9 +60,7 @@ namespace Dodge_Study
 
         private void Start()
         {
-            boundaryPoints = TrackingSpaceGenerator.GetTrackingSpace(out boundaryCenter, out centerMargin);
-            centerTrans.localPosition = new Vector3(boundaryCenter.x, 0, boundaryCenter.y);
-            Debug.Log("Boundary Center is at " + boundaryCenter.x + ", " + boundaryCenter.y);
+            SetTrackingSpaceAndCenter();
 
             lookDirTrans = new GameObject().transform;
             userTrans = cam.transform;
@@ -145,6 +145,28 @@ namespace Dodge_Study
                     loadCircle.gameObject.SetActive(false);
                 }
             }
+        }
+
+        /// <summary>
+        /// Called on Start and by DevToolUI button
+        /// </summary>
+        public void SetTrackingSpaceAndCenter()
+        {
+            boundaryPoints = TrackingSpaceGenerator.GetTrackingSpace(out boundaryCenter, out centerMargin);
+            centerTrans.localPosition = new Vector3(boundaryCenter.x, 0, boundaryCenter.y);
+            Debug.Log("Boundary Center is at " + boundaryCenter.x + ", " + boundaryCenter.y);
+            
+            if (centerMargin < 1)
+                WarningUI.SetActive(true);
+            else
+                WarningUI.SetActive(false);
+
+            warningUIMarginText.text = centerMargin.ToString();
+        }
+
+        public void StartExperimentByButtonPress()
+        {
+            checkPositioning = true;
         }
 
         IEnumerator stayDirected()

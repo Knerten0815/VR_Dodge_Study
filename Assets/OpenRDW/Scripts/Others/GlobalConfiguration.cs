@@ -1367,7 +1367,7 @@ public class GlobalConfiguration : MonoBehaviour
 
     public void LogEverythingAndEndExperiment()
     {
-        GetResultDirAndFileName(statisticsLogger.SUMMARY_STATISTICS_DIRECTORY, out string resultDir, out string fileName);
+        GetResultDirAndFileName(ExperimentManager.Instance.resultDirectory, out string resultDir, out string fileName);
 
         Debug.Log(string.Format("Save data to resultDir:{0}, fileName:{1}", resultDir, fileName));
         statisticsLogger.LogExperimentSummaryStatisticsResultsSCSV(resultDir, fileName);

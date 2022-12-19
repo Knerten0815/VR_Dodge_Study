@@ -1,67 +1,13 @@
-﻿using Dodge_Study;
-using System.Collections.Generic;
-using TMPro;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace RD_Hiding
+namespace Dodge_Study
 {
-    public class SingletonFoEveryton : MonoBehaviour
+    public class DebugVisuals : MonoBehaviour
     {
         public GameObject trackingSpaceRoot;
-        public GlobalConfiguration config;
-        public GameObject startUI;
-        public float distanceToActivateStartUI = 0.1f;
-        public RayToggler leftRayToggler, rightRayToggler;
-        
-        [SerializeField] bool ignoreWarning; 
-        [SerializeField] GameObject warningUI;
-        [SerializeField] float minArea, maxArea;
-        [SerializeField] TMP_Text areaWarning;
 
-        private bool firstStart = true;
-        private List<GameObject> debugVisuals = new List<GameObject>();
-
-        #region Singleton Setup
-        private static SingletonFoEveryton _instance;
-
-        public static SingletonFoEveryton Instance { get { return _instance; } }
-
-        private void Awake()
-        {
-            if (_instance != null && _instance != this)
-                Destroy(this);
-            else
-                _instance = this;
-        }
-        #endregion
-
-        void Start()
-        {
-            //check Tracking Space dimensions
-            if (!ignoreWarning)
-            {
-                float area = PositioningManager.Instance.centerMargin;
-                areaWarning.text = area.ToString("0.00");
-
-                if (area > maxArea || area < minArea)
-                {
-                    Debug.Log("TrackingSpace is too small. Opening Warning UI.");
-                    warningUI.SetActive(true);
-                }                    
-            }
-        }
-
-        private void Update()
-        {
-            if(config.movementController == GlobalConfiguration.MovementController.HMD && firstStart && Mathf.Abs(Camera.main.transform.position.x) < distanceToActivateStartUI && Mathf.Abs(Camera.main.transform.position.z) < distanceToActivateStartUI)
-            {
-                Debug.Log("Participant entered start location: Opening Start Screen");
-                firstStart = false;
-                startUI.SetActive(true);
-                leftRayToggler.alwaysShowRays = true;
-                rightRayToggler.alwaysShowRays = true;
-            }
-        }
+        private List<GameObject> debugVisualsGOList = new List<GameObject>();
 
         public GameObject instantiateSphere2D(Vector2 position, bool isPartOfTrackingSpace)
         {
@@ -111,24 +57,24 @@ namespace RD_Hiding
             {
                 // draw 5x5 m tracking boundary if not headset is used
                 TrackingSpaceGenerator.GenerateRectangleTrackingSpace(0, out PositioningManager.Instance.boundaryPoints, out _, out _, 5f, 5f);
-                debugVisuals.Add(DrawLine(PositioningManager.Instance.boundaryPoints[0], PositioningManager.Instance.boundaryPoints[1]));
-                debugVisuals.Add(DrawLine(PositioningManager.Instance.boundaryPoints[1], PositioningManager.Instance.boundaryPoints[2]));
-                debugVisuals.Add(DrawLine(PositioningManager.Instance.boundaryPoints[2], PositioningManager.Instance.boundaryPoints[3]));
-                debugVisuals.Add(DrawLine(PositioningManager.Instance.boundaryPoints[3], PositioningManager.Instance.boundaryPoints[0]));
+                debugVisualsGOList.Add(DrawLine(PositioningManager.Instance.boundaryPoints[0], PositioningManager.Instance.boundaryPoints[1]));
+                debugVisualsGOList.Add(DrawLine(PositioningManager.Instance.boundaryPoints[1], PositioningManager.Instance.boundaryPoints[2]));
+                debugVisualsGOList.Add(DrawLine(PositioningManager.Instance.boundaryPoints[2], PositioningManager.Instance.boundaryPoints[3]));
+                debugVisualsGOList.Add(DrawLine(PositioningManager.Instance.boundaryPoints[3], PositioningManager.Instance.boundaryPoints[0]));
             }
             else
             {
                 foreach (var point in PositioningManager.Instance.boundaryPoints)
-                    debugVisuals.Add(instantiateSphere2D(point, true));
+                    debugVisualsGOList.Add(instantiateSphere2D(point, true));
 
                 // add center
-                debugVisuals.Add(instantiateSphere2D(PositioningManager.Instance.boundaryCenter, true, Vector3.one * 0.2f, Color.red));
+                debugVisualsGOList.Add(instantiateSphere2D(PositioningManager.Instance.boundaryCenter, true, Vector3.one * 0.2f, Color.red));
             }
         }
 
         public void DestroyDebugVisuals()
         {
-            foreach(GameObject go in debugVisuals)
+            foreach(GameObject go in debugVisualsGOList)
                 GameObject.Destroy(go);
         }
 
@@ -151,7 +97,7 @@ namespace RD_Hiding
             lr.SetPosition(0, start);
             lr.SetPosition(1, end);
 
-            debugVisuals.Add(line);
+            debugVisualsGOList.Add(line);
             return line;
         }
 
@@ -179,5 +125,5 @@ namespace RD_Hiding
             return line;
         }
             #endregion
-        }
+    }
 }

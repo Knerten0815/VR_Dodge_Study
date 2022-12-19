@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace RD_Hiding
@@ -33,9 +32,6 @@ namespace RD_Hiding
             resetRingDiameter = resetter.resetRingDiameter;
 
             targetPosition = calculateTargetPosition();
-
-            if(resetter.showShepherdTarget)
-                target = SingletonFoEveryton.Instance.instantiateSphere2D(targetPosition, true);
 
             StartCoroutine(calculateAnimationKeys());
         }

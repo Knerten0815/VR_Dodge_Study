@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using static StatisticsLogger;
 
 namespace Dodge_Study
@@ -12,11 +13,14 @@ namespace Dodge_Study
     {
         [SerializeField] GlobalConfiguration config;
         [SerializeField] TrialObjectSpawner spawner;
-        [SerializeField] Image progressBar;        
+        [SerializeField] Image progressBar;
+        [SerializeField] GameObject startUI, devToolUI;
+        [SerializeField] TMP_Text persistentIdText, introIdText;
         public int conditionCount;
         public TrialData currentCondition = null;
         public bool trialIsRunning;
         public bool useRedirection;
+        public string userID;
 
         [HideInInspector] public List<AvatarStatistics> savedStats = new List<AvatarStatistics>();
 
@@ -24,7 +28,7 @@ namespace Dodge_Study
         [SerializeField] private Color[] graphColors;
 
         private List<TrialData> untestedConditions = new List<TrialData>();
-        private string sampleDirectory, graphDirectory, timeString;
+        public string sampleDirectory, graphDirectory, resultDirectory;
         
         private System.Random rnd;
 
@@ -39,9 +43,14 @@ namespace Dodge_Study
             else
                 _instance = this;
 
-            timeString = Utilities.GetTimeStringForFileName();
-            sampleDirectory = Utilities.GetProjectPath() + "/ExperimentResults/" + timeString + "/" + "Sampled Metrics/";
-            graphDirectory = Utilities.GetProjectPath() + "/ExperimentResults/" + timeString + "/" + "Graphs/";
+            userID = SetUserID();
+            persistentIdText.text = "ID: " + userID;
+            introIdText.text = "ID: " + userID;
+
+            resultDirectory = Utilities.GetProjectPath() + "/ExperimentResults/userID_" + userID + "/";
+            sampleDirectory = resultDirectory + "SampledMetrics/";
+            graphDirectory = resultDirectory + "Graphs/";
+            Utilities.CreateDirectoryIfNeeded(resultDirectory);
             Utilities.CreateDirectoryIfNeeded(sampleDirectory);
             Utilities.CreateDirectoryIfNeeded(graphDirectory);
             Utilities.CreateDirectoryIfNeeded(graphDirectory + "Real/");
@@ -66,6 +75,30 @@ namespace Dodge_Study
                     StartTrial();
                 }
             }
+        }
+        private string SetUserID()
+        {
+            int id = PlayerPrefs.GetInt("userID", -1);
+            string userID;
+
+            if (id < 0)
+            {
+                id = 0;
+                PlayerPrefs.SetInt("userID", 0);
+            }
+            else
+            {
+                id++;
+                PlayerPrefs.SetInt("userID", id);
+            }
+
+            if (useRedirection)
+                userID = "A" + id;
+            else
+                userID = "B" + id;
+
+            Debug.Log("userID is " + userID);
+            return userID;
         }
 
         private TrialData pickRandomCondition()
@@ -122,6 +155,25 @@ namespace Dodge_Study
                     config.EndExperiment(2);
                 else
                     config.EndExperiment(0);
+
+                currentCondition = null;
+
+                PositioningManager.Instance.checkPositioning = true;
+
+                progressBar.fillAmount = (conditionCount - untestedConditions.Count) / (float)conditionCount;
+            }
+        }
+
+        public void EndTrialByDebugUI()
+        {
+            if (trialIsRunning)
+            {
+                trialIsRunning = false;
+                Debug.Log("Ended Trial: " + currentCondition.TrialID);
+
+                config.experimentSetups[config.experimentIterator].trialData = currentCondition;
+
+                config.EndExperiment(-1);
 
                 currentCondition = null;
 
@@ -260,7 +312,7 @@ namespace Dodge_Study
 
             texBoundary.Apply();
 
-            string filePath = graphDirectory + "Tracking_Space_" + timeString + ".png";
+            string filePath = graphDirectory + "Tracking_Space_" + userID + ".png";
             //Export as png file
             Utilities.ExportTexture2dToPng(filePath, texBoundary);
         }

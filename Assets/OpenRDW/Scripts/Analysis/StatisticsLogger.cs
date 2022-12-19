@@ -860,7 +860,7 @@ public class StatisticsLogger : MonoBehaviour {
         globalConfiguration = GetComponent<GlobalConfiguration>();
         RESULT_DIRECTORY = Utilities.GetProjectPath() + RESULT_DIRECTORY;
         RESULT_WITH_TIME_DIRECTORY = RESULT_DIRECTORY + RESULT_WITH_TIME_DIRECTORY;
-        SUMMARY_STATISTICS_DIRECTORY = RESULT_WITH_TIME_DIRECTORY + SUMMARY_STATISTICS_DIRECTORY;
+        SUMMARY_STATISTICS_DIRECTORY = RESULT_WITH_TIME_DIRECTORY;// + SUMMARY_STATISTICS_DIRECTORY;
         SAMPLED_METRICS_DIRECTORY = RESULT_WITH_TIME_DIRECTORY + SAMPLED_METRICS_DIRECTORY;
         GRAPH_DERECTORY = RESULT_WITH_TIME_DIRECTORY + GRAPH_DERECTORY;
         TMP_DERECTORY = RESULT_WITH_TIME_DIRECTORY + TMP_DERECTORY;
@@ -868,14 +868,14 @@ public class StatisticsLogger : MonoBehaviour {
         SCREENSHOTS_DERECTORY = RESULT_WITH_TIME_DIRECTORY + SCREENSHOTS_DERECTORY;
 
         //create relative directories        
-        Utilities.CreateDirectoryIfNeeded(RESULT_DIRECTORY);
-        Utilities.CreateDirectoryIfNeeded(RESULT_WITH_TIME_DIRECTORY);
-        Utilities.CreateDirectoryIfNeeded(SUMMARY_STATISTICS_DIRECTORY);
-        Utilities.CreateDirectoryIfNeeded(SAMPLED_METRICS_DIRECTORY);
-        Utilities.CreateDirectoryIfNeeded(GRAPH_DERECTORY);
+        //Utilities.CreateDirectoryIfNeeded(RESULT_DIRECTORY);
+        //Utilities.CreateDirectoryIfNeeded(RESULT_WITH_TIME_DIRECTORY);
+        //Utilities.CreateDirectoryIfNeeded(SUMMARY_STATISTICS_DIRECTORY);
+        //Utilities.CreateDirectoryIfNeeded(SAMPLED_METRICS_DIRECTORY);
+        //Utilities.CreateDirectoryIfNeeded(GRAPH_DERECTORY);
         Utilities.CreateDirectoryIfNeeded(TMP_DERECTORY);
-        Utilities.CreateDirectoryIfNeeded(VIDEO_DERECTORY);
-        Utilities.CreateDirectoryIfNeeded(SCREENSHOTS_DERECTORY);        
+        //Utilities.CreateDirectoryIfNeeded(VIDEO_DERECTORY);
+        //Utilities.CreateDirectoryIfNeeded(SCREENSHOTS_DERECTORY);        
 
         obstacleColor = globalConfiguration.obstacleColor;
     }
@@ -986,7 +986,7 @@ public class StatisticsLogger : MonoBehaviour {
         texRealPathGraph.Apply();
 
         string rdirString = Dodge_Study.ExperimentManager.Instance.useRedirection ? "rdir" : "noRdir";
-        string path = GRAPH_DERECTORY + "Real/" + string.Format("Iteration{0}_ID{1}_real_{2}.png", experimentIteration, experimentSetup.trialData.TrialID, rdirString);
+        string path = Dodge_Study.ExperimentManager.Instance.graphDirectory + "Real/" + string.Format("Iteration{0}_ID{1}_real_{2}.png", experimentIteration, experimentSetup.trialData.TrialID, rdirString);
         //Export as png file
         Utilities.ExportTexture2dToPng(path, texRealPathGraph);
     }
@@ -1014,7 +1014,7 @@ public class StatisticsLogger : MonoBehaviour {
         texVirtualPathGraph.Apply();
 
         string rdirString = Dodge_Study.ExperimentManager.Instance.useRedirection ? "rdir" : "noRdir";
-        string path = GRAPH_DERECTORY + "Virtual/" + string.Format("Iteration{0}_ID{1}_virt_{2}.png", experimentIteration, experimentSetup.trialData.TrialID, rdirString);
+        string path = Dodge_Study.ExperimentManager.Instance.graphDirectory + "Virtual/" + string.Format("Iteration{0}_ID{1}_virt_{2}.png", experimentIteration, experimentSetup.trialData.TrialID, rdirString);
         //Export as png file
         Utilities.ExportTexture2dToPng(path, texVirtualPathGraph);
     }
