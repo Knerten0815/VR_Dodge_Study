@@ -26,9 +26,9 @@ public class AvatarAnimatorController : MonoBehaviour
     void Update()
     {
         var animator = GetComponentInChildren<Animator>();        
-        var walkSpeed = (redirectionManager.currPos - prePos).magnitude / globalConfiguration.GetDeltaTime();
+        var walkSpeed = (Utilities.FlattenedPos3D(redirectionManager.currPos) - prePos).magnitude / globalConfiguration.GetDeltaTime();
         UpdateAnimator(animator, walkSpeed, globalConfiguration.GetDeltaTime());
-        prePos = redirectionManager.currPos;
+        prePos = Utilities.FlattenedPos3D(redirectionManager.currPos);
     }
     public static void UpdateAnimator(Animator animator, float walkSpeed, float time)
     {

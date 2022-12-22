@@ -191,7 +191,7 @@ public class MovementManager : MonoBehaviour {
             }
         }
         else {
-            if ((redirectionManager.currPos - Utilities.FlattenedPos3D(redirectionManager.targetWaypoint.position)).magnitude < generalManager.distanceToWaypointThreshold)
+            if ((Utilities.FlattenedPos3D(redirectionManager.currPos) - Utilities.FlattenedPos3D(redirectionManager.targetWaypoint.position)).magnitude < generalManager.distanceToWaypointThreshold)
             {
                 UpdateWaypoint();
             }

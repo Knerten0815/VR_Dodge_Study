@@ -34,7 +34,7 @@ public abstract class SteerToRedirector : Redirector {
         PickRedirectionTarget();
 
         // Get Required Data
-        Vector3 deltaPos = redirectionManager.deltaPos;
+        Vector3 deltaPos = Utilities.FlattenedPos3D(redirectionManager.deltaPos);
         float deltaDir = redirectionManager.deltaDir;
 
         rotationFromCurvatureGain = 0;
@@ -46,8 +46,8 @@ public abstract class SteerToRedirector : Redirector {
         }
 
         //Compute desired facing vector for redirection
-        Vector3 desiredFacingDirection = Utilities.FlattenedPos3D(currentTarget.position) - redirectionManager.currPos;
-        int desiredSteeringDirection = (-1) * (int)Mathf.Sign(Utilities.GetSignedAngle(redirectionManager.currDir, desiredFacingDirection)); // We have to steer to the opposite direction so when the user counters this steering, she steers in right direction
+        Vector3 desiredFacingDirection = Utilities.FlattenedPos3D(currentTarget.position) - Utilities.FlattenedPos3D(redirectionManager.currPos);
+        int desiredSteeringDirection = (-1) * (int)Mathf.Sign(Utilities.GetSignedAngle(Utilities.FlattenedDir3D(redirectionManager.currDir), desiredFacingDirection)); // We have to steer to the opposite direction so when the user counters this steering, she steers in right direction
 
         //Compute proposed rotation gain
         rotationFromRotationGain = 0;
@@ -80,7 +80,7 @@ public abstract class SteerToRedirector : Redirector {
         {
             //DAMPENING METHODS
             // MAHDI: Sinusiodally scaling the rotation when the bearing is near zero
-            float bearingToTarget = Vector3.Angle(redirectionManager.currDir, desiredFacingDirection);
+            float bearingToTarget = Vector3.Angle(Utilities.FlattenedDir3D(redirectionManager.currDir), desiredFacingDirection);
             if (useBearingThresholdBasedRotationDampeningTimofey)
             {
                 // TIMOFEY

@@ -3,7 +3,7 @@
     public class TrialData
     {
         // Variables and their possible values. Adjust them here and only here.
-        public enum Form { Sphere, MorningStar, Cylinder, Car }
+        public enum Form { Sphere, Cylinder, Car }
         public static float[] sizes = new float[] { 0.3f, 0.8f };
         public static float[] speeds = new float[] { 18, 24, 30 };
         public static float[] angles = new float[] { 40, 27, 13, 0, -13, -27, -40 };

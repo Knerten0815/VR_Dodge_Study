@@ -14,6 +14,8 @@ namespace Dodge_Study
         public float centerMargin;
         public Transform centerTrans, backPosTrans;
         public RedirectionManager rm;
+        [HideInInspector]
+        public InputDevice device;
 
         [SerializeField] Camera cam;
         [SerializeField] GameObject LookAtTarget, Crosshair;
@@ -31,7 +33,6 @@ namespace Dodge_Study
         [SerializeField] TMP_Text warningUIMarginText, debugUIMarginText;
 
         private Transform userTrans, lookDirTrans;
-        private InputDevice device;
         public bool checkPositioning, userIsReady;
         private bool isPositioned, isDirected;
         private Coroutine loadRoutine;

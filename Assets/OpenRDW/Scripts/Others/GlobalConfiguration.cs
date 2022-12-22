@@ -1340,7 +1340,8 @@ public class GlobalConfiguration : MonoBehaviour
             List<Dictionary<string, List<float>>> oneDimensionalSamples;
             List<Dictionary<string, List<Vector2>>> twoDimensionalSamples;
             List<Dictionary<string, List<Vector3>>> threeDimensionalSamples;
-            statisticsLogger.GetExperimentResultsForSampledVariables(out oneDimensionalSamples, out twoDimensionalSamples, out threeDimensionalSamples);
+            List<Dictionary<string, List<Vector4>>> fourDimensionalSamples;
+            statisticsLogger.GetExperimentResultsForSampledVariables(out oneDimensionalSamples, out twoDimensionalSamples, out threeDimensionalSamples, out fourDimensionalSamples);
             ExperimentManager.Instance.LogAllSamples(experimentIterator, oneDimensionalSamples, twoDimensionalSamples, threeDimensionalSamples);     // ----------------------------------- statisticsLogger.LogAllExperimentSamples(TrialIdToString(experimentIterator), oneDimensionalSamples, twoDimensionalSamples);
         }
 

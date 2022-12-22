@@ -16,11 +16,11 @@ namespace Dodge_Study
         public override void PickRedirectionTarget()
         {
             //Vector3 trackingAreaPosition = Utilities.FlattenedPos3D(redirectionManager.trackingSpace.position);
-            Vector3 userToTarget = PositioningManager.Instance.backPosTrans.position - redirectionManager.currPos;
+            Vector3 userToTarget = PositioningManager.Instance.backPosTrans.position - Utilities.FlattenedPos3D(redirectionManager.currPos);
 
             //Compute steering target for S2B
-            float unsignedAngleToTarget = Vector3.Angle(userToTarget, redirectionManager.currDir);//unsigned angle
-            float directionToTarget = Mathf.Sign(Utilities.GetSignedAngle(redirectionManager.currDir, userToTarget));//signed angle
+            float unsignedAngleToTarget = Vector3.Angle(userToTarget, Utilities.FlattenedDir3D(redirectionManager.currDir));//unsigned angle
+            float directionToTarget = Mathf.Sign(Utilities.GetSignedAngle(Utilities.FlattenedDir3D(redirectionManager.currDir), userToTarget));//signed angle
                                                                                                                      //Debug.Log(bearingToCenter);
             if (unsignedAngleToTarget >= S2B_UNSIGNED_ANGLE_THRESHOLD_IN_DEGREE && useTempTargetInS2B)
             {
@@ -28,7 +28,7 @@ namespace Dodge_Study
                 if (noTmpTarget)
                 {
                     tmpTarget = new GameObject("S2B Temp Target");
-                    tmpTarget.transform.position = redirectionManager.currPos + S2B_TEMP_TARGET_DISTANCE * (Quaternion.Euler(0, directionToTarget * 90, 0) * redirectionManager.currDir);
+                    tmpTarget.transform.position = Utilities.FlattenedPos3D(redirectionManager.currPos) + S2B_TEMP_TARGET_DISTANCE * (Quaternion.Euler(0, directionToTarget * 90, 0) * Utilities.FlattenedDir3D(redirectionManager.currDir));
                     tmpTarget.transform.parent = transform;
                     noTmpTarget = false;
                 }

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.XR;
+
 public class RedirectionManager : MonoBehaviour {
     public static readonly float MaxSamePosTime = 50;//the max time(in seconds) the avatar can stand on the same position, exceeds this value will make data invalid (stuck in one place)
 
@@ -55,6 +57,10 @@ public class RedirectionManager : MonoBehaviour {
     [HideInInspector]
     public float priority;
 
+    [HideInInspector]
+    public Quaternion currRot, currRotReal;
+    [HideInInspector]
+    public Vector3 currEuler, currEulerReal;
     [HideInInspector]
     public Vector3 currPos, currPosReal, prevPos, prevPosReal;
     [HideInInspector]
@@ -296,7 +302,7 @@ public class RedirectionManager : MonoBehaviour {
         if (globalConfiguration.networkingMode && movementManager.avatarId != networkManager.avatarId)
             return;
 
-        if (currPos.Equals(prevPos))
+        if (Utilities.FlattenedPos3D(currPos).Equals(prevPos))
         {
             //used in auto simulation mode and there are unfinished waypoints
             if (globalConfiguration.movementController == GlobalConfiguration.MovementController.AutoPilot && !movementManager.ifMissionComplete)
@@ -429,11 +435,20 @@ public class RedirectionManager : MonoBehaviour {
 
     public void UpdateCurrentUserState()
     {    
-        currPos = Utilities.FlattenedPos3D(headTransform.position);//only consider head position
-        currPosReal = GetPosReal(currPos);        
-        currDir = Utilities.FlattenedDir3D(headTransform.forward);
-        currDirReal = GetDirReal(currDir);
+        currPos = headTransform.position;//only consider head position
+        currPosReal = Utilities.GetRelativePosition(currPos, trackingSpace.transform);        
+        currDir = headTransform.forward;
+        currDirReal = Utilities.GetRelativeDirection(currDir, transform);
         walkDist += (Utilities.FlattenedPos2D(currPos) - Utilities.FlattenedPos2D(prevPos)).magnitude;
+
+        // ---------------- VR-Dodge Study ----------------------------------
+        currRot = headTransform.rotation;
+        Dodge_Study.PositioningManager.Instance.device.TryGetFeatureValue(CommonUsages.deviceRotation, out currRotReal);
+        currEuler = currRot.eulerAngles;
+        currEulerReal = currRotReal.eulerAngles;
+        //Debug.Log(currEuler.Equals(currEulerReal));
+        //Debug.Log("" + currEuler.x.Equals(currEulerReal.x) + currEuler.y.Equals(currEulerReal.y) + currEuler.z.Equals(currEulerReal.z));
+        //-------------------------------------------------------------------
 
         //Debug.Log("walkDist: " + walkDist);
         //Debug.Log("current velocity: " + (currPos - prevPos).magnitude / GetDeltaTime());
@@ -456,8 +471,8 @@ public class RedirectionManager : MonoBehaviour {
 
     void CalculateStateChanges()
     {
-        deltaPos = currPos - prevPos;
-        deltaDir = Utilities.GetSignedAngle(prevDir, currDir);
+        deltaPos = Utilities.FlattenedDir3D(currPos) - prevPos;
+        deltaDir = Utilities.GetSignedAngle(prevDir, Utilities.FlattenedDir3D(currDir));
         //Debug.Log(string.Format("prevDir:{0}, currDir:{1}, deltaDir:{2}", prevDir.ToString("f3"), currDir.ToString("f3"), deltaDir));
     }
 

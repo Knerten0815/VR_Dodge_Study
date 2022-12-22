@@ -2740,6 +2740,10 @@ MonoBehaviour:
   keyboardController: {fileID: 0}
   bodyHeadFollower: {fileID: 0}
   priority: 0
+  currRot: {x: 0, y: 0, z: 0, w: 0}
+  currRotReal: {x: 0, y: 0, z: 0, w: 0}
+  currEuler: {x: 0, y: 0, z: 0}
+  currEulerReal: {x: 0, y: 0, z: 0}
   currPos: {x: 0, y: 0, z: 0}
   currPosReal: {x: 0, y: 0, z: 0}
   prevPos: {x: 0, y: 0, z: 0}
@@ -6759,7 +6763,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   formPrefabs:
-  - {fileID: 2129576509318253966, guid: 5c573c4174d9df04cb6fc521be822ac9, type: 3}
   - {fileID: 5214797135087486053, guid: 36e0492e8b17c3d468a8de8d9dce56ac, type: 3}
   - {fileID: 1822996757174854123, guid: 3d896e67c6f216c4ca396738bdf3d183, type: 3}
   - {fileID: 6347201277799456853, guid: 7e98723443722de41af6849ae54212bb, type: 3}
