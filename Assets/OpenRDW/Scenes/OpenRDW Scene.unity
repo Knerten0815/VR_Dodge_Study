@@ -891,7 +891,7 @@ MonoBehaviour:
   introIdText: {fileID: 1129885110}
   conditionCount: 0
   trialIsRunning: 0
-  useRedirection: 1
+  useRedirection: 0
   userID: 
   boundaryColor: {r: 0.54509807, g: 0.54901963, b: 0.56078434, a: 1}
   radiusColor: {r: 0, g: 0, b: 0, a: 1}
@@ -2283,7 +2283,7 @@ MonoBehaviour:
   RESET_TRIGGER_BUFFER: 0.1
   simulatedTime: 0
   targetFPS: 50
-  testOnlySomeTrials: 1
+  testOnlySomeTrials: 0
   trialsForRepeating: 15
   experimentIterator: 0
   experimentSetupsListIterator: 0
@@ -2726,8 +2726,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   headTransform: {fileID: 1387029340}
-  redirectorChoice: 11
-  resetterChoice: 3
+  redirectorChoice: 0
+  resetterChoice: 0
   globalConfiguration: {fileID: 0}
   body: {fileID: 226266040}
   trackingSpace: {fileID: 0}
@@ -6763,7 +6763,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   formPrefabs:
-  - {fileID: 5214797135087486053, guid: 36e0492e8b17c3d468a8de8d9dce56ac, type: 3}
+  - {fileID: 2129576509318253966, guid: 5c573c4174d9df04cb6fc521be822ac9, type: 3}
   - {fileID: 1822996757174854123, guid: 3d896e67c6f216c4ca396738bdf3d183, type: 3}
   - {fileID: 6347201277799456853, guid: 7e98723443722de41af6849ae54212bb, type: 3}
   boundaryCenter: {fileID: 1141405480}
@@ -8337,7 +8337,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1097306651}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 483e807336683d34c9c4f4fcd64d458b, type: 3}
