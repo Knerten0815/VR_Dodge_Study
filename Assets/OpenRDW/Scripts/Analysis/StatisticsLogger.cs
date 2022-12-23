@@ -370,13 +370,25 @@ public class StatisticsLogger : MonoBehaviour {
             //er["virtual_way_distance"] = us.virtualWayDistance.ToString();
 
             //er["virtual_distance_between_resets_average"] = GetAverage(us.virtualDistancesTravelledBetweenResets).ToString();
-            er["time_elapsed_between_resets_average"] = GetAverage(us.timeElapsedBetweenResets).ToString();            
+            //er["time_elapsed_between_resets_average"] = GetAverage(us.timeElapsedBetweenResets).ToString();
+            er["experiment_duration"] = (us.experimentEndingTime - us.experimentBeginningTime).ToString();
+            //er["execute_duration"] = (((double)us.executeEndingTime - us.executeBeginningTime)/ 1e7).ToString();
+            er["average_sampling_interval"] = GetAverage(samplingIntervals).ToString();
 
-            //er["sum_injected_translation(IN METERS)"] = us.sumOfInjectedTranslation.ToString();
-            er["sum_injected_rotation_g_r(IN DEGREES)"] = us.sumOfInjectedRotationFromRotationGain.ToString();
-            //er["sum_injected_rotation_g_c(IN DEGREES)"] = us.sumOfInjectedRotationFromCurvatureGain.ToString();
             er["sum_real_distance_travelled(IN METERS)"] = us.sumOfRealDistanceTravelled.ToString();
-            er["sum_virtual_distance_travelled(IN METERS)"] = us.sumOfVirtualDistanceTravelled.ToString();
+            //er["sum_virtual_distance_travelled(IN METERS)"] = us.sumOfVirtualDistanceTravelled.ToString();
+
+            //er["distance_to_boundary_average"] = GetAverage(us.distanceToNearestBoundarySamples).ToString();
+            //er["distance_to_center_average"] = GetAverage(us.distanceToCenterSamples).ToString();
+
+            // -------------------------- VR- Dodge-Study -------------------------------------------
+            er["max_distance_to_center"] = us.maxDistanceToCenter.ToString();
+            er["real_pos_at_max_dist"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(us.realPosAtMaxDistanceToCenter);
+            er["virt_pos_at_max_dist"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(us.virtPosAtMaxDistanceToCenter);
+            // --------------------------------------------------------------------------------------
+
+            //er["sum_injected_translation(IN METERS)"] = us.sumOfInjectedTranslation.ToString();            
+            //er["sum_injected_rotation_g_c(IN DEGREES)"] = us.sumOfInjectedRotationFromCurvatureGain.ToString();            
             //er["min_g_t"] = us.minTranslationGain < float.MaxValue ? us.minTranslationGain.ToString() : "N/A";
             //er["max_g_t"] = us.maxTranslationGain > float.MinValue ? us.maxTranslationGain.ToString() : "N/A";
             er["min_g_r"] = us.minRotationGain < float.MaxValue ? us.minRotationGain.ToString() : "N/A";
@@ -389,23 +401,18 @@ public class StatisticsLogger : MonoBehaviour {
             //er["injected_rotation_from_rotation_gain_average"] = GetAverage(us.injectedRotationFromRotationGainSamples).ToString();   // these are no longer absolute values, so average is misleading. Since there is no other rotation gain from curvature, this value would be the same as "injected rotation average"
             //er["g_c_average"] = GetAverageOfAbsoluteValues(us.curvatureGainSamples).ToString();
             //er["injected_rotation_from_curvature_gain_average"] = GetAverage(us.injectedRotationFromCurvatureGainSamples).ToString();
+            er["sum_injected_rotation_g_r(IN DEGREES)"] = us.sumOfInjectedRotationFromRotationGain.ToString();
             er["injected_rotation_average"] = GetAverage(us.injectedRotationSamples).ToString();
 
             //er["real_position_average"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(GetAverage(us.userRealPositionSamples));
             //er["virtual_position_average"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(GetAverage(us.userVirtualPositionSamples));
-            er["distance_to_boundary_average"] = GetAverage(us.distanceToNearestBoundarySamples).ToString();
-            er["distance_to_center_average"] = GetAverage(us.distanceToCenterSamples).ToString();
+            
 
-            er["experiment_duration"] = (us.experimentEndingTime - us.experimentBeginningTime).ToString();
-            //er["execute_duration"] = (((double)us.executeEndingTime - us.executeBeginningTime)/ 1e7).ToString();
-            er["average_sampling_interval"] = GetAverage(samplingIntervals).ToString();
+            
 
             // -------------------------- VR- Dodge-Study -------------------------------------------
             er["max_yaw_real"] = us.maxYawReal.ToString();
-            er["max_yaw_virt"] = us.maxYawVirtual.ToString();
-            er["max_distance_to_center"] = us.maxDistanceToCenter.ToString();
-            er["real_pos_at_max_dist"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(us.realPosAtMaxDistanceToCenter);
-            er["virt_pos_at_max_dist"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(us.virtPosAtMaxDistanceToCenter);
+            er["max_yaw_virt"] = us.maxYawVirtual.ToString();            
             er["real_dir_at_real_yaw"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(us.realDirAtMaxRealYaw);
             er["virt_dir_at_real_yaw"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(us.virtDirAtMaxRealYaw);
             er["real_dir_at_virt_yaw"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(us.realDirAtMaxVirtYaw);
@@ -447,9 +454,10 @@ public class StatisticsLogger : MonoBehaviour {
             var threeDimensionalSample = new Dictionary<string, List<Vector3>>();
             var fourDimensionalSample = new Dictionary<string, List<Vector4>>();
 
-            oneDimensionalSample.Add("distances_to_boundary", us.distanceToNearestBoundarySamples);
+            oneDimensionalSample.Add("sampling_intervals", samplingIntervals);
+            //oneDimensionalSample.Add("distances_to_boundary", us.distanceToNearestBoundarySamples);
             //oneDimensionalSample.Add("normalized_distances_to_boundary", GetTrackingAreaNormalizedList(us.distanceToNearestBoundarySamples));
-            oneDimensionalSample.Add("distances_to_center", us.distanceToCenterSamples);
+            //oneDimensionalSample.Add("distances_to_center", us.distanceToCenterSamples);
             //oneDimensionalSample.Add("normalized_distances_to_center", GetTrackingAreaNormalizedList(distanceToCenterSamples));
             //oneDimensionalSample.Add("g_t", us.translationGainSamples);
            // oneDimensionalSample.Add("injected_translations", us.injectedTranslationSamples);
@@ -460,16 +468,18 @@ public class StatisticsLogger : MonoBehaviour {
             oneDimensionalSample.Add("injected_rotations", us.injectedRotationSamples);
             //oneDimensionalSample.Add("virtual_distances_between_resets", us.virtualDistancesTravelledBetweenResets);
             //oneDimensionalSample.Add("time_elapsed_between_resets", us.timeElapsedBetweenResets);
-            oneDimensionalSample.Add("sampling_intervals", samplingIntervals);
-
-            threeDimensionalSample.Add("user_real_positions", us.userRealPositionSamples);
-            threeDimensionalSample.Add("user_virtual_positions", us.userVirtualPositionSamples);
-
-            //---------------- VR-Dodge-Study ----------------------------------
             oneDimensionalSample.Add("real_rotation_accumulation", us.realRotAccumulationSamples);
             oneDimensionalSample.Add("additional_virtual_rotation_accumulation", us.addVirtRotAccumulationSamples);
 
             twoDimensionalSample.Add("relative_virt_position", us.relativeVirtualPositionSamples);
+
+            threeDimensionalSample.Add("real_position", us.userRealPositionSamples);
+            threeDimensionalSample.Add("virtual_position", us.userVirtualPositionSamples);
+
+            //---------------- VR-Dodge-Study ----------------------------------
+            
+
+            
 
             threeDimensionalSample.Add("real_direction", us.realDirSamples);
             threeDimensionalSample.Add("virtual_direction", us.virtDirSamples);
@@ -479,12 +489,13 @@ public class StatisticsLogger : MonoBehaviour {
             fourDimensionalSample.Add("real_rotation", us.realRotSamples);
             fourDimensionalSample.Add("virtual_rotation", us.virtRotSamples);
 
-            threeDimensionalSamples.Add(threeDimensionalSample);
-            fourDimensionalSamples.Add(fourDimensionalSample);
+            
             //--------------- VR Dodge-Study ----------------------------------
 
             oneDimensionalSamples.Add(oneDimensionalSample);
             twoDimensionalSamples.Add(twoDimensionalSample);
+            threeDimensionalSamples.Add(threeDimensionalSample);
+            fourDimensionalSamples.Add(fourDimensionalSample);
         }
     }
 
@@ -692,7 +703,7 @@ public class StatisticsLogger : MonoBehaviour {
             us.userRealPositionSamplesBuffer.Add(rm.currPosReal);
             us.userVirtualPositionSamplesBuffer.Add(rm.currPos);
             us.distanceToNearestBoundarySamplesBuffer.Add(Utilities.GetNearestDistToObstacleAndTrackingSpace(globalConfiguration.obstaclePolygons, Dodge_Study.PositioningManager.Instance.boundaryPoints, Utilities.FlattenedPos2D(rm.currPosReal)));
-            us.distanceToCenterSamplesBuffer.Add(Utilities.FlattenedPos3D(rm.currPosReal).magnitude);
+            us.distanceToCenterSamplesBuffer.Add((Dodge_Study.PositioningManager.Instance.centerTrans.position-Utilities.FlattenedPos3D(rm.currPosReal)).magnitude);
 
             // ------------------ VR-Dodge-Study ------------------------------------
             if(us.maxDistanceToCenter < Utilities.FlattenedPos3D(rm.currPosReal).magnitude)

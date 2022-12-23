@@ -471,8 +471,8 @@ public class RedirectionManager : MonoBehaviour {
 
     void CalculateStateChanges()
     {
-        deltaPos = Utilities.FlattenedDir3D(currPos) - prevPos;
-        deltaDir = Utilities.GetSignedAngle(prevDir, Utilities.FlattenedDir3D(currDir));
+        deltaPos = Utilities.FlattenedPos3D(currPos) - Utilities.FlattenedPos3D(prevPos);
+        deltaDir = Utilities.GetSignedAngle(Utilities.FlattenedDir3D(prevDir), Utilities.FlattenedDir3D(currDir));
         //Debug.Log(string.Format("prevDir:{0}, currDir:{1}, deltaDir:{2}", prevDir.ToString("f3"), currDir.ToString("f3"), deltaDir));
     }
 

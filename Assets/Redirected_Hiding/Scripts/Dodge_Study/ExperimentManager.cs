@@ -197,10 +197,6 @@ namespace Dodge_Study
             int lineCount = oneDimensionalSamplesMaps[0].First().Value.Count;
 
             // Set up the headers
-            foreach (string header in twoDimensionalSamplesMaps[0].Keys)
-            {
-                csvWriter.Write(header + ";");
-            }
             foreach (string header in oneDimensionalSamplesMaps[0].Keys)
             {
                 csvWriter.Write( header + ";");
@@ -213,19 +209,15 @@ namespace Dodge_Study
             {
                 csvWriter.Write(header + ";");
             }
+            foreach (string header in twoDimensionalSamplesMaps[0].Keys)
+            {
+                csvWriter.Write(header + ";");
+            }
 
             // Write values
             for (int i = 1; i < lineCount; i++)
             {
                 csvWriter.WriteLine();
-                foreach (KeyValuePair<string, List<Vector2>> keyListPair in twoDimensionalSamplesMaps[0])
-                {
-                    if (i < keyListPair.Value.Count)
-                        csvWriter.Write(keyListPair.Value[i].x.ToString().Replace(",", ".") + ", " + keyListPair.Value[i].y.ToString().Replace(",", ".") + ";");
-                    else
-                        csvWriter.Write(";");
-                }
-
                 foreach (KeyValuePair<string, List<float>> keyListPair in oneDimensionalSamplesMaps[0])
                 {
                     if (i < keyListPair.Value.Count)
@@ -246,6 +238,14 @@ namespace Dodge_Study
                 {
                     if (i < keyListPair.Value.Count)
                         csvWriter.Write(keyListPair.Value[i].x.ToString().Replace(",", ".") + ", " + keyListPair.Value[i].y.ToString().Replace(",", ".") + ", " + keyListPair.Value[i].z.ToString().Replace(",", ".") + ", " + keyListPair.Value[i].w.ToString().Replace(",", ".") + ";");
+                    else
+                        csvWriter.Write(";");
+                }
+                
+                foreach (KeyValuePair<string, List<Vector2>> keyListPair in twoDimensionalSamplesMaps[0])
+                {
+                    if (i < keyListPair.Value.Count)
+                        csvWriter.Write(keyListPair.Value[i].x.ToString().Replace(",", ".") + ", " + keyListPair.Value[i].y.ToString().Replace(",", ".") + ";");
                     else
                         csvWriter.Write(";");
                 }
