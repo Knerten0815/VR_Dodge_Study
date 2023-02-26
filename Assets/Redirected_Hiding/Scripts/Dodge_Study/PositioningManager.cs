@@ -92,8 +92,8 @@ namespace Dodge_Study
                 // boiler plate for getting the lookAt-ray. Redirected walking is a mess.
                 Quaternion deviceRot;
                 device.TryGetFeatureValue(CommonUsages.deviceRotation, out deviceRot);
-                // X from device, bc OpenRDW sets it to zero somehow. Y from OpenRDW bc its altered by OpenRDW. Z is the same in both.
                 lookDirTrans.position = userTrans.position;
+                // X from device, bc OpenRDW sets it to zero somehow. Y from OpenRDW because its altered by OpenRDW. Z is the same in both.
                 lookDirTrans.rotation = Quaternion.Euler(deviceRot.eulerAngles.x, userTrans.eulerAngles.y, userTrans.eulerAngles.z);
                 Ray r = new Ray(userTrans.position, lookDirTrans.TransformDirection(Vector3.forward));
 
@@ -108,13 +108,6 @@ namespace Dodge_Study
                     isDirected = false;
                     targetRndr.material = noHitMat;
                 }
-
-                /*// test ray
-                Debug.Log("Device Rot: " + deviceRot.eulerAngles);
-                Debug.Log("User Rot: " + userTrans.eulerAngles);
-                Debug.DrawRay(r.origin, r.direction);
-                lookDirTrans.position = r.origin + r.direction;
-                lookDirTrans.rotation = deviceRot;*/
 
                 float distance = Utilities.FlattenedPos2D(userTrans.position - centerTrans.position).magnitude;
                 if (Mathf.Abs(distance) < positioningTolerance)

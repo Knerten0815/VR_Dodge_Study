@@ -23,7 +23,7 @@ namespace Dodge_Study
 
             for(int i = 0; i < TrialData.angles.Length; i++)
             {
-                startPositions[i] = Instantiate(new GameObject().transform);//formPrefabs[2]).transform;
+                startPositions[i] = Instantiate(new GameObject().transform);
                 startPositions[i].name = "Start Angle " + TrialData.angles[i];
 
                 // set angle (meaning position)
@@ -60,18 +60,17 @@ namespace Dodge_Study
             GameObject go = Instantiate(formPrefabs[ecpC.FormIndex]);
             // set angle (meaning position)
             Vector3 objPos = startPositions[ecpC.AngleIndex].position;
-            objPos.y = 1.65f;               // --------------------------------------------------------------------------------------------------TODO: set Object height to head height of user
+            objPos.y = 1.65f;
             go.transform.position = objPos;
             go.transform.rotation = startPositions[ecpC.AngleIndex].rotation;
             // set size
             go.transform.localScale *= ecpC.GetSize();
 
-            //go.transform.SetParent(objectGoal.transform);
             go.name = "TrialObject" + ecpC.TrialID;
 
             // set speed
             currentCollisionObject = go.AddComponent<TrialObject>();
-            currentCollisionObject.Init(ecpC.GetSpeed(), ecpC.GetForm() == TrialData.Form.Car);//, ecpC.GetAngle(), this);
+            currentCollisionObject.Init(ecpC.GetSpeed(), ecpC.GetForm() == TrialData.Form.Car);
 
             objectGoal.transform.position = PositioningManager.Instance.centerTrans.position + (currentCollisionObject.transform.forward * extraDistance);
             objectGoal.transform.rotation = currentCollisionObject.transform.rotation;

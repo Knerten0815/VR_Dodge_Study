@@ -406,9 +406,6 @@ public class StatisticsLogger : MonoBehaviour {
 
             //er["real_position_average"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(GetAverage(us.userRealPositionSamples));
             //er["virtual_position_average"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(GetAverage(us.userVirtualPositionSamples));
-            
-
-            
 
             // -------------------------- VR- Dodge-Study -------------------------------------------
             er["max_yaw_real"] = us.maxYawReal.ToString();
@@ -468,6 +465,8 @@ public class StatisticsLogger : MonoBehaviour {
             oneDimensionalSample.Add("injected_rotations", us.injectedRotationSamples);
             //oneDimensionalSample.Add("virtual_distances_between_resets", us.virtualDistancesTravelledBetweenResets);
             //oneDimensionalSample.Add("time_elapsed_between_resets", us.timeElapsedBetweenResets);
+
+            //---------------- VR-Dodge-Study ----------------------------------
             oneDimensionalSample.Add("real_rotation_accumulation", us.realRotAccumulationSamples);
             oneDimensionalSample.Add("additional_virtual_rotation_accumulation", us.addVirtRotAccumulationSamples);
 
@@ -475,12 +474,7 @@ public class StatisticsLogger : MonoBehaviour {
 
             threeDimensionalSample.Add("real_position", us.userRealPositionSamples);
             threeDimensionalSample.Add("virtual_position", us.userVirtualPositionSamples);
-
-            //---------------- VR-Dodge-Study ----------------------------------
             
-
-            
-
             threeDimensionalSample.Add("real_direction", us.realDirSamples);
             threeDimensionalSample.Add("virtual_direction", us.virtDirSamples);
             threeDimensionalSample.Add("real_euler", us.realEulerSamples);
@@ -488,8 +482,6 @@ public class StatisticsLogger : MonoBehaviour {
 
             fourDimensionalSample.Add("real_rotation", us.realRotSamples);
             fourDimensionalSample.Add("virtual_rotation", us.virtRotSamples);
-
-            
             //--------------- VR Dodge-Study ----------------------------------
 
             oneDimensionalSamples.Add(oneDimensionalSample);

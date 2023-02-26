@@ -21,7 +21,7 @@ namespace Dodge_Study
             //Compute steering target for S2B
             float unsignedAngleToTarget = Vector3.Angle(userToTarget, Utilities.FlattenedDir3D(redirectionManager.currDir));//unsigned angle
             float directionToTarget = Mathf.Sign(Utilities.GetSignedAngle(Utilities.FlattenedDir3D(redirectionManager.currDir), userToTarget));//signed angle
-                                                                                                                     //Debug.Log(bearingToCenter);
+
             if (unsignedAngleToTarget >= S2B_UNSIGNED_ANGLE_THRESHOLD_IN_DEGREE && useTempTargetInS2B)
             {
                 //Generate temporary target
