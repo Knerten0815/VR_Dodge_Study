@@ -407,7 +407,7 @@ public class StatisticsLogger : MonoBehaviour {
             //er["real_position_average"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(GetAverage(us.userRealPositionSamples));
             //er["virtual_position_average"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(GetAverage(us.userVirtualPositionSamples));
 
-            // -------------------------- VR- Dodge-Study -------------------------------------------
+            // -------------------------- VR- Dodge-Study -------------------------------------------------------------------------------------------------
             er["max_yaw_real"] = us.maxYawReal.ToString();
             er["max_yaw_virt"] = us.maxYawVirtual.ToString();            
             er["real_dir_at_real_yaw"] = Dodge_Study.ExperimentManager.Instance.Vec3ToString(us.realDirAtMaxRealYaw);
@@ -426,7 +426,7 @@ public class StatisticsLogger : MonoBehaviour {
             er["virt_rot_at_real_yaw"] = Dodge_Study.ExperimentManager.Instance.Vec4ToString(us.virtRotAtMaxRealYaw);
             er["real_rot_at_virt_yaw"] = Dodge_Study.ExperimentManager.Instance.Vec4ToString(us.realRotAtMaxVirtYaw);
             er["virt_rot_at_virt_yaw"] = Dodge_Study.ExperimentManager.Instance.Vec4ToString(us.virtRotAtMaxVirtYaw);
-            // --------------------------------------------------------------------------------------
+            // ----------------------------------------------------------------------------------------------------------------------------------------------
 
             //if passive haptics mode
             if (globalConfiguration.passiveHaptics) {
@@ -506,8 +506,8 @@ public class StatisticsLogger : MonoBehaviour {
     {
         if (state == LoggingState.logging)
         {
-            //Debug.Log("Real Rotaion delta: " + realRotDelta);
-            if(realRotDelta > 0)
+            // --------------------------------------------------------------------------- VR-Dodge-Study -----------------------------------------------------
+            if (realRotDelta > 0)
             {
                 //if(realRotDelta / Time.deltaTime >= 1.5f)
                     negativeYawAccumulation = 0; //reset negative rotation accumulation
@@ -539,7 +539,7 @@ public class StatisticsLogger : MonoBehaviour {
                 us.realRotAtMaxRealYaw = new Vector4(currRotReal.x, currRotReal.y, currRotReal.z, currRotReal.w);
                 us.virtRotAtMaxRealYaw = new Vector4(currRotVirt.x, currRotVirt.y, currRotVirt.z, currRotVirt.w);
             }
-        }
+        }// --------------------------------------------------------------------------- VR-Dodge-Study -----------------------------------------------------
     }
 
     public void Event_Translation_Gain(int userId, float g_t, Vector3 translationApplied)
